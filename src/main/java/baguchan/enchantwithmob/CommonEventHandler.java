@@ -313,10 +313,9 @@ public class CommonEventHandler {
                 if (MobEnchantUtils.hasMobEnchant(stack)) {
 
                     if (target instanceof IEnchantCap cap) {
-                        final boolean[] flag = {false};
-                        flag[0] = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, cap);
+                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, cap);
 
-                        if (flag[0]) {
+                        if (flag) {
                             event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
                             stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
@@ -332,7 +331,6 @@ public class CommonEventHandler {
                             event.setCanceled(true);
                         }
                     }
-                    ;
                 }
             }
         }
@@ -352,11 +350,9 @@ public class CommonEventHandler {
                     event.setCancellationResult(InteractionResult.SUCCESS);
                     event.setCanceled(true);
                 }
-                ;
-
+            }
             }
         }
-    }
 
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {

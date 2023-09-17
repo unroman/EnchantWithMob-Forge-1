@@ -59,9 +59,9 @@ public class EnchantersBookItem extends Item {
 							if (enchantedMob instanceof IEnchantCap cap) {
 								if (!cap.getEnchantCap().hasEnchant()) {
 									if (flag[0]) {
-										MobEnchantUtils.addItemMobEnchantToEntity(stack, enchantedMob, cap);
+										MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
 									} else {
-										flag[0] = MobEnchantUtils.addItemMobEnchantToEntity(stack, enchantedMob, cap);
+										flag[0] = MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
 									}
 								}
 							}
@@ -77,7 +77,7 @@ public class EnchantersBookItem extends Item {
 
 						playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
-						return InteractionResultHolder.success(stack);
+						return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
 					}
 				} else {
 					playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);

@@ -57,27 +57,26 @@ public class MobEnchantBookItem extends Item {
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
-            final boolean[] flag = {false};
-            if (playerIn instanceof IEnchantCap cap) {
-                flag[0] = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, cap);
-            }
-            ;
+			if (playerIn instanceof IEnchantCap cap) {
+				boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, cap);
 
-            //When flag is true, enchanting is success.
-            if (flag[0]) {
-                playerIn.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
+				//When flag is true, enchanting is success.
+				if (flag) {
+					playerIn.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
+					stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
 
-                return InteractionResultHolder.success(stack);
-			} else {
-				playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant_yourself"), true);
+					playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
-				playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+					return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+				} else {
+					playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant_yourself"), true);
 
-				return InteractionResultHolder.fail(stack);
+					playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+
+					return InteractionResultHolder.fail(stack);
+				}
 			}
 		}
 		return super.use(level, playerIn, handIn);

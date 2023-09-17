@@ -27,7 +27,7 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo callbackInfo) {
-        if ((this.getEnchantCap().getEnchantOwner().isPresent() && this.getEnchantCap().getEnchantOwner().get().isAlive()) && this.getEnchantCap().hasEnchant()) {
+        if ((this.getEnchantCap().getEnchantOwner().isPresent() && this.getEnchantCap().getEnchantOwner().get().isAlive() || this.getEnchantCap().isFromOwner()) && this.getEnchantCap().hasEnchant()) {
             if (this.getEnchantCap().getEnchantOwner().isEmpty()) {
                 LivingEntity livingEntity = (LivingEntity) ((Object) this);
                 this.getEnchantCap().removeMobEnchantFromOwner(livingEntity);

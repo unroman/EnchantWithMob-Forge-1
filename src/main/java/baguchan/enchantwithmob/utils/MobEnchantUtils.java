@@ -224,6 +224,20 @@ public class MobEnchantUtils {
 		return flag;
 	}
 
+    public static boolean addUnstableItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity owner, IEnchantCap capability) {
+        ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
+        boolean flag = false;
+
+        for (int i = 0; i < listnbt.size(); ++i) {
+            CompoundTag compoundnbt = listnbt.getCompound(i);
+            if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
+                capability.getEnchantCap().addMobEnchantFromOwner(entity, owner, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt));
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
 	public static void removeMobEnchantToEntity(LivingEntity entity, IEnchantCap capability) {
 		capability.getEnchantCap().removeAllMobEnchant(entity);
 	}
