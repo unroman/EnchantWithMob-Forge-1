@@ -231,7 +231,7 @@ public class MobEnchantUtils {
         for (int i = 0; i < listnbt.size(); ++i) {
             CompoundTag compoundnbt = listnbt.getCompound(i);
             if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
-                capability.getEnchantCap().addMobEnchantFromOwner(entity, owner, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt));
+				capability.getEnchantCap().addMobEnchantFromOwner(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt), owner);
                 flag = true;
             }
         }
