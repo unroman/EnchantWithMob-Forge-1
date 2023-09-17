@@ -207,7 +207,7 @@ public class EnchanterEntity extends SpellcasterIllager {
 
     @Override
     protected SoundEvent getCastingSoundEvent() {
-        return SoundEvents.ILLUSIONER_CAST_SPELL;
+        return SoundEvents.ENCHANTMENT_TABLE_USE;
     }
 
     @Override

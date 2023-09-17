@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,44 +41,51 @@ public class EnchantersBookItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		if (MobEnchantUtils.hasMobEnchant(stack)) {
-			List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, this.enchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
-			List<LivingEntity> hasEnchantedMoblist = level.getNearbyEntities(LivingEntity.class, this.alreadyEnchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
+		if (!level.isClientSide()) {
+			if (MobEnchantUtils.hasMobEnchant(stack)) {
+				List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, this.enchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
+				List<LivingEntity> hasEnchantedMoblist = level.getNearbyEntities(LivingEntity.class, this.alreadyEnchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
 
-			if (hasEnchantedMoblist.isEmpty() || hasEnchantedMoblist.size() < 5) {
-				if (!list.isEmpty()) {
-					int size = list.size();
-					final boolean[] flag = {false};
-					for (int i = 0; i < size; ++i) {
-						LivingEntity enchantedMob = list.get(i);
+				if (hasEnchantedMoblist.isEmpty() || hasEnchantedMoblist.size() < 5) {
+					if (!list.isEmpty()) {
+						int size = list.size();
+						final boolean[] flag = {false};
+						for (int i = 0; i < size; ++i) {
+							LivingEntity enchantedMob = list.get(i);
 
-						if (i >= 5) {
-							break;
-						}
+							if (i >= 5) {
+								break;
+							}
 
-						if (!enchantedMob.canAttack(playerIn) && playerIn != enchantedMob) {
-							if (enchantedMob instanceof IEnchantCap cap) {
-								if (!cap.getEnchantCap().hasEnchant()) {
-									if (flag[0]) {
-										MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
-									} else {
-										flag[0] = MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
+							if (!enchantedMob.canAttack(playerIn) && playerIn != enchantedMob) {
+								if (enchantedMob instanceof IEnchantCap cap) {
+									if (!cap.getEnchantCap().hasEnchant()) {
+										if (flag[0]) {
+											MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
+										} else {
+											flag[0] = MobEnchantUtils.addUnstableItemMobEnchantToEntity(stack, enchantedMob, playerIn, cap);
+										}
 									}
 								}
+								;
 							}
-							;
 						}
-					}
 
-					//When flag is true, enchanting is success.
-					if (flag[0]) {
-						playerIn.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+						//When flag is true, enchanting is success.
+						if (flag[0]) {
+							level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
+							stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
 
-						stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
+							playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
-						playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
+							return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+						}
+					} else {
+						playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);
 
-						return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+						playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+
+						return InteractionResultHolder.fail(stack);
 					}
 				} else {
 					playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);
@@ -86,12 +94,6 @@ public class EnchantersBookItem extends Item {
 
 					return InteractionResultHolder.fail(stack);
 				}
-			} else {
-				playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);
-
-				playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
-
-				return InteractionResultHolder.fail(stack);
 			}
 		}
 		return super.use(level, playerIn, handIn);

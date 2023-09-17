@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -56,26 +57,28 @@ public class MobEnchantBookItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
-			if (playerIn instanceof IEnchantCap cap) {
-				boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, cap);
+		if (!level.isClientSide()) {
+			if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
+				if (playerIn instanceof IEnchantCap cap) {
+					boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, cap);
 
 
-				//When flag is true, enchanting is success.
-				if (flag) {
-					playerIn.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+					//When flag is true, enchanting is success.
+					if (flag) {
+						level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
 
-					stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
+						stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
 
-					playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
+						playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
-					return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
-				} else {
-					playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant_yourself"), true);
+						return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+					} else {
+						playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant_yourself"), true);
 
-					playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+						playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
 
-					return InteractionResultHolder.fail(stack);
+						return InteractionResultHolder.fail(stack);
+					}
 				}
 			}
 		}
