@@ -57,8 +57,7 @@ public class MobEnchantBookItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		if (!level.isClientSide()) {
-			if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
+		if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
 				if (playerIn instanceof IEnchantCap cap) {
 					boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, playerIn, cap);
 
@@ -77,7 +76,6 @@ public class MobEnchantBookItem extends Item {
 						return InteractionResultHolder.fail(stack);
 					}
 				}
-			}
 		}
 		return super.use(level, playerIn, handIn);
 	}
