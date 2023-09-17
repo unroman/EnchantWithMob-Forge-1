@@ -41,7 +41,6 @@ public class EnchantersBookItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
-		if (!level.isClientSide()) {
 			if (MobEnchantUtils.hasMobEnchant(stack)) {
 				List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, this.enchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
 				List<LivingEntity> hasEnchantedMoblist = level.getNearbyEntities(LivingEntity.class, this.alreadyEnchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
@@ -74,7 +73,6 @@ public class EnchantersBookItem extends Item {
 						//When flag is true, enchanting is success.
 						if (flag[0]) {
 							level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
-							stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
 
 							playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
@@ -95,7 +93,6 @@ public class EnchantersBookItem extends Item {
 					return InteractionResultHolder.fail(stack);
 				}
 			}
-		}
 		return super.use(level, playerIn, handIn);
 	}
 

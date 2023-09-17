@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -210,7 +211,7 @@ public class MobEnchantUtils {
 	 * @param entity     Enchanting target
 	 * @param capability MobEnchant Capability
 	 */
-	public static boolean addItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, IEnchantCap capability) {
+	public static boolean addItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity user, IEnchantCap capability) {
 		ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
 		boolean flag = false;
 
@@ -219,24 +220,33 @@ public class MobEnchantUtils {
 			if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
 				capability.getEnchantCap().addMobEnchant(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt));
 				flag = true;
+
+				if (!user.level().isClientSide()) {
+					itemIn.hurtAndBreak(1, user, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+
+				}
 			}
 		}
 		return flag;
 	}
 
-    public static boolean addUnstableItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity owner, IEnchantCap capability) {
-        ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
-        boolean flag = false;
+	public static boolean addUnstableItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity owner, IEnchantCap capability) {
+		ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
+		boolean flag = false;
 
-        for (int i = 0; i < listnbt.size(); ++i) {
-            CompoundTag compoundnbt = listnbt.getCompound(i);
-            if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
+		for (int i = 0; i < listnbt.size(); ++i) {
+			CompoundTag compoundnbt = listnbt.getCompound(i);
+			if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
 				capability.getEnchantCap().addMobEnchantFromOwner(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt), owner);
-                flag = true;
-            }
-        }
-        return flag;
-    }
+				flag = true;
+				if (!owner.level().isClientSide()) {
+					itemIn.hurtAndBreak(1, owner, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+
+				}
+			}
+		}
+		return flag;
+	}
 
 	public static void removeMobEnchantToEntity(LivingEntity entity, IEnchantCap capability) {
 		capability.getEnchantCap().removeAllMobEnchant(entity);

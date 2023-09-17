@@ -313,7 +313,7 @@ public class CommonEventHandler {
                 if (MobEnchantUtils.hasMobEnchant(stack)) {
 
                     if (target instanceof IEnchantCap cap) {
-                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, cap);
+                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getEntity(), cap);
 
                         if (flag) {
                             event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);

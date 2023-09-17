@@ -60,15 +60,12 @@ public class MobEnchantBookItem extends Item {
 		if (!level.isClientSide()) {
 			if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
 				if (playerIn instanceof IEnchantCap cap) {
-					boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, cap);
+					boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, playerIn, playerIn, cap);
 
 
 					//When flag is true, enchanting is success.
 					if (flag) {
 						level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
-
-						stack.hurtAndBreak(1, playerIn, (entity) -> entity.broadcastBreakEvent(handIn));
-
 						playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
 
 						return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
