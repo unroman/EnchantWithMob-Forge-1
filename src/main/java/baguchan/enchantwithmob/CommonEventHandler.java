@@ -1,7 +1,6 @@
 package baguchan.enchantwithmob;
 
 import baguchan.enchantwithmob.api.IEnchantCap;
-import baguchan.enchantwithmob.api.IEnchantVisual;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import baguchan.enchantwithmob.message.MobEnchantedMessage;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
@@ -12,16 +11,14 @@ import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.TraceableEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -36,7 +33,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -48,18 +45,6 @@ import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class CommonEventHandler {
-
-    /*
-     * add Enchant Visual
-     */
-    @SubscribeEvent
-    public static void onTraceableEntitySpawn(EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof IEnchantVisual enchantVisual && event.getEntity() instanceof TraceableEntity traceableEntity) {
-            if (traceableEntity.getOwner() instanceof IEnchantCap enchantCap) {
-                enchantVisual.setEnchantVisual(enchantCap.getEnchantCap().hasEnchant());
-            }
-        }
-    }
 
     /*
      * this event handle the Ender dragon mob enchant
@@ -126,7 +111,7 @@ public class CommonEventHandler {
      * handle the Normal Entity Mob Enchant
      */
     @SubscribeEvent
-    public static void onSpawnEntity(MobSpawnEvent.FinalizeSpawn event) {
+    public static void onSpawnEntity(LivingSpawnEvent.SpecialSpawn event) {
         if (event.getEntity() instanceof IEnchantCap cap) {
             LevelAccessor world = event.getLevel();
             if (!world.isClientSide()) {
@@ -185,7 +170,7 @@ public class CommonEventHandler {
                 if (EnchantConfig.COMMON.naturalSpawnEnchantedMob.get() && isSpawnEnchantableEntity(event.getEntity())) {
 
                     if (!(livingEntity instanceof Animal) && !(livingEntity instanceof WaterAnimal) || EnchantConfig.COMMON.spawnEnchantedAnimal.get()) {
-                        if (event.getSpawnType() != MobSpawnType.BREEDING && event.getSpawnType() != MobSpawnType.CONVERSION && event.getSpawnType() != MobSpawnType.STRUCTURE && event.getSpawnType() != MobSpawnType.MOB_SUMMONED) {
+                        if (event.getSpawnReason() != MobSpawnType.BREEDING && event.getSpawnReason() != MobSpawnType.CONVERSION && event.getSpawnReason() != MobSpawnType.STRUCTURE && event.getSpawnReason() != MobSpawnType.MOB_SUMMONED) {
                             if (world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 if (!world.isClientSide()) {
                                     int i = 0;
@@ -279,7 +264,7 @@ public class CommonEventHandler {
         }
 
         if (livingEntity instanceof IEnchantCap cap) {
-            if (!event.getSource().is(DamageTypeTags.BYPASSES_EFFECTS) && cap.getEnchantCap().hasEnchant()) {
+            if (!event.getSource().isBypassInvul() && cap.getEnchantCap().hasEnchant()) {
                 int mobEnchantLevel = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.PROTECTION.get());
                 int mobEnchantSize = cap.getEnchantCap().getMobEnchants().size();
 
@@ -289,10 +274,10 @@ public class CommonEventHandler {
                if (cap.getEnchantCap().hasEnchant()) {
                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.THORN.get());
 
-                   if (event.getSource().getDirectEntity() instanceof LivingEntity && !event.getSource().is(DamageTypeTags.IS_PROJECTILE) && !event.getSource().is(DamageTypes.THORNS) && livingEntity.getRandom().nextFloat() < i * 0.1F) {
+                   if (event.getSource().getDirectEntity() instanceof LivingEntity && !event.getSource().isProjectile() && !event.getSource().isMagic() && livingEntity.getRandom().nextFloat() < i * 0.1F) {
                        LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();
 
-                       attacker.hurt(livingEntity.damageSources().thorns(livingEntity), MobEnchantCombatRules.getThornDamage(event.getAmount(), cap.getEnchantCap()));
+                       attacker.hurt(DamageSource.thorns(livingEntity), MobEnchantCombatRules.getThornDamage(event.getAmount(), cap.getEnchantCap()));
                    }
                }
             }
@@ -453,7 +438,7 @@ public class CommonEventHandler {
     public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         Player playerEntity = event.getEntity();
         if (playerEntity instanceof IEnchantCap cap) {
-            if (!playerEntity.level().isClientSide()) {
+            if (!playerEntity.level.isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
                     EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
                 }

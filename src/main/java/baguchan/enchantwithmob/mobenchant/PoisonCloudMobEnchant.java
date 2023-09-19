@@ -63,8 +63,8 @@ public class PoisonCloudMobEnchant extends MobEnchant {
 
 			if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON_CLOUD.get())) {
                 //arrow is different
-                if (!(projectile instanceof AbstractArrow) || !projectile.onGround()) {
-                    AreaEffectCloud areaeffectcloud = new AreaEffectCloud(owner.level(), event.getRayTraceResult().getLocation().x, event.getRayTraceResult().getLocation().y, event.getRayTraceResult().getLocation().z);
+				if (!(projectile instanceof AbstractArrow) || !projectile.isOnGround()) {
+					AreaEffectCloud areaeffectcloud = new AreaEffectCloud(owner.level, event.getRayTraceResult().getLocation().x, event.getRayTraceResult().getLocation().y, event.getRayTraceResult().getLocation().z);
                     areaeffectcloud.setRadius(0.6F);
                     areaeffectcloud.setRadiusOnUse(-0.01F);
                     areaeffectcloud.setWaitTime(10);
@@ -73,11 +73,10 @@ public class PoisonCloudMobEnchant extends MobEnchant {
                     areaeffectcloud.setRadiusPerTick(-0.001F);
 
                     areaeffectcloud.addEffect(new MobEffectInstance(MobEffects.POISON, 80, i - 1));
-                    owner.level().addFreshEntity(areaeffectcloud);
+					owner.level.addFreshEntity(areaeffectcloud);
                 }
 			}
 		}
-		;
 	}
 
 	public static boolean shooterIsLiving(Projectile projectile) {

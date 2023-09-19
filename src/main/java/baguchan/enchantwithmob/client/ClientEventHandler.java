@@ -7,6 +7,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector3f;
 import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
@@ -28,9 +32,6 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3d;
 
 import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.ANCIENT_GLINT;
 import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.enchantBeamSwirl;
@@ -89,18 +90,18 @@ public class ClientEventHandler {
 		float f1 = (float) (vector3d.y - d4);
 		float f2 = (float) (vector3d.z - d5);
 		float f3 = 0.1F;
-        VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+		VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANT_GLINT_LOCATION));
         Matrix4f matrix4f = p_229118_3_.last().pose();
         Matrix3f matrix3f = p_229118_3_.last().normal();
         float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
         float f5 = f2 * f4;
         float f6 = f * f4;
-        BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
-        BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
+		BlockPos blockpos = new BlockPos(p_229118_1_.getEyePosition(p_229118_2_));
+		BlockPos blockpos1 = new BlockPos(p_229118_5_.getEyePosition(p_229118_2_));
         int i = getBlockLightLevel(p_229118_1_, blockpos);
         int j = getBlockLightLevel(p_229118_5_, blockpos1);
-        int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
-        int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
+		int k = p_229118_1_.level.getBrightness(LightLayer.SKY, blockpos);
+		int l = p_229118_1_.level.getBrightness(LightLayer.SKY, blockpos1);
         renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
         renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
         p_229118_3_.popPose();
@@ -147,19 +148,20 @@ public class ClientEventHandler {
 	}
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {
-        return p_239381_1_.level().getBrightness(LightLayer.SKY, p_239381_2_);
+		return p_239381_1_.level.getBrightness(LightLayer.SKY, p_239381_2_);
 	}
 
 	protected static int getBlockLightLevel(Entity p_225624_1_, BlockPos p_225624_2_) {
-        return p_225624_1_.isOnFire() ? 15 : p_225624_1_.level().getBrightness(LightLayer.BLOCK, p_225624_2_);
+		return p_225624_1_.isOnFire() ? 15 : p_225624_1_.level.getBrightness(LightLayer.BLOCK, p_225624_2_);
 	}
 
 	private static void setupGlintTexturing(float p_110187_) {
 		long i = Util.getMillis() * 8L;
 		float f = (float) (i % 110000L) / 110000.0F;
 		float f1 = (float) (i % 30000L) / 30000.0F;
-		Matrix4f matrix4f = (new Matrix4f()).translation(-f, f1, 0.0F);
-		matrix4f.rotateZ(0.17453292F).scale(p_110187_);
+		Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-f, f1, 0.0F);
+		matrix4f.multiply(Vector3f.ZP.rotationDegrees(10.0F));
+		matrix4f.multiply(Matrix4f.createScaleMatrix(p_110187_, p_110187_, p_110187_));
 		RenderSystem.setTextureMatrix(matrix4f);
 	}
 }

@@ -75,7 +75,7 @@ public class EnchanterEntity extends SpellcasterIllager {
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.level().isClientSide) {
+        if (this.level.isClientSide) {
             if (this.attackAnimationTick < this.attackAnimationLength) {
                 this.attackAnimationTick++;
             }
@@ -124,13 +124,13 @@ public class EnchanterEntity extends SpellcasterIllager {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide) {
+        if (this.level.isClientSide) {
             this.setupAnimationStates();
         }
     }
 
     private void setupAnimationStates() {
-        if (this.attackAnimationState.isStarted() || this.castingAnimationState.isStarted() || this.hurtTime > 0 || this.walkAnimation.isMoving()) {
+        if (this.attackAnimationState.isStarted() || this.castingAnimationState.isStarted() || this.hurtTime > 0 || this.animationSpeed > 0F) {
             this.idleAnimationState.stop();
         } else {
             this.idleAnimationState.startIfStopped(this.tickCount);
@@ -273,18 +273,18 @@ public class EnchanterEntity extends SpellcasterIllager {
             } else if (EnchanterEntity.this.tickCount < this.nextAttackTickCount) {
                 return false;
             } else {
-                List<LivingEntity> list = EnchanterEntity.this.level().getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.fillter);
+                List<LivingEntity> list = EnchanterEntity.this.level.getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.fillter);
                 if (list.isEmpty()) {
                     return false;
                 } else {
-                    List<LivingEntity> enchanted_list = EnchanterEntity.this.level().getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.enchanted_fillter);
+                    List<LivingEntity> enchanted_list = EnchanterEntity.this.level.getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.enchanted_fillter);
 
                     //set enchant limit
                     if (enchanted_list.size() < 5) {
                         LivingEntity target = list.get(EnchanterEntity.this.random.nextInt(list.size()));
                         if (target != EnchanterEntity.this.getTarget() && target != EnchanterEntity.this && target.isAlliedTo(EnchanterEntity.this) && EnchanterEntity.this.isAlliedTo(target) && (target.getTeam() == EnchanterEntity.this.getTeam() || target.getMobType() == MobType.ILLAGER && target.getTeam() == null)) {
                             EnchanterEntity.this.setEnchantTarget(target);
-                            EnchanterEntity.this.level().broadcastEntityEvent(EnchanterEntity.this, (byte) 61);
+                            EnchanterEntity.this.level.broadcastEntityEvent(EnchanterEntity.this, (byte) 61);
                             return true;
                         } else {
                             return false;
@@ -407,7 +407,7 @@ public class EnchanterEntity extends SpellcasterIllager {
         @Override
         public void start() {
             super.start();
-            this.enchanter.level().broadcastEntityEvent(this.enchanter, (byte) 4);
+            this.enchanter.level.broadcastEntityEvent(this.enchanter, (byte) 4);
         }
 
         @Override

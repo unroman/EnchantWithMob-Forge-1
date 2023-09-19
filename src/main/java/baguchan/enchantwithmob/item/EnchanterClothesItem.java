@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class EnchanterClothesItem extends ArmorItem {
-    public EnchanterClothesItem(ArmorItem.Type type, Properties p_40388_) {
+    public EnchanterClothesItem(EquipmentSlot type, Properties p_40388_) {
         super(ModArmorMaterials.ENCHANTER_CLOTHES, type, p_40388_);
     }
 

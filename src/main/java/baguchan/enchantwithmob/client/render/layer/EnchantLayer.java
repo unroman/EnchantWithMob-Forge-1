@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
@@ -22,7 +24,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
 public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
@@ -62,7 +63,7 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
                 EntityModel<T> entitymodel = this.getParentModel();
                 entitymodel.prepareMobModel(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
                 this.getParentModel().copyPropertiesTo(entitymodel);
-                VertexConsumer ivertexbuilder = bufferIn.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+                VertexConsumer ivertexbuilder = bufferIn.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANT_GLINT_LOCATION));
                 entitymodel.setupAnim(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
                 entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, intensity, intensity, intensity, 1.0F);
             }
@@ -82,8 +83,9 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
         long i = Util.getMillis() * 8L;
         float f = (float) (i % 110000L) / 110000.0F;
         float f1 = (float) (i % 30000L) / 30000.0F;
-        Matrix4f matrix4f = (new Matrix4f()).translation(-f, f1, 0.0F);
-        matrix4f.rotateZ(0.17453292F).scale(p_110187_);
+        Matrix4f matrix4f = Matrix4f.createTranslateMatrix(-f, f1, 0.0F);
+        matrix4f.multiply(Vector3f.ZP.rotationDegrees(10.0F));
+        matrix4f.multiply(Matrix4f.createScaleMatrix(p_110187_, p_110187_, p_110187_));
         RenderSystem.setTextureMatrix(matrix4f);
     }
 }

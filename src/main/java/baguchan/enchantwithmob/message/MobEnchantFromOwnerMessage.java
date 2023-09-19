@@ -42,8 +42,8 @@ public class MobEnchantFromOwnerMessage {
 
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
-                Entity ownerEntity = Minecraft.getInstance().player.level().getEntity(message.ownerID);
+                Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
+                Entity ownerEntity = Minecraft.getInstance().player.level.getEntity(message.ownerID);
                 if (entity != null && entity instanceof LivingEntity && ownerEntity != null && ownerEntity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
                         cap.getEnchantCap().addOwner((LivingEntity) entity, (LivingEntity) ownerEntity);

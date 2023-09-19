@@ -4,7 +4,7 @@ import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -31,21 +31,20 @@ public class EnderDragonRendererMixin {
                 p_114211_.pushPose();
                 float f = (float) p_114208_.getLatencyPos(7, p_114210_)[0];
                 float f1 = (float) (p_114208_.getLatencyPos(5, p_114210_)[1] - p_114208_.getLatencyPos(10, p_114210_)[1]);
-                p_114211_.mulPose(Axis.YP.rotationDegrees(-f));
-                p_114211_.mulPose(Axis.XP.rotationDegrees(f1 * 10.0F));
+                p_114211_.mulPose(Vector3f.YP.rotationDegrees(-f));
+                p_114211_.mulPose(Vector3f.XP.rotationDegrees(f1 * 10.0F));
                 p_114211_.translate(0.0F, 0.0F, 1.0F);
                 p_114211_.scale(-1.0F, -1.0F, 1.0F);
                 p_114211_.translate(0.0F, -1.501F, 0.0F);
                 boolean flag = p_114208_.hurtTime > 0;
                 this.model.prepareMobModel(p_114208_, 0.0F, 0.0F, p_114210_);
                 if (p_114208_.dragonDeathTime <= 0) {
-                    VertexConsumer vertexconsumer3 = p_114212_.getBuffer(EnchantLayer.enchantSwirl(cap.getEnchantCap().isAncient() ? EnchantLayer.ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+                    VertexConsumer vertexconsumer3 = p_114212_.getBuffer(EnchantLayer.enchantSwirl(cap.getEnchantCap().isAncient() ? EnchantLayer.ANCIENT_GLINT : ItemRenderer.ENCHANT_GLINT_LOCATION));
                     this.model.renderToBuffer(p_114211_, vertexconsumer3, p_114213_, OverlayTexture.pack(0.0F, flag), 1.0F, 1.0F, 1.0F, 1.0F);
                 }
 
                 p_114211_.popPose();
             }
         }
-        ;
     }
 }

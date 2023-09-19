@@ -56,7 +56,7 @@ public class MobEnchantedMessage {
 
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
+                Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
                         if (!MobEnchantUtils.findMobEnchantHandler(cap.getEnchantCap().getMobEnchants(), message.enchantType)) {

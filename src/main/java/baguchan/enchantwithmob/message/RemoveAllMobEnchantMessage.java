@@ -36,7 +36,7 @@ public class RemoveAllMobEnchantMessage {
 
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
+                Entity entity = Minecraft.getInstance().player.level.getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
                         cap.getEnchantCap().removeAllMobEnchant((LivingEntity) entity);

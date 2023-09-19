@@ -221,7 +221,7 @@ public class MobEnchantUtils {
 				capability.getEnchantCap().addMobEnchant(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt));
 				flag = true;
 
-				if (!user.level().isClientSide()) {
+				if (!user.level.isClientSide()) {
 					itemIn.hurtAndBreak(1, user, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
 				}
@@ -239,7 +239,7 @@ public class MobEnchantUtils {
 			if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
 				capability.getEnchantCap().addMobEnchantFromOwner(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt), owner);
 				flag = true;
-				if (!owner.level().isClientSide()) {
+				if (!owner.level.isClientSide()) {
 					itemIn.hurtAndBreak(1, owner, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
 				}
