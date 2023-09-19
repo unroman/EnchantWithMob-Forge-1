@@ -3,19 +3,24 @@ package baguchan.enchantwithmob.mixin;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
+import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModTrackedDatas;
+import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements IEnchantCap {
@@ -38,6 +43,20 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap {
                 this.playSound(SoundEvents.ITEM_BREAK, 1.5F, 1.6F);
             }
         }
+    }
+
+    @Inject(method = "getVoicePitch", at = @At("RETURN"), cancellable = true)
+    public void getVoicePitch(CallbackInfoReturnable<Float> cir) {
+        int fastTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(this.getEnchantCap().getMobEnchants(), MobEnchants.FAST.get()), 0, 2);
+        int slowTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(this.getEnchantCap().getMobEnchants(), MobEnchants.SLOW.get()), 0, 2);
+        float different = Mth.clamp(cir.getReturnValue() + fastTime * 0.125F - slowTime * 0.125F, 0.1F, 2.0F);
+
+        cir.setReturnValue(different);
+    }
+
+    @Shadow
+    public boolean isBaby() {
+        return false;
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
