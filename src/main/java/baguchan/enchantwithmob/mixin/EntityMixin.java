@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Entity.class)
 public class EntityMixin implements IEnchantedTime {
-    private float differentTime;
+    private float differentTime = 1.0F;
 
     @Override
     public float getDifferentTime() {

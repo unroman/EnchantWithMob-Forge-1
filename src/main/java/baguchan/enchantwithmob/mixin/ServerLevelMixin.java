@@ -37,7 +37,7 @@ public abstract class ServerLevelMixin extends Level {
             int fastTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.FAST.get()), 0, 2);
             int slowTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.SLOW.get()), 0, 2);
 
-            float different = 1 + fastTime * 0.175F - slowTime * 0.175F;
+            float different = 1 + fastTime * 0.125F - slowTime * 0.125F;
 
 
             if (different > 1F || different < 1F) {

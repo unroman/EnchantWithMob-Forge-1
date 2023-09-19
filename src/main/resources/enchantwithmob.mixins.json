@@ -15,6 +15,7 @@
     "ArrowMixin",
     "client.EnderDragonRendererMixin",
     "client.EvokerFangsRendererMixin",
+    "client.HierarchicalModelMixin",
     "client.LivingEntityRendererMixin",
     "client.WitherSkullRendererMixin"
   ],
