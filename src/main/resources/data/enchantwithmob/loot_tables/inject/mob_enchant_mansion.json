@@ -18,7 +18,8 @@
                 "min": 20.0,
                 "max": 40.0
               },
-              "treasure": true
+              "treasure": true,
+              "curse": true
             }
           ],
           "name": "enchantwithmob:mob_enchant_book"
@@ -34,7 +35,8 @@
                 "min": 10.0,
                 "max": 40.0
               },
-              "treasure": true
+              "treasure": true,
+              "curse": true
             }
           ],
           "name": "enchantwithmob:enchanters_book"
