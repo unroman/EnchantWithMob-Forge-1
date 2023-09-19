@@ -5,8 +5,8 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
-public class FastMobEnchant extends MobEnchant {
-    public FastMobEnchant(Properties properties) {
+public class SlowMobEnchant extends MobEnchant {
+    public SlowMobEnchant(Properties properties) {
         super(properties);
     }
 
@@ -24,7 +24,7 @@ public class FastMobEnchant extends MobEnchant {
     }
 
     public boolean isCursedEnchant() {
-        return false;
+        return true;
     }
 
     @Override
@@ -34,6 +34,6 @@ public class FastMobEnchant extends MobEnchant {
 
     @Override
     protected boolean canApplyTogether(MobEnchant ench) {
-        return super.canApplyTogether(ench) && ench != MobEnchants.SPEEDY.get() && ench != MobEnchants.SLOW.get();
+        return super.canApplyTogether(ench) && ench != MobEnchants.SPEEDY.get() && ench != MobEnchants.FAST.get();
     }
 }
