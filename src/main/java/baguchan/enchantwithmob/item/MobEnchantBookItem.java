@@ -82,15 +82,7 @@ public class MobEnchantBookItem extends Item {
 
 
 	public void fillItemCategory(CreativeModeTab p_41151_, NonNullList<ItemStack> p_41152_) {
-		if (p_41151_ == CreativeModeTab.TAB_SEARCH) {
-			for (MobEnchant mobEnchant : MobEnchants.getRegistry().get().getValues()) {
-				if (!mobEnchant.isDisabled()) {
-					ItemStack stack = new ItemStack(this);
-					MobEnchantUtils.addMobEnchantToItemStack(stack, mobEnchant, mobEnchant.getMaxLevel());
-					p_41152_.add(stack);
-				}
-			}
-		} else {
+		if (this.allowedIn(p_41151_)) {
 			for (MobEnchant mobEnchant : MobEnchants.getRegistry().get().getValues()) {
 				if (!mobEnchant.isDisabled()) {
 					ItemStack stack = new ItemStack(this);
