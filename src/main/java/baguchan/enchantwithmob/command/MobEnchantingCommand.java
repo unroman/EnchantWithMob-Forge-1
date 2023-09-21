@@ -12,14 +12,14 @@ import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 public class MobEnchantingCommand {
 
 	private static final Dynamic2CommandExceptionType ERROR_LEVEL_TOO_HIGH = new Dynamic2CommandExceptionType((p_137022_, p_137023_) -> {
-		return Component.translatable("commands.enchant.failed.level", p_137022_, p_137023_);
+		return new TranslatableComponent("commands.enchant.failed.level", p_137022_, p_137023_);
 	});
 
 
@@ -55,15 +55,15 @@ public class MobEnchantingCommand {
 					enchantCap.getEnchantCap().setEnchantType((LivingEntity) entity, MobEnchantCapability.EnchantType.NORMAL);
 				}
 
-				commandStack.sendSuccess(Component.translatable("commands.enchantwithmob.mob_enchanting.clear", entity.getDisplayName()), true);
+				commandStack.sendSuccess(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.clear", entity.getDisplayName()), true);
 				return 1;
 			} else {
-				commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.clear.fail.no_living_entity", entity.getDisplayName()));
+				commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.clear.fail.no_living_entity", entity.getDisplayName()));
 
 				return 0;
 			}
 		} else {
-			commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.clear.fail.no_entity"));
+			commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.clear.fail.no_entity"));
 
 			return 0;
 		}
@@ -77,15 +77,15 @@ public class MobEnchantingCommand {
 					enchantCap.getEnchantCap().setEnchantType((LivingEntity) entity, ancientMob ? MobEnchantCapability.EnchantType.ANCIENT : MobEnchantCapability.EnchantType.NORMAL);
 				}
 
-				commandStack.sendSuccess(Component.translatable("commands.enchantwithmob.ancient_mob.set_ancient", entity.getDisplayName()), true);
+				commandStack.sendSuccess(new TranslatableComponent("commands.enchantwithmob.ancient_mob.set_ancient", entity.getDisplayName()), true);
 				return 1;
 			} else {
-				commandStack.sendFailure(Component.translatable("commands.enchantwithmob.ancient_mob.fail.no_living_entity", entity.getDisplayName()));
+				commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.ancient_mob.fail.no_living_entity", entity.getDisplayName()));
 
 				return 0;
 			}
 		} else {
-			commandStack.sendFailure(Component.translatable("commands.enchantwithmob.ancient_mob.fail.no_entity"));
+			commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.ancient_mob.fail.no_entity"));
 
 			return 0;
 		}
@@ -97,28 +97,28 @@ public class MobEnchantingCommand {
 			if (entity instanceof LivingEntity) {
 				if (mobEnchant != null) {
 					if (level > mobEnchant.getMaxLevel()) {
-						commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.set_enchant.fail.too_high"));
+						commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.set_enchant.fail.too_high"));
 						return 0;
 					} else {
 						if (entity instanceof IEnchantCap enchantCap) {
 							enchantCap.getEnchantCap().addMobEnchant((LivingEntity) entity, mobEnchant, level);
 						}
 
-						commandStack.sendSuccess(Component.translatable("commands.enchantwithmob.mob_enchanting.set_enchant", entity.getDisplayName(), MobEnchants.getRegistry().get().getKey(mobEnchant)), true);
+						commandStack.sendSuccess(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.set_enchant", entity.getDisplayName(), MobEnchants.getRegistry().get().getKey(mobEnchant)), true);
 						return 1;
 					}
 				} else {
-					commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_mobenchant"));
+					commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_mobenchant"));
 
 					return 0;
 				}
 			} else {
-				commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_living_entity", entity.getDisplayName()));
+				commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_living_entity", entity.getDisplayName()));
 
 				return 0;
 			}
 		} else {
-			commandStack.sendFailure(Component.translatable("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_entity"));
+			commandStack.sendFailure(new TranslatableComponent("commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_entity"));
 
 			return 0;
 		}

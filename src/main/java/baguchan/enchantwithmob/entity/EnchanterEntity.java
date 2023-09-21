@@ -36,10 +36,6 @@ import java.util.function.Predicate;
 public class EnchanterEntity extends SpellcasterIllager {
     private LivingEntity enchantTarget;
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState attackAnimationState = new AnimationState();
-    public final AnimationState castingAnimationState = new AnimationState();
-
     public int attackAnimationTick;
     public final int attackAnimationLength = 19;
     public final int attackAnimationActionPoint = 10;
@@ -80,16 +76,8 @@ public class EnchanterEntity extends SpellcasterIllager {
                 this.attackAnimationTick++;
             }
 
-            if (this.attackAnimationTick >= this.attackAnimationLength) {
-                this.attackAnimationState.stop();
-            }
-
             if (this.castingAnimationTick < this.castingAnimationLength) {
                 this.castingAnimationTick++;
-            }
-
-            if (this.castingAnimationTick >= this.castingAnimationLength) {
-                this.castingAnimationState.stop();
             }
         }
     }
@@ -97,14 +85,8 @@ public class EnchanterEntity extends SpellcasterIllager {
     @Override
     public void handleEntityEvent(byte p_21375_) {
         if (p_21375_ == 4) {
-            this.attackAnimationState.start(this.tickCount);
-            this.idleAnimationState.stop();
-            this.castingAnimationState.stop();
             this.attackAnimationTick = 0;
         } else if (p_21375_ == 61) {
-            this.castingAnimationState.start(this.tickCount);
-            this.idleAnimationState.stop();
-            this.attackAnimationState.stop();
             this.castingAnimationTick = 0;
         } else {
             super.handleEntityEvent(p_21375_);
@@ -119,24 +101,6 @@ public class EnchanterEntity extends SpellcasterIllager {
     public static AttributeSupplier.Builder createAttributeMap() {
         return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double) 0.3F).add(Attributes.MAX_HEALTH, 24.0D).add(Attributes.FOLLOW_RANGE, 24.0D).add(Attributes.ATTACK_DAMAGE, 2.0F);
     }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (this.level.isClientSide) {
-            this.setupAnimationStates();
-        }
-    }
-
-    private void setupAnimationStates() {
-        if (this.attackAnimationState.isStarted() || this.castingAnimationState.isStarted() || this.hurtTime > 0 || this.animationSpeed > 0F) {
-            this.idleAnimationState.stop();
-        } else {
-            this.idleAnimationState.startIfStopped(this.tickCount);
-        }
-    }
-
 
     @Override
     public boolean isAlliedTo(Entity p_184191_1_) {
@@ -427,7 +391,7 @@ public class EnchanterEntity extends SpellcasterIllager {
                     if (this.tick == this.enchanter.attackAnimationActionPoint) {
                         this.enchanter.swing(InteractionHand.MAIN_HAND);
                         this.enchanter.doHurtTarget(livingentity);
-                        this.enchanter.playSound(SoundEvents.ILLUSIONER_AMBIENT);
+                        this.enchanter.playSound(SoundEvents.ILLUSIONER_AMBIENT, 1, 1);
                     }
                     this.enchanter.getNavigation().stop();
                 }

@@ -3,7 +3,6 @@ package baguchan.enchantwithmob.client;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
 import baguchan.enchantwithmob.client.model.EnchanterModel;
-import baguchan.enchantwithmob.client.overlay.MobEnchantOverlay;
 import baguchan.enchantwithmob.client.render.EnchanterRenderer;
 import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedEyesLayer;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -97,8 +95,5 @@ public class ClientRegistrar {
         });
     }
 
-    @SubscribeEvent
-    public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("mobenchant", new MobEnchantOverlay());
-    }
+
 }

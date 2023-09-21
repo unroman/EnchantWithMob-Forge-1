@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.client.IItemRenderProperties;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -24,22 +24,23 @@ public class EnchanterClothesItem extends ArmorItem {
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
         super.initializeClient(consumer);
         consumer.accept(ArmorRender.INSTANCE);
     }
 
-    private static final class ArmorRender implements IClientItemExtensions {
+    private static final class ArmorRender implements IItemRenderProperties {
         private static final ArmorRender INSTANCE = new ArmorRender();
 
 
+        @NotNull
         @Override
-        public @NotNull Model getGenericArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+        public Model getBaseArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
             EntityModelSet models = Minecraft.getInstance().getEntityModels();
             ModelPart root = models.bakeLayer(ModModelLayers.ENCHANTER_CLOTHES);
 
             EnchanterClothesModel<?> model2 = new EnchanterClothesModel<>(root);
-            ForgeHooksClient.copyModelProperties(original, model2);
+            ForgeHooksClient.copyModelProperties(_default, model2);
             return model2;
         }
 /*

@@ -1,12 +1,9 @@
 package baguchan.enchantwithmob.client.model;
 
 import bagu_chan.bagus_lib.client.layer.IArmor;
-import baguchan.enchantwithmob.client.animation.EnchanterAnimation;
 import baguchan.enchantwithmob.entity.EnchanterEntity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.animation.AnimationDefinition;
-import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -97,41 +94,14 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
 		this.head.xRot = headPitch * ((float) Math.PI / 180F);
 
 		this.cape.xRot = 0.1F + limbSwingAmount * 0.6F;
 
 		AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = entity.getArmPose();
-		if (this.riding) {
-			this.applyStatic(EnchanterAnimation.ENCHANTER_SIT);
-		}
-
-		if (entity.castingAnimationState.isStarted()) {
-			this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANTER_ENCHANCE, ageInTicks);
-		}
-
-		if (entity.attackAnimationState.isStarted()) {
-			this.animate(entity.attackAnimationState, EnchanterAnimation.ENCHANTER_ATTACK, ageInTicks);
-		}
-
-		if (!entity.castingAnimationState.isStarted() && !entity.attackAnimationState.isStarted()) {
-			this.animate(entity.idleAnimationState, EnchanterAnimation.ENCHANTER_IDLE, ageInTicks);
-			this.applyStatic(EnchanterAnimation.ENCHANTER_NO_ARM);
-		}
-		this.animateWalk(EnchanterAnimation.ENCHANTER_WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
 	}
 
-	protected void applyStatic(AnimationDefinition p_288996_) {
-		KeyframeAnimations.animate(this, p_288996_, 0L, 1.0F, ANIMATION_VECTOR_CACHE);
-	}
-
-	protected void animateWalk(AnimationDefinition p_268159_, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
-		long i = (long) (p_268057_ * 50.0F * p_268138_);
-		float f = Math.min(p_268347_ * p_268165_, 1.0F);
-		KeyframeAnimations.animate(this, p_268159_, i, f, ANIMATION_VECTOR_CACHE);
-	}
 
 	@Override
 	public ModelPart root() {

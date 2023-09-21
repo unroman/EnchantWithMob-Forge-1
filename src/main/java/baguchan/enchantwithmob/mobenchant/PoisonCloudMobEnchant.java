@@ -39,7 +39,7 @@ public class PoisonCloudMobEnchant extends MobEnchant {
 
 	@Override
 	public boolean isCompatibleMob(LivingEntity livingEntity) {
-		return EnchantConfig.COMMON.WHITELIST_SHOOT_ENTITY.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType()).toString()) && !(livingEntity instanceof Witch) || livingEntity instanceof Player;
+		return EnchantConfig.COMMON.WHITELIST_SHOOT_ENTITY.get().contains(ForgeRegistries.ENTITIES.getKey(livingEntity.getType()).toString()) && !(livingEntity instanceof Witch) || livingEntity instanceof Player;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class PoisonCloudMobEnchant extends MobEnchant {
 	@SubscribeEvent
 	public static void onImpact(ProjectileImpactEvent event) {
 		Projectile projectile = event.getProjectile();
-		if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_POISON_CLOUD_PROJECTILE.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(projectile.getType()).toString()))
+		if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_POISON_CLOUD_PROJECTILE.get().contains(ForgeRegistries.ENTITIES.getKey(projectile.getType()).toString()))
 			return;
 		LivingEntity owner = (LivingEntity) projectile.getOwner();
 		if (owner instanceof IEnchantCap cap) {

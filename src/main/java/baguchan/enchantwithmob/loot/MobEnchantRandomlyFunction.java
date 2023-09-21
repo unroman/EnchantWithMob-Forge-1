@@ -8,17 +8,11 @@ import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -30,6 +24,7 @@ import org.slf4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,7 +42,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 	}
 
 	public ItemStack run(ItemStack p_80429_, LootContext p_80430_) {
-		RandomSource randomsource = p_80430_.getRandom();
+		Random randomsource = p_80430_.getRandom();
 		MobEnchant enchantment;
 		if (this.enchantments.isEmpty()) {
 			boolean flag = p_80429_.is(Items.BOOK) || p_80429_.is(ModItems.MOB_ENCHANT_BOOK.get());
@@ -67,7 +62,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		return enchantItem(p_80429_, enchantment, randomsource);
 	}
 
-	private static ItemStack enchantItem(ItemStack p_230980_, MobEnchant p_230981_, RandomSource p_230982_) {
+	private static ItemStack enchantItem(ItemStack p_230980_, MobEnchant p_230981_, Random p_230982_) {
 		int i = Mth.nextInt(p_230982_, p_230981_.getMinLevel(), p_230981_.getMaxLevel());
 		if (p_230980_.is(Items.BOOK)) {
 			p_230980_ = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());

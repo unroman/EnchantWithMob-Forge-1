@@ -3,7 +3,6 @@ package baguchan.enchantwithmob.message;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,7 +38,7 @@ public class MobEnchantedMessage {
 
     public void serialize(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
-        buffer.writeRegistryId(MobEnchants.getRegistry().get(), this.enchantType);
+        buffer.writeRegistryId(this.enchantType);
         buffer.writeInt(this.level);
     }
 

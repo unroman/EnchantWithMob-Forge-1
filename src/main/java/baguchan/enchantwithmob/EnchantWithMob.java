@@ -58,7 +58,7 @@ public class EnchantWithMob {
 
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		MobEnchants.MOB_ENCHANT.register(bus);
-		ModArgumentTypeInfos.COMMAND_ARGUMENT_TYPES.register(bus);
+		ModArgumentTypeInfos.init();
 		ModEntities.ENTITIES_REGISTRY.register(bus);
 		ModItems.ITEM_REGISTRY.register(bus);
 
@@ -78,29 +78,25 @@ public class EnchantWithMob {
 	}
 
 	private void setupMessages() {
-        CHANNEL.messageBuilder(SoulParticleMessage.class, 0)
-                .encoder(SoulParticleMessage::serialize).decoder(SoulParticleMessage::deserialize)
-                .consumerMainThread(SoulParticleMessage::handle)
-                .add();
-        CHANNEL.messageBuilder(AncientMessage.class, 1)
+		CHANNEL.messageBuilder(AncientMessage.class, 0)
                 .encoder(AncientMessage::serialize).decoder(AncientMessage::deserialize)
-                .consumerMainThread(AncientMessage::handle)
+				.consumer(AncientMessage::handle)
                 .add();
-        CHANNEL.messageBuilder(MobEnchantedMessage.class, 2)
+		CHANNEL.messageBuilder(MobEnchantedMessage.class, 1)
                 .encoder(MobEnchantedMessage::serialize).decoder(MobEnchantedMessage::deserialize)
-                .consumerMainThread(MobEnchantedMessage::handle)
+				.consumer(MobEnchantedMessage::handle)
                 .add();
-        CHANNEL.messageBuilder(MobEnchantFromOwnerMessage.class, 3)
+		CHANNEL.messageBuilder(MobEnchantFromOwnerMessage.class, 2)
                 .encoder(MobEnchantFromOwnerMessage::serialize).decoder(MobEnchantFromOwnerMessage::deserialize)
-                .consumerMainThread(MobEnchantFromOwnerMessage::handle)
+				.consumer(MobEnchantFromOwnerMessage::handle)
                 .add();
-        CHANNEL.messageBuilder(RemoveAllMobEnchantMessage.class, 4)
+		CHANNEL.messageBuilder(RemoveAllMobEnchantMessage.class, 3)
                 .encoder(RemoveAllMobEnchantMessage::serialize).decoder(RemoveAllMobEnchantMessage::deserialize)
-                .consumerMainThread(RemoveAllMobEnchantMessage::handle)
+				.consumer(RemoveAllMobEnchantMessage::handle)
                 .add();
-        CHANNEL.messageBuilder(RemoveMobEnchantOwnerMessage.class, 6)
+		CHANNEL.messageBuilder(RemoveMobEnchantOwnerMessage.class, 4)
                 .encoder(RemoveMobEnchantOwnerMessage::serialize).decoder(RemoveMobEnchantOwnerMessage::deserialize)
-                .consumerMainThread(RemoveMobEnchantOwnerMessage::handle)
+				.consumer(RemoveMobEnchantOwnerMessage::handle)
                 .add();
     }
 

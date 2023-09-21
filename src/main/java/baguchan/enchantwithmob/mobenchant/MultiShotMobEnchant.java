@@ -13,7 +13,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,13 +29,13 @@ public class MultiShotMobEnchant extends MobEnchant {
 	}
 
 	@SubscribeEvent
-	public static void onEntityJoinWorld(EntityJoinLevelEvent event) {
+	public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if (!event.loadedFromDisk()) {
 			Entity entity = event.getEntity();
-			Level level = event.getLevel();
+			Level level = event.getWorld();
 			if (entity instanceof Projectile) {
 				Projectile projectile = (Projectile) entity;
-				if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_MULTISHOT_PROJECTILE.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString()))
+				if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_MULTISHOT_PROJECTILE.get().contains(ForgeRegistries.ENTITIES.getKey(entity.getType()).toString()))
 					return;
 				LivingEntity owner = (LivingEntity) projectile.getOwner();
 				MobEnchantUtils.executeIfPresent(owner, MobEnchants.MULTISHOT.get(), () -> {
@@ -98,6 +98,6 @@ public class MultiShotMobEnchant extends MobEnchant {
 
 	@Override
 	public boolean isCompatibleMob(LivingEntity livingEntity) {
-		return EnchantConfig.COMMON.WHITELIST_SHOOT_ENTITY.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType()).toString()) || livingEntity instanceof Player;
+		return EnchantConfig.COMMON.WHITELIST_SHOOT_ENTITY.get().contains(ForgeRegistries.ENTITIES.getKey(livingEntity.getType()).toString()) || livingEntity instanceof Player;
 	}
 }

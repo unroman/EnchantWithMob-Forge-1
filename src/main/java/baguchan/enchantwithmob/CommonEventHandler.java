@@ -8,7 +8,7 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantCombatRules;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -29,7 +29,7 @@ import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -50,9 +50,9 @@ public class CommonEventHandler {
      * this event handle the Ender dragon mob enchant
      */
     @SubscribeEvent
-    public static void onEnderDragonSpawn(EntityJoinLevelEvent event) {
+    public static void onEnderDragonSpawn(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof IEnchantCap cap && event.getEntity() instanceof EnderDragon livingEntity) {
-            LevelAccessor world = event.getLevel();
+            LevelAccessor world = event.getWorld();
             if (!world.isClientSide()) {
                 if (!cap.getEnchantCap().hasEnchant()) {
                     if (isSpawnAlwayEnchantableAncientEntity(livingEntity)) {
@@ -113,9 +113,9 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onSpawnEntity(LivingSpawnEvent.SpecialSpawn event) {
         if (event.getEntity() instanceof IEnchantCap cap) {
-            LevelAccessor world = event.getLevel();
+            LevelAccessor world = event.getWorld();
             if (!world.isClientSide()) {
-                LivingEntity livingEntity = event.getEntity();
+                LivingEntity livingEntity = event.getEntityLiving();
 
                 if (isSpawnAlwayEnchantableAncientEntity(livingEntity)) {
                     int i = 0;
@@ -204,20 +204,20 @@ public class CommonEventHandler {
     }
 
     private static boolean isSpawnAlwayEnchantableEntity(Entity entity) {
-        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && EnchantConfig.COMMON.ALWAY_ENCHANTABLE_MOBS.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && EnchantConfig.COMMON.ALWAY_ENCHANTABLE_MOBS.get().contains(ForgeRegistries.ENTITIES.getKey(entity.getType()).toString());
     }
 
     private static boolean isSpawnAlwayEnchantableAncientEntity(Entity entity) {
-        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && EnchantConfig.COMMON.ALWAY_ENCHANTABLE_ANCIENT_MOBS.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && EnchantConfig.COMMON.ALWAY_ENCHANTABLE_ANCIENT_MOBS.get().contains(ForgeRegistries.ENTITIES.getKey(entity.getType()).toString());
     }
 
     private static boolean isSpawnEnchantableEntity(Entity entity) {
-        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && !EnchantConfig.COMMON.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+        return !(entity instanceof Player) && !(entity instanceof ArmorStand) && !(entity instanceof Boat) && !(entity instanceof Minecart) && !EnchantConfig.COMMON.ENCHANT_ON_SPAWN_EXCLUSION_MOBS.get().contains(ForgeRegistries.ENTITIES.getKey(entity.getType()).toString());
     }
 
     @SubscribeEvent
-    public static void onUpdateEnchanted(LivingEvent.LivingTickEvent event) {
-        LivingEntity livingEntity = event.getEntity();
+    public static void onUpdateEnchanted(LivingEvent.LivingUpdateEvent event) {
+        LivingEntity livingEntity = event.getEntityLiving();
 
         if (livingEntity instanceof IEnchantCap cap) {
             for (MobEnchantHandler enchantHandler : cap.getEnchantCap().getMobEnchants()) {
@@ -231,7 +231,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
-        LivingEntity livingEntity = event.getEntity();
+        LivingEntity livingEntity = event.getEntityLiving();
 
         if (event.getSource().getEntity() instanceof LivingEntity) {
             LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
@@ -292,26 +292,26 @@ public class CommonEventHandler {
         ItemStack stack = event.getItemStack();
         Entity entityTarget = event.getTarget();
 
-        if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+        if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !event.getPlayer().getCooldowns().isOnCooldown(stack.getItem())) {
             if (entityTarget instanceof LivingEntity) {
                 LivingEntity target = (LivingEntity) entityTarget;
                 if (MobEnchantUtils.hasMobEnchant(stack)) {
 
                     if (target instanceof IEnchantCap cap) {
-                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getEntity(), cap);
+                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getPlayer(), cap);
 
                         if (flag) {
                             event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                            stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
+                            stack.hurtAndBreak(1, event.getPlayer(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
 
-                            event.getEntity().getCooldowns().addCooldown(stack.getItem(), 60);
+                            event.getPlayer().getCooldowns().addCooldown(stack.getItem(), 60);
 
                             event.setCancellationResult(InteractionResult.SUCCESS);
                             event.setCanceled(true);
                         } else {
-                            event.getEntity().displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
-                            event.getEntity().getCooldowns().addCooldown(stack.getItem(), 20);
+                            event.getPlayer().displayClientMessage(new TranslatableComponent("enchantwithmob.cannot.enchant"), true);
+                            event.getPlayer().getCooldowns().addCooldown(stack.getItem(), 20);
                             event.setCancellationResult(InteractionResult.FAIL);
                             event.setCanceled(true);
                         }
@@ -320,7 +320,7 @@ public class CommonEventHandler {
             }
         }
 
-        if (stack.getItem() == ModItems.MOB_UNENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+        if (stack.getItem() == ModItems.MOB_UNENCHANT_BOOK.get() && !event.getPlayer().getCooldowns().isOnCooldown(stack.getItem())) {
             if (entityTarget instanceof LivingEntity) {
                 LivingEntity target = (LivingEntity) entityTarget;
 
@@ -328,9 +328,9 @@ public class CommonEventHandler {
                     MobEnchantUtils.removeMobEnchantToEntity(target, cap);
                     event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                    stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
+                    stack.hurtAndBreak(1, event.getPlayer(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
 
-                    event.getEntity().getCooldowns().addCooldown(stack.getItem(), 80);
+                    event.getPlayer().getCooldowns().addCooldown(stack.getItem(), 80);
 
                     event.setCancellationResult(InteractionResult.SUCCESS);
                     event.setCanceled(true);
@@ -409,7 +409,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onExpDropped(LivingExperienceDropEvent event) {
-        LivingEntity entity = event.getEntity();
+        LivingEntity entity = event.getEntityLiving();
         if (entity instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant()) {
                 if (cap.getEnchantCap().isAncient()) {
@@ -423,7 +423,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
+        Player player = event.getPlayer();
         if (player instanceof ServerPlayer) {
             if (player instanceof IEnchantCap cap) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
@@ -436,7 +436,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        Player playerEntity = event.getEntity();
+        Player playerEntity = event.getPlayer();
         if (playerEntity instanceof IEnchantCap cap) {
             if (!playerEntity.level.isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
@@ -448,10 +448,10 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void bringBackEnchant(EntityJoinLevelEvent event) {
+    public static void bringBackEnchant(EntityJoinWorldEvent event) {
         Entity livingEntity = event.getEntity();
         if (livingEntity instanceof IEnchantCap cap) {
-            if (!event.getLevel().isClientSide()) {
+            if (!event.getWorld().isClientSide()) {
                 //Sync Client Enchant
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
                     MobEnchantedMessage message = new MobEnchantedMessage(livingEntity, cap.getEnchantCap().getMobEnchants().get(i));
@@ -465,7 +465,7 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onClone(PlayerEvent.Clone event) {
         Player oldPlayer = event.getOriginal();
-        Player newPlayer = event.getEntity();
+        Player newPlayer = event.getPlayer();
         if (!event.isWasDeath()) {
             ((IEnchantCap) oldPlayer).getEnchantCap().getMobEnchants().forEach(mobEnchantHandler -> {
                 ((IEnchantCap) newPlayer).getEnchantCap().addMobEnchant(newPlayer, mobEnchantHandler.getMobEnchant(), mobEnchantHandler.getEnchantLevel());

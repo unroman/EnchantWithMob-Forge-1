@@ -9,11 +9,12 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class MobEnchant {
+public class MobEnchant extends ForgeRegistryEntry<MobEnchant> {
 	private final Map<Attribute, AttributeModifier> attributeModifierMap = Maps.newHashMap();
 	protected final Rarity enchantType;
 	private final int level;

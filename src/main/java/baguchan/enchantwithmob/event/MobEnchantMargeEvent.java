@@ -13,7 +13,7 @@ public class MobEnchantMargeEvent {
 
 	@SubscribeEvent
 	public static void onEntityConversion(LivingConversionEvent.Post event) {
-        LivingEntity livingEntity = event.getEntity();
+        LivingEntity livingEntity = event.getEntityLiving();
         LivingEntity outcome = event.getOutcome();
 
         if (outcome instanceof IEnchantCap cap) {
