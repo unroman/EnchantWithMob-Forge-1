@@ -58,6 +58,7 @@ public class EnchantWithMob {
 
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModArgumentTypeInfos.init();
+		MobEnchants.MOB_ENCHANTS_REGISTER.register(bus);
 		ModEntities.ENTITIES_REGISTRY.register(bus);
 		ModItems.ITEM_REGISTRY.register(bus);
 

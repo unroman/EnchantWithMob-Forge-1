@@ -189,7 +189,7 @@ public class ClientEventHandler {
 
 						ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 
-						MutableComponent s = new TranslatableComponent("mobenchant." + MobEnchants.getRegistry().get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().get().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(new TranslatableComponent("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+						MutableComponent s = new TranslatableComponent("mobenchant." + MobEnchants.MOB_ENCHANTS.get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.MOB_ENCHANTS.get().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(new TranslatableComponent("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
 
 						int xOffset = 20;
 						int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;

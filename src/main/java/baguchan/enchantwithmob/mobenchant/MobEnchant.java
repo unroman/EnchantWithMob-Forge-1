@@ -87,7 +87,7 @@ public class MobEnchant extends ForgeRegistryEntry<MobEnchant> {
     }
 
     public MobEnchant addAttributesModifier(Attribute attributeIn, String uuid, double amount, AttributeModifier.Operation operation) {
-		AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(uuid), Util.makeDescriptionId("mobenchant", MobEnchants.getRegistry().get().getKey(this)), amount, operation);
+        AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(uuid), Util.makeDescriptionId("mobenchant", this.getRegistryName()), amount, operation);
         this.attributeModifierMap.put(attributeIn, attributemodifier);
         return this;
     }
@@ -112,7 +112,7 @@ public class MobEnchant extends ForgeRegistryEntry<MobEnchant> {
 			if (modifiableattributeinstance != null) {
 				AttributeModifier attributemodifier = entry.getValue();
 				modifiableattributeinstance.removeModifier(attributemodifier);
-				modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getId(), MobEnchants.getRegistry().get().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.getOperation()));
+                modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getId(), this.getRegistryName().toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.getOperation()));
 			}
 		}
     }
@@ -122,7 +122,7 @@ public class MobEnchant extends ForgeRegistryEntry<MobEnchant> {
     }
 
     public boolean isDisabled() {
-        return EnchantConfig.COMMON.DISABLE_ENCHANTS.get().contains(MobEnchants.getRegistry().get().getKey(this).toString());
+        return EnchantConfig.COMMON.DISABLE_ENCHANTS.get().contains(MobEnchants.MOB_ENCHANTS.get().getKey(this).toString());
     }
 
     public boolean isCursedEnchant() {

@@ -2,20 +2,32 @@ package baguchan.enchantwithmob.registry;
 
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.mobenchant.*;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MobEnchants {
+	public static final ResourceKey<Registry<MobEnchant>> MOB_ENCHANT = key("mob_enchant");
+	public static final DeferredRegister<MobEnchant> MOB_ENCHANTS_REGISTER = DeferredRegister.create(MOB_ENCHANT, EnchantWithMob.MODID);
+	public static final Supplier<IForgeRegistry<MobEnchant>> MOB_ENCHANTS = MOB_ENCHANTS_REGISTER.makeRegistry(MobEnchant.class, () -> new RegistryBuilder<MobEnchant>()
+			.addCallback(MobEnchant.class)
+			.setName(new ResourceLocation(EnchantWithMob.MODID, "mob_enchant"))
+			.setDefaultKey(new ResourceLocation(EnchantWithMob.MODID, "protection")));
+
+	private static <T> ResourceKey<Registry<T>> key(String name) {
+		return ResourceKey.createRegistryKey(new ResourceLocation(name));
+	}
 
 	public static final MobEnchant PROTECTION = new ProtectionMobEnchant(new MobEnchant.Properties(MobEnchant.Rarity.COMMON, 4));
 	public static final MobEnchant TOUGH = new ToughMobEnchant(new MobEnchant.Properties(MobEnchant.Rarity.VERY_RARE, 2)).addAttributesModifier(Attributes.ARMOR, "313644c5-ead2-4670-b9eb-0b41d59ce5a2", (double) 2.0F, AttributeModifier.Operation.ADDITION).addAttributesModifier(Attributes.ARMOR_TOUGHNESS, "8135df8f-38d9-490a-8d6f-c908fa973b34", (double) 0.5F, AttributeModifier.Operation.ADDITION);
@@ -32,24 +44,6 @@ public class MobEnchants {
 	public static final MobEnchant SMALL = new SmallMobEnchant(new MobEnchant.Properties(MobEnchant.Rarity.VERY_RARE, 2)).addAttributesModifier(Attributes.MAX_HEALTH, "b4170c63-d50b-a0ee-15b7-9156c6e41940", -0.1D, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	public static final MobEnchant FAST = new FastMobEnchant(new MobEnchant.Properties(MobEnchant.Rarity.VERY_RARE, 2));
 	public static final MobEnchant SLOW = new SlowMobEnchant(new MobEnchant.Properties(MobEnchant.Rarity.VERY_RARE, 2));
-
-	private static Supplier<IForgeRegistry<MobEnchant>> registry;
-
-	@SubscribeEvent
-	public static void onNewRegistry(NewRegistryEvent event) {
-		registry = event.create(new RegistryBuilder<MobEnchant>()
-				.addCallback(MobEnchant.class)
-				.setName(new ResourceLocation(EnchantWithMob.MODID, "mob_enchant"))
-				.setDefaultKey(new ResourceLocation(EnchantWithMob.MODID, "protection")));
-	}
-
-	public static Supplier<IForgeRegistry<MobEnchant>> getRegistry() {
-		if (registry == null) {
-			throw new IllegalStateException("Registry not yet initialized");
-		}
-		return registry;
-	}
-
 	@SubscribeEvent
 	public static void registerMobEnchant(RegistryEvent.Register<MobEnchant> event) {
 		event.getRegistry().register(PROTECTION.setRegistryName("protection"));

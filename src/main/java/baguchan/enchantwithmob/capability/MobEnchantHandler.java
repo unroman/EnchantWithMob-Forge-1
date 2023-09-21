@@ -27,7 +27,7 @@ public class MobEnchantHandler {
 		CompoundTag nbt = new CompoundTag();
 
 		if (mobEnchant != null) {
-			nbt.putString("MobEnchant", MobEnchants.getRegistry().get().getKey(mobEnchant).toString());
+			nbt.putString("MobEnchant", MobEnchants.MOB_ENCHANTS.get().getKey(mobEnchant).toString());
 			nbt.putInt("EnchantLevel", enchantLevel);
 		}
 

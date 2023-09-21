@@ -46,7 +46,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		MobEnchant enchantment;
 		if (this.enchantments.isEmpty()) {
 			boolean flag = p_80429_.is(Items.BOOK) || p_80429_.is(ModItems.MOB_ENCHANT_BOOK.get());
-			List<MobEnchant> list = MobEnchants.getRegistry().get().getValues().stream().filter(MobEnchant::isOnlyChest).filter((p_80436_) -> {
+			List<MobEnchant> list = MobEnchants.MOB_ENCHANTS.get().getValues().stream().filter(MobEnchant::isOnlyChest).filter((p_80436_) -> {
 				return flag;
 			}).collect(Collectors.toList());
 			if (list.isEmpty()) {
@@ -108,7 +108,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 				JsonArray jsonarray = new JsonArray();
 
 				for (MobEnchant enchantment : p_80455_.enchantments) {
-					ResourceLocation resourcelocation = MobEnchants.getRegistry().get().getKey(enchantment);
+					ResourceLocation resourcelocation = MobEnchants.MOB_ENCHANTS.get().getKey(enchantment);
 					if (resourcelocation == null) {
 						throw new IllegalArgumentException("Don't know how to serialize enchantment " + enchantment);
 					}
@@ -126,7 +126,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 			if (p_80450_.has("enchantments")) {
 				for (JsonElement jsonelement : GsonHelper.getAsJsonArray(p_80450_, "enchantments")) {
 					String s = GsonHelper.convertToString(jsonelement, "enchantment");
-					MobEnchant enchantment = MobEnchants.getRegistry().get().getValue(new ResourceLocation(s));
+					MobEnchant enchantment = MobEnchants.MOB_ENCHANTS.get().getValue(new ResourceLocation(s));
 					list.add(enchantment);
 				}
 			}

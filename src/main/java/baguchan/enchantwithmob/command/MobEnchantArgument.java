@@ -35,15 +35,15 @@ public class MobEnchantArgument implements ArgumentType<MobEnchant> {
 
 	public MobEnchant parse(StringReader p_parse_1_) throws CommandSyntaxException {
 		ResourceLocation resourcelocation = ResourceLocation.read(p_parse_1_);
-		if (MobEnchants.getRegistry().get().containsKey(resourcelocation)) {
-			return MobEnchants.getRegistry().get().getValue(resourcelocation);
+		if (MobEnchants.MOB_ENCHANTS.get().containsKey(resourcelocation)) {
+			return MobEnchants.MOB_ENCHANTS.get().getValue(resourcelocation);
 		} else {
 			throw ERROR_UNKNOWN_EFFECT.create(resourcelocation);
 		}
 	}
 
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> p_listSuggestions_1_, SuggestionsBuilder p_listSuggestions_2_) {
-		return SharedSuggestionProvider.suggestResource(MobEnchants.getRegistry().get().getKeys().stream().filter(resource -> !EnchantConfig.COMMON.DISABLE_ENCHANTS.get().contains(resource.toString())), p_listSuggestions_2_);
+		return SharedSuggestionProvider.suggestResource(MobEnchants.MOB_ENCHANTS.get().getKeys().stream().filter(resource -> !EnchantConfig.COMMON.DISABLE_ENCHANTS.get().contains(resource.toString())), p_listSuggestions_2_);
 	}
 
 	public Collection<String> getExamples() {

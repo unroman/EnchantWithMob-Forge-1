@@ -84,7 +84,7 @@ public class MobEnchantBookItem extends Item {
 
 	public void fillItemCategory(CreativeModeTab p_41151_, NonNullList<ItemStack> p_41152_) {
 		if (this.allowdedIn(p_41151_)) {
-			for (MobEnchant mobEnchant : MobEnchants.getRegistry().get().getValues()) {
+			for (MobEnchant mobEnchant : MobEnchants.MOB_ENCHANTS.get().getValues()) {
 				if (!mobEnchant.isDisabled()) {
 					ItemStack stack = new ItemStack(this);
 					MobEnchantUtils.addMobEnchantToItemStack(stack, mobEnchant, mobEnchant.getMaxLevel());
@@ -114,7 +114,7 @@ public class MobEnchantBookItem extends Item {
 					ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 					ChatFormatting[] textformatting3 = new ChatFormatting[]{ChatFormatting.RED};
 
-					tooltip.add(new TranslatableComponent("mobenchant." + MobEnchants.getRegistry().get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().get().getKey(mobEnchant).getPath()).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting).append(" ").append(new TranslatableComponent("enchantment.level." + enchantmentLevel).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting)));
+					tooltip.add(new TranslatableComponent("mobenchant." + MobEnchants.MOB_ENCHANTS.get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.MOB_ENCHANTS.get().getKey(mobEnchant).getPath()).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting).append(" ").append(new TranslatableComponent("enchantment.level." + enchantmentLevel).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting)));
 				}
             }
 
