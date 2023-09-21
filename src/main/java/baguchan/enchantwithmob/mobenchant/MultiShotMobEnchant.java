@@ -38,7 +38,7 @@ public class MultiShotMobEnchant extends MobEnchant {
 				if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_MULTISHOT_PROJECTILE.get().contains(ForgeRegistries.ENTITIES.getKey(entity.getType()).toString()))
 					return;
 				LivingEntity owner = (LivingEntity) projectile.getOwner();
-				MobEnchantUtils.executeIfPresent(owner, MobEnchants.MULTISHOT.get(), () -> {
+				MobEnchantUtils.executeIfPresent(owner, MobEnchants.MULTISHOT, () -> {
 					if (!level.isClientSide && projectile.tickCount == 0 && !isAdding) {
 						isAdding = true;
 						CompoundTag compoundNBT = new CompoundTag();

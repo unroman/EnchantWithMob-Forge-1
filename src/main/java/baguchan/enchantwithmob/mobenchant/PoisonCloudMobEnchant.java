@@ -44,7 +44,7 @@ public class PoisonCloudMobEnchant extends MobEnchant {
 
 	@Override
 	protected boolean canApplyTogether(MobEnchant ench) {
-		return ench != MobEnchants.POISON.get() && super.canApplyTogether(ench);
+		return ench != MobEnchants.POISON && super.canApplyTogether(ench);
 	}
 
 	@Override
@@ -59,9 +59,9 @@ public class PoisonCloudMobEnchant extends MobEnchant {
 			return;
 		LivingEntity owner = (LivingEntity) projectile.getOwner();
 		if (owner instanceof IEnchantCap cap) {
-			int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON_CLOUD.get());
+			int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON_CLOUD);
 
-			if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON_CLOUD.get())) {
+			if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON_CLOUD)) {
                 //arrow is different
 				if (!(projectile instanceof AbstractArrow) || !projectile.isOnGround()) {
 					AreaEffectCloud areaeffectcloud = new AreaEffectCloud(owner.level, event.getRayTraceResult().getLocation().x, event.getRayTraceResult().getLocation().y, event.getRayTraceResult().getLocation().z);

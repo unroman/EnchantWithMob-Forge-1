@@ -238,7 +238,7 @@ public class CommonEventHandler {
 
             if (attacker instanceof IEnchantCap cap) {
                 if (cap.getEnchantCap().hasEnchant()) {
-                    int mobEnchantLevel = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.STRONG.get());
+                    int mobEnchantLevel = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.STRONG);
                     int mobEnchantSize = cap.getEnchantCap().getMobEnchants().size();
 
                     //make snowman stronger
@@ -249,8 +249,8 @@ public class CommonEventHandler {
                     }
                 }
 
-                if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get())) {
-                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get());
+                if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON)) {
+                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON);
 
                     if (event.getAmount() > 0) {
                         if (attacker.getRandom().nextFloat() < i * 0.125F) {
@@ -265,14 +265,14 @@ public class CommonEventHandler {
 
         if (livingEntity instanceof IEnchantCap cap) {
             if (!event.getSource().isBypassInvul() && cap.getEnchantCap().hasEnchant()) {
-                int mobEnchantLevel = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.PROTECTION.get());
+                int mobEnchantLevel = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.PROTECTION);
                 int mobEnchantSize = cap.getEnchantCap().getMobEnchants().size();
 
                 event.setAmount(MobEnchantCombatRules.getDamageReduction(event.getAmount(), mobEnchantLevel, mobEnchantSize));
             }
             if (event.getSource().getDirectEntity() != null) {
                if (cap.getEnchantCap().hasEnchant()) {
-                   int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.THORN.get());
+                   int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.THORN);
 
                    if (event.getSource().getDirectEntity() instanceof LivingEntity && !event.getSource().isProjectile() && !event.getSource().isMagic() && livingEntity.getRandom().nextFloat() < i * 0.1F) {
                        LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();

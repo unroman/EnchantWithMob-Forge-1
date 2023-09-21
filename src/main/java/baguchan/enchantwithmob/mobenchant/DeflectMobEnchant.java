@@ -31,7 +31,7 @@ public class DeflectMobEnchant extends MobEnchant {
 
         if (event.getRayTraceResult() instanceof EntityHitResult) {
             EntityHitResult entityHitResult = (EntityHitResult) event.getRayTraceResult();
-            MobEnchantUtils.executeIfPresent(entityHitResult.getEntity(), MobEnchants.DEFLECT.get(), () -> {
+            MobEnchantUtils.executeIfPresent(entityHitResult.getEntity(), MobEnchants.DEFLECT, () -> {
                 event.setCanceled(true);
                 Vec3 vec3 = projectile.getDeltaMovement();
 
@@ -45,7 +45,7 @@ public class DeflectMobEnchant extends MobEnchant {
 
     @Override
     protected boolean canApplyTogether(MobEnchant ench) {
-        return super.canApplyTogether(ench) && ench != MobEnchants.THORN.get();
+        return super.canApplyTogether(ench) && ench != MobEnchants.THORN;
     }
 
     @Override

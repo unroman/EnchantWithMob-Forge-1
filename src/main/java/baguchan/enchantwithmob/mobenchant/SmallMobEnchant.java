@@ -45,7 +45,7 @@ public class SmallMobEnchant extends MobEnchant {
     }
 
     public static float getDamageIncrease(float damage, MobEnchantCapability cap) {
-        int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getMobEnchants(), MobEnchants.SMALL.get());
+        int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getMobEnchants(), MobEnchants.SMALL);
         if (level > 0) {
             damage /= 1.0F + level * 0.15F;
         }
@@ -68,6 +68,6 @@ public class SmallMobEnchant extends MobEnchant {
 
     @Override
     protected boolean canApplyTogether(MobEnchant ench) {
-        return super.canApplyTogether(ench) && ench != MobEnchants.HUGE.get();
+        return super.canApplyTogether(ench) && ench != MobEnchants.HUGE;
     }
 }

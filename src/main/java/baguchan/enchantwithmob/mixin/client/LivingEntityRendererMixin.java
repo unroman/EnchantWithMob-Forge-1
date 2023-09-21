@@ -27,12 +27,12 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     public void setRenderScales(T p_115308_, float p_115309_, float p_115310_, PoseStack p_115311_, MultiBufferSource p_115312_, int p_115313_, CallbackInfo callbackInfo) {
         if (p_115308_ instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant()) {
-                if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get())) {
-                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get());
+                if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL)) {
+                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL);
                     float cappedScale = Mth.clamp(0.15F * level, 0.0F, 0.9F);
                     p_115311_.scale(1.0F - cappedScale, 1.0F - cappedScale, 1.0F - cappedScale);
-                } else if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get())) {
-                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get());
+                } else if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE)) {
+                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE);
                     p_115311_.scale(1.0F + 0.15F * level, 1.0F + 0.15F * level, 1.0F + 0.15F * level);
                 } else if (EnchantConfig.COMMON.changeSizeWhenEnchant.get()) {
                     p_115311_.scale(1.05F, 1.05F, 1.05F);
@@ -46,8 +46,8 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
         if (this.getModel() instanceof IEnchantedTime enchantedTime) {
             if (instance instanceof IEnchantCap enchantCap) {
                 //ajust time
-                int fastTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.FAST.get()), 0, 2);
-                int slowTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.SLOW.get()), 0, 2);
+                int fastTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.FAST), 0, 2);
+                int slowTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(enchantCap.getEnchantCap().getMobEnchants(), MobEnchants.SLOW), 0, 2);
                 float different = 1 + fastTime * 0.125F - slowTime * 0.125F;
 
                 enchantedTime.setDifferentTime(different);

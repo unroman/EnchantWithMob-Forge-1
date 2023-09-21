@@ -23,16 +23,16 @@ public class EntitySizeEvent {
 
         if (entity instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant()) {
-                if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get())) {
-                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get());
+                if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL)) {
+                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL);
                     float cappedScale = Mth.clamp(0.15F * level, 0.0F, 0.9F);
                     float totalWidth = entity.getDimensions(entity.getPose()).width * (1.0F - cappedScale);
                     float totalHeight = entity.getDimensions(entity.getPose()).height * (1.0F - cappedScale);
                     event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * (1.0F - cappedScale));
 
                     event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight));
-                } else if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get())) {
-                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get());
+                } else if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE)) {
+                    int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE);
 
                     float totalWidth = entity.getDimensions(entity.getPose()).width * (1.0F + level * 0.15F);
                     float totalHeight = entity.getDimensions(entity.getPose()).height * (1.0F + level * 0.15F);

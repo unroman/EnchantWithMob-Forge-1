@@ -1,8 +1,12 @@
 package baguchan.enchantwithmob.client;
 
+import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
+import baguchan.enchantwithmob.capability.MobEnchantHandler;
+import baguchan.enchantwithmob.mobenchant.MobEnchant;
+import baguchan.enchantwithmob.registry.MobEnchants;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,7 +15,9 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -21,6 +27,8 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +36,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -163,5 +172,32 @@ public class ClientEventHandler {
 		matrix4f.multiply(Vector3f.ZP.rotationDegrees(10.0F));
 		matrix4f.multiply(Matrix4f.createScaleMatrix(p_110187_, p_110187_, p_110187_));
 		RenderSystem.setTextureMatrix(matrix4f);
+	}
+
+	@SubscribeEvent
+	public static void registerOverlay(RenderGameOverlayEvent event) {
+		Minecraft mc = Minecraft.getInstance();
+
+		if (EnchantConfig.CLIENT.showEnchantedMobHud.get() && mc.crosshairPickEntity != null) {
+			if (mc.crosshairPickEntity instanceof IEnchantCap cap) {
+				if (cap.getEnchantCap().hasEnchant()) {
+					mc.font.drawShadow(event.getMatrixStack(), mc.crosshairPickEntity.getDisplayName(), (int) 20, (int) 50, 0xe0e0e0);
+
+					for (MobEnchantHandler mobEnchantHandler : cap.getEnchantCap().getMobEnchants()) {
+						MobEnchant mobEnchant = mobEnchantHandler.getMobEnchant();
+						int mobEnchantLevel = mobEnchantHandler.getEnchantLevel();
+
+						ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
+
+						MutableComponent s = new TranslatableComponent("mobenchant." + MobEnchants.getRegistry().get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().get().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(new TranslatableComponent("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+
+						int xOffset = 20;
+						int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;
+
+						mc.font.drawShadow(event.getMatrixStack(), s, (int) (xOffset), (int) yOffset, 0xe0e0e0);
+					}
+				}
+			}
+		}
 	}
 }

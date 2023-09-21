@@ -185,7 +185,7 @@ public class EnchanterEntity extends SpellcasterIllager {
         boolean flag = this.random.nextFloat() <= raid.getEnchantOdds() + 0.1F;
         if (flag) {
             if (this instanceof IEnchantCap cap) {
-                MobEnchantUtils.addEnchantmentToEntity(this, cap, new MobEnchantmentData(MobEnchants.PROTECTION.get(), 2));
+                MobEnchantUtils.addEnchantmentToEntity(this, cap, new MobEnchantmentData(MobEnchants.PROTECTION, 2));
             }
         }
     }
