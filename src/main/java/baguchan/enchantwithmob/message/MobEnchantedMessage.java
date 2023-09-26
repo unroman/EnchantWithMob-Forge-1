@@ -9,10 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class MobEnchantedMessage {
     private int entityId;
@@ -51,22 +49,19 @@ public class MobEnchantedMessage {
         return new MobEnchantedMessage(entityId, new MobEnchantHandler(enchantType, level));
     }
 
-    public static boolean handle(MobEnchantedMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
 
+    public void handle(CustomPayloadEvent.Context context) {
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
+                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
-                        if (!MobEnchantUtils.findMobEnchantHandler(cap.getEnchantCap().getMobEnchants(), message.enchantType)) {
-                            cap.getEnchantCap().addMobEnchant((LivingEntity) entity, message.enchantType, message.level);
+                        if (!MobEnchantUtils.findMobEnchantHandler(cap.getEnchantCap().getMobEnchants(), enchantType)) {
+                            cap.getEnchantCap().addMobEnchant((LivingEntity) entity, enchantType, level);
                         }
                     }
                 }
             });
         }
-
-        return true;
     }
 }

@@ -4,11 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
-
 public class SoulParticleMessage {
 	private int entityId;
 
@@ -30,12 +27,10 @@ public class SoulParticleMessage {
 		return new SoulParticleMessage(entityId);
 	}
 
-	public static boolean handle(SoulParticleMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
-
+    public void handle(CustomPayloadEvent.Context context) {
 		if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
 			context.enqueueWork(() -> {
-				Entity entity = Minecraft.getInstance().level.getEntity(message.entityId);
+                Entity entity = Minecraft.getInstance().level.getEntity(entityId);
 				if (entity != null) {
 					for (int i = 0; i < 4; i++) {
 						entity.level().addParticle(ParticleTypes.SCULK_SOUL, entity.getRandomX(0.5D), entity.getRandomY(), entity.getRandomZ(0.5D), 0.0F, 0.1F, 0.0F);
@@ -43,7 +38,5 @@ public class SoulParticleMessage {
 				}
 			});
 		}
-
-		return true;
-	}
+    }
 }

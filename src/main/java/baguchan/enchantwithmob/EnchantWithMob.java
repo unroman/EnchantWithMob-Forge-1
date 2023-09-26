@@ -20,8 +20,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,10 +34,8 @@ public class EnchantWithMob {
 
 	public static final String MODID = "enchantwithmob";
     public static final String NETWORK_PROTOCOL = "2";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(MODID, "net"))
-            .networkProtocolVersion(() -> NETWORK_PROTOCOL)
-            .clientAcceptedVersions(NETWORK_PROTOCOL::equals)
-            .serverAcceptedVersions(NETWORK_PROTOCOL::equals)
+    public static final SimpleChannel CHANNEL = ChannelBuilder.named(new ResourceLocation(MODID, "net"))
+            .networkProtocolVersion(2)
             .simpleChannel();
 
     public static Capability<ItemMobEnchantCapability> ITEM_MOB_ENCHANT_CAP = CapabilityManager.get(new CapabilityToken<>() {

@@ -6,17 +6,11 @@ import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.registry.ModLootItemFunctions;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -34,10 +28,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
+	private static final Codec<MobEnchant> ENCHANTMENT_SET_CODEC = ExtraCodecs.lazyInitializedCodec(() -> MobEnchants.getRegistry().get().getCodec());
+	public static final Codec<MobEnchantRandomlyFunction> CODEC = RecordCodecBuilder.create((p_297085_) -> {
+		return commonFields(p_297085_).and(Codec.list(ENCHANTMENT_SET_CODEC).fieldOf("mob_enchant").forGetter((p_297084_) -> {
+			return p_297084_.enchantments;
+		})).apply(p_297085_, MobEnchantRandomlyFunction::new);
+	});
 	private static final Logger LOGGER = LogUtils.getLogger();
 	final List<MobEnchant> enchantments;
 
-	public MobEnchantRandomlyFunction(LootItemCondition[] p_80418_, Collection<MobEnchant> p_80419_) {
+	public MobEnchantRandomlyFunction(List<LootItemCondition> p_80418_, Collection<MobEnchant> p_80419_) {
 		super(p_80418_);
 		this.enchantments = ImmutableList.copyOf(p_80419_);
 	}
@@ -103,40 +103,6 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 
 		public LootItemFunction build() {
 			return new MobEnchantRandomlyFunction(this.getConditions(), this.enchantments);
-		}
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<MobEnchantRandomlyFunction> {
-		public void serialize(JsonObject p_80454_, MobEnchantRandomlyFunction p_80455_, JsonSerializationContext p_80456_) {
-			super.serialize(p_80454_, p_80455_, p_80456_);
-			if (!p_80455_.enchantments.isEmpty()) {
-				JsonArray jsonarray = new JsonArray();
-
-				for (MobEnchant enchantment : p_80455_.enchantments) {
-					ResourceLocation resourcelocation = MobEnchants.getRegistry().get().getKey(enchantment);
-					if (resourcelocation == null) {
-						throw new IllegalArgumentException("Don't know how to serialize enchantment " + enchantment);
-					}
-
-					jsonarray.add(new JsonPrimitive(resourcelocation.toString()));
-				}
-
-				p_80454_.add("enchantments", jsonarray);
-			}
-
-		}
-
-		public MobEnchantRandomlyFunction deserialize(JsonObject p_80450_, JsonDeserializationContext p_80451_, LootItemCondition[] p_80452_) {
-			List<MobEnchant> list = Lists.newArrayList();
-			if (p_80450_.has("enchantments")) {
-				for (JsonElement jsonelement : GsonHelper.getAsJsonArray(p_80450_, "enchantments")) {
-					String s = GsonHelper.convertToString(jsonelement, "enchantment");
-					MobEnchant enchantment = MobEnchants.getRegistry().get().getValue(new ResourceLocation(s));
-					list.add(enchantment);
-				}
-			}
-
-			return new MobEnchantRandomlyFunction(p_80452_, list);
 		}
 	}
 }

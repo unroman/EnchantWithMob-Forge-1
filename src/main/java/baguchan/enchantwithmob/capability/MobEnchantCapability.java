@@ -45,7 +45,7 @@ public class MobEnchantCapability {
 		this.mobEnchants.add(new MobEnchantHandler(mobEnchant, enchantLevel));
 		if (!entity.level().isClientSide) {
 			MobEnchantedMessage message = new MobEnchantedMessage(entity, mobEnchant, enchantLevel);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
 		//Sync Client Enchant
@@ -63,7 +63,7 @@ public class MobEnchantCapability {
 		this.enchantType = enchantType;
 		if (!entity.level().isClientSide) {
 			AncientMessage message = new AncientMessage(entity, enchantType == EnchantType.ANCIENT);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 		this.sync(entity);
 	}
@@ -81,7 +81,7 @@ public class MobEnchantCapability {
 		this.mobEnchants.add(new MobEnchantHandler(mobEnchant, enchantLevel));
 		if (!entity.level().isClientSide) {
 			MobEnchantedMessage message = new MobEnchantedMessage(entity, mobEnchant, enchantLevel);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 		this.addOwner(entity, owner);
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
@@ -95,7 +95,7 @@ public class MobEnchantCapability {
 		this.sync(entity);
 		if (!entity.level().isClientSide) {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 	}
 
@@ -114,7 +114,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!livingEntity.level().isClientSide) {
 			RemoveMobEnchantOwnerMessage message = new RemoveMobEnchantOwnerMessage(livingEntity);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(livingEntity));
 		}
 	}
 
@@ -129,7 +129,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!entity.level().isClientSide) {
 			RemoveAllMobEnchantMessage message = new RemoveAllMobEnchantMessage(entity);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 		this.mobEnchants.removeAll(mobEnchants);
 		//size changed like minecraft dungeons
@@ -146,7 +146,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!entity.level().isClientSide) {
 			RemoveAllMobEnchantMessage message = new RemoveAllMobEnchantMessage(entity);
-			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+            EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
 		}
 		this.mobEnchants.removeAll(mobEnchants);
 		this.removeOwner(entity);
@@ -165,7 +165,7 @@ public class MobEnchantCapability {
 		if (EnchantConfig.COMMON.dungeonsLikeHealth.get()) {
 			AttributeInstance modifiableattributeinstance = entity.getAttributes().getInstance(Attributes.MAX_HEALTH);
 			if (modifiableattributeinstance != null && !modifiableattributeinstance.hasModifier(HEALTH_MODIFIER)) {
-				modifiableattributeinstance.removeModifier(HEALTH_MODIFIER);
+                modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_UUID);
 				modifiableattributeinstance.addPermanentModifier(HEALTH_MODIFIER);
 				entity.setHealth(entity.getHealth() * 1.25F);
 			}
@@ -189,7 +189,7 @@ public class MobEnchantCapability {
 		if (modifiableattributeinstance != null) {
 			if (modifiableattributeinstance.hasModifier(HEALTH_MODIFIER)) {
 				entity.setHealth(entity.getHealth() / 1.25F);
-				modifiableattributeinstance.removeModifier(HEALTH_MODIFIER);
+                modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_UUID);
 			}
 		}
 	}

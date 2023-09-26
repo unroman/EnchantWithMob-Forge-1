@@ -5,10 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public class RemoveAllMobEnchantMessage {
     private int entityId;
@@ -31,21 +29,17 @@ public class RemoveAllMobEnchantMessage {
         return new RemoveAllMobEnchantMessage(entityId);
     }
 
-    public static boolean handle(RemoveAllMobEnchantMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
+    public void handle(CustomPayloadEvent.Context context) {
 
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
+                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
                         cap.getEnchantCap().removeAllMobEnchant((LivingEntity) entity);
                     }
-                    ;
                 }
             });
         }
-
-        return true;
     }
 }

@@ -442,7 +442,7 @@ public class CommonEventHandler {
         if (player instanceof ServerPlayer) {
             if (player instanceof IEnchantCap cap) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)));
+                    EnchantWithMob.CHANNEL.send(new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)), PacketDistributor.PLAYER.with((ServerPlayer) player));
 
                 }
             }
@@ -455,7 +455,7 @@ public class CommonEventHandler {
         if (playerEntity instanceof IEnchantCap cap) {
             if (!playerEntity.level().isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
+                    EnchantWithMob.CHANNEL.send(new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(playerEntity));
                 }
             }
         }
@@ -470,7 +470,7 @@ public class CommonEventHandler {
                 //Sync Client Enchant
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
                     MobEnchantedMessage message = new MobEnchantedMessage(livingEntity, cap.getEnchantCap().getMobEnchants().get(i));
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
+                    EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(livingEntity));
                 }
             }
         }

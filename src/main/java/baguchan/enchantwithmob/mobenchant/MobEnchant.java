@@ -99,7 +99,7 @@ public class MobEnchant {
 		for (Map.Entry<Attribute, AttributeModifier> entry : this.attributeModifierMap.entrySet()) {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
-				modifiableattributeinstance.removeModifier(entry.getValue());
+                modifiableattributeinstance.removeModifier(entry.getValue().getId());
 			}
 		}
 
@@ -110,7 +110,7 @@ public class MobEnchant {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
 				AttributeModifier attributemodifier = entry.getValue();
-				modifiableattributeinstance.removeModifier(attributemodifier);
+                modifiableattributeinstance.removeModifier(attributemodifier.getId());
 				modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getId(), MobEnchants.getRegistry().get().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.getOperation()));
 			}
 		}

@@ -2,10 +2,8 @@ package baguchan.enchantwithmob.loot;
 
 import baguchan.enchantwithmob.registry.ModLootItemFunctions;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -15,15 +13,26 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
+import java.util.List;
 import java.util.Set;
 
 public class MobEnchantWithLevelsFunction extends LootItemConditionalFunction {
+    public static final Codec<MobEnchantWithLevelsFunction> CODEC = RecordCodecBuilder.create((p_298285_) -> {
+        return commonFields(p_298285_).and(p_298285_.group(NumberProviders.CODEC.fieldOf("levels").forGetter((p_298991_) -> {
+            return p_298991_.levels;
+        }), Codec.BOOL.fieldOf("treasure").orElse(false).forGetter((p_298792_) -> {
+            return p_298792_.treasure;
+        }), Codec.BOOL.fieldOf("curse").orElse(false).forGetter((p_298792_) -> {
+            return p_298792_.treasure;
+        }))).apply(p_298285_, MobEnchantWithLevelsFunction::new);
+    });
 	final NumberProvider levels;
 	final boolean treasure;
 	final boolean curse;
 
-	MobEnchantWithLevelsFunction(LootItemCondition[] p_165193_, NumberProvider p_165194_, boolean p_165195_, boolean curse) {
+    MobEnchantWithLevelsFunction(List<LootItemCondition> p_165193_, NumberProvider p_165194_, boolean p_165195_, boolean curse) {
 		super(p_165193_);
 		this.levels = p_165194_;
 		this.treasure = p_165195_;
@@ -72,22 +81,6 @@ public class MobEnchantWithLevelsFunction extends LootItemConditionalFunction {
 
 		public LootItemFunction build() {
 			return new MobEnchantWithLevelsFunction(this.getConditions(), this.levels, this.treasure, this.curse);
-		}
-	}
-
-	public static class Serializer extends LootItemConditionalFunction.Serializer<MobEnchantWithLevelsFunction> {
-		public void serialize(JsonObject p_80506_, MobEnchantWithLevelsFunction p_80507_, JsonSerializationContext p_80508_) {
-			super.serialize(p_80506_, p_80507_, p_80508_);
-			p_80506_.add("levels", p_80508_.serialize(p_80507_.levels));
-			p_80506_.addProperty("treasure", p_80507_.treasure);
-			p_80506_.addProperty("curse", p_80507_.curse);
-		}
-
-		public MobEnchantWithLevelsFunction deserialize(JsonObject p_80502_, JsonDeserializationContext p_80503_, LootItemCondition[] p_80504_) {
-			NumberProvider numberprovider = GsonHelper.getAsObject(p_80502_, "levels", p_80503_, NumberProvider.class);
-			boolean flag = GsonHelper.getAsBoolean(p_80502_, "treasure", false);
-			boolean flag2 = GsonHelper.getAsBoolean(p_80502_, "curse", false);
-			return new MobEnchantWithLevelsFunction(p_80504_, numberprovider, flag, flag2);
 		}
 	}
 }
