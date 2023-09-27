@@ -38,5 +38,6 @@ public class SoulParticleMessage {
 				}
 			});
 		}
+		context.setPacketHandled(true);
     }
 }

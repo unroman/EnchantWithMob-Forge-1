@@ -46,5 +46,6 @@ public class AncientMessage {
                 }
             });
         }
+        context.setPacketHandled(true);
     }
 }

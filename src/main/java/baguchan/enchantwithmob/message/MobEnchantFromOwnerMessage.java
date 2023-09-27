@@ -48,5 +48,6 @@ public class MobEnchantFromOwnerMessage {
                 }
             });
         }
+        context.setPacketHandled(true);
     }
 }

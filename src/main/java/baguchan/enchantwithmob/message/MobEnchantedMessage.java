@@ -63,5 +63,6 @@ public class MobEnchantedMessage {
                 }
             });
         }
+        context.setPacketHandled(true);
     }
 }
