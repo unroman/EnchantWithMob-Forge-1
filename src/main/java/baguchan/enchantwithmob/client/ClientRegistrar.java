@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractSkeleton;
+import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,6 +43,7 @@ public class ClientRegistrar {
     private static final RenderType WITCH_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_witch_eyes.png"));
     private static final RenderType WOLF_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_wolf_eyes.png"));
     private static final RenderType ZOMBIE_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_zombie_eyes.png"));
+	private static final RenderType GUARDIAN_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_guardian_eyes.png"));
 
 	@SubscribeEvent
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {
@@ -91,6 +93,9 @@ public class ClientRegistrar {
 				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WOLF_EYES, EntityType.WOLF));
 				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), ZOMBIE_EYES, (entity) -> {
 					return entity instanceof Zombie && !(entity instanceof ZombifiedPiglin);
+				}));
+				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), GUARDIAN_EYES, (entity) -> {
+					return entity instanceof Guardian;
 				}));
 
 			}

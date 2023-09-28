@@ -24,5 +24,6 @@ public class ModItems {
     public static final RegistryObject<Item> ENCHANTER_CLOTHES = ITEM_REGISTRY.register("enchanter_clothes", () -> new EnchanterClothesItem(ArmorItem.Type.CHESTPLATE, (new Item.Properties())));
     public static final RegistryObject<Item> ENCHANTER_HAT = ITEM_REGISTRY.register("enchanter_hat", () -> new EnchanterClothesItem(ArmorItem.Type.HELMET, (new Item.Properties())));
     public static final RegistryObject<Item> ENCHANTER_BOOTS = ITEM_REGISTRY.register("enchanter_boots", () -> new EnchanterClothesItem(ArmorItem.Type.BOOTS, (new Item.Properties())));
+    public static final RegistryObject<Item> ENCHANTER_LEGGINGS = ITEM_REGISTRY.register("enchanter_leggings", () -> new EnchanterClothesItem(ArmorItem.Type.LEGGINGS, (new Item.Properties())));
 
 }

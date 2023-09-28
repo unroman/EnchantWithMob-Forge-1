@@ -17,6 +17,7 @@ public class ModCreativeTabs {
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(ModItems.ENCHANTER_HAT.get());
             event.accept(ModItems.ENCHANTER_CLOTHES.get());
+            event.accept(ModItems.ENCHANTER_LEGGINGS.get());
             event.accept(ModItems.ENCHANTER_BOOTS.get());
             event.accept(ModItems.MOB_UNENCHANT_BOOK.get());
             event.acceptAll(MobEnchantBookItem.generateMobEnchantmentBookTypesOnlyMaxLevel());
