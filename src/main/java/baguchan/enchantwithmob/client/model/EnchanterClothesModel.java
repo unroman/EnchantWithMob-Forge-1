@@ -1,5 +1,7 @@
 package baguchan.enchantwithmob.client.model;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -16,6 +18,17 @@ public class EnchanterClothesModel<T extends LivingEntity> extends HumanoidModel
         this.leftBoots = root.getChild("left_boots");
     }
 
+    @Override
+    protected Iterable<ModelPart> bodyParts() {
+        return Iterables.concat(super.bodyParts(), ImmutableList.of(this.rightBoots, this.leftBoots));
+    }
+
+    @Override
+    public void setAllVisible(boolean p_102880_) {
+        super.setAllVisible(p_102880_);
+        this.rightBoots.visible = p_102880_;
+        this.leftBoots.visible = p_102880_;
+    }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
