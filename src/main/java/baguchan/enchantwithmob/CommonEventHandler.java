@@ -291,53 +291,54 @@ public class CommonEventHandler {
     public static void onRightClick(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
         Entity entityTarget = event.getTarget();
+        if (!(entityTarget instanceof Player)) {
+            if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+                if (entityTarget instanceof LivingEntity) {
+                    LivingEntity target = (LivingEntity) entityTarget;
+                    if (MobEnchantUtils.hasMobEnchant(stack)) {
 
-        if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
-            if (entityTarget instanceof LivingEntity) {
-                LivingEntity target = (LivingEntity) entityTarget;
-                if (MobEnchantUtils.hasMobEnchant(stack)) {
+                        if (target instanceof IEnchantCap cap) {
+                            boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getEntity(), cap);
 
-                    if (target instanceof IEnchantCap cap) {
-                        boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getEntity(), cap);
+                            if (flag) {
+                                event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                        if (flag) {
-                            event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+                                stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
 
-                            stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
+                                event.getEntity().getCooldowns().addCooldown(stack.getItem(), 60);
 
-                            event.getEntity().getCooldowns().addCooldown(stack.getItem(), 60);
-
-                            event.setCancellationResult(InteractionResult.SUCCESS);
-                            event.setCanceled(true);
-                        } else {
-                            event.getEntity().displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
-                            event.getEntity().getCooldowns().addCooldown(stack.getItem(), 20);
-                            event.setCancellationResult(InteractionResult.FAIL);
-                            event.setCanceled(true);
+                                event.setCancellationResult(InteractionResult.SUCCESS);
+                                event.setCanceled(true);
+                            } else {
+                                event.getEntity().displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
+                                event.getEntity().getCooldowns().addCooldown(stack.getItem(), 20);
+                                event.setCancellationResult(InteractionResult.FAIL);
+                                event.setCanceled(true);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (stack.getItem() == ModItems.MOB_UNENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
-            if (entityTarget instanceof LivingEntity) {
-                LivingEntity target = (LivingEntity) entityTarget;
+            if (stack.getItem() == ModItems.MOB_UNENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+                if (entityTarget instanceof LivingEntity) {
+                    LivingEntity target = (LivingEntity) entityTarget;
 
-                if (target instanceof IEnchantCap cap) {
-                    MobEnchantUtils.removeMobEnchantToEntity(target, cap);
-                    event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+                    if (target instanceof IEnchantCap cap) {
+                        MobEnchantUtils.removeMobEnchantToEntity(target, cap);
+                        event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                    stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
+                        stack.hurtAndBreak(1, event.getEntity(), (entity) -> entity.broadcastBreakEvent(event.getHand()));
 
-                    event.getEntity().getCooldowns().addCooldown(stack.getItem(), 80);
+                        event.getEntity().getCooldowns().addCooldown(stack.getItem(), 80);
 
-                    event.setCancellationResult(InteractionResult.SUCCESS);
-                    event.setCanceled(true);
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.setCanceled(true);
+                    }
                 }
             }
-            }
         }
+    }
 
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
