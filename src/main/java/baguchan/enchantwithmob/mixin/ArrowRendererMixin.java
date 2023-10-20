@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ArrowRenderer.class)
-public class ArrowMixin<T extends AbstractArrow> {
+public class ArrowRendererMixin<T extends AbstractArrow> {
 
 	@Inject(method = "render", at = @At("TAIL"))
 	public void render(T p_113839_, float p_113840_, float p_113841_, PoseStack p_113842_, MultiBufferSource p_113843_, int p_113844_, CallbackInfo callbackInfo) {
