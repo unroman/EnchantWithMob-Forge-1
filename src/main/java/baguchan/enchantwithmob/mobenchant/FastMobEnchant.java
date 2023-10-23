@@ -3,7 +3,6 @@ package baguchan.enchantwithmob.mobenchant;
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 
 public class FastMobEnchant extends MobEnchant {
     public FastMobEnchant(Properties properties) {
@@ -29,7 +28,7 @@ public class FastMobEnchant extends MobEnchant {
 
     @Override
     public boolean isCompatibleMob(LivingEntity livingEntity) {
-        return !(livingEntity instanceof Player) || EnchantConfig.COMMON.bigYourSelf.get();
+        return super.isCompatibleMob(livingEntity) || EnchantConfig.COMMON.bigYourSelf.get();
     }
 
     @Override

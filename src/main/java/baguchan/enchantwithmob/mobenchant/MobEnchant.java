@@ -2,6 +2,7 @@ package baguchan.enchantwithmob.mobenchant;
 
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import baguchan.enchantwithmob.utils.MobEnchantConfigUtils;
 import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureElement;
 import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -80,7 +82,7 @@ public class MobEnchant implements FeatureElement {
 	}
 
 	public boolean isCompatibleMob(LivingEntity livingEntity) {
-		return true;
+        return !(livingEntity instanceof Player) || MobEnchantConfigUtils.isPlayerEnchantable(this);
 	}
 
 	/**

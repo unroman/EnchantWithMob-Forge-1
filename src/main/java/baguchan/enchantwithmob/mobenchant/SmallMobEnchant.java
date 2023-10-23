@@ -7,7 +7,6 @@ import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -63,7 +62,7 @@ public class SmallMobEnchant extends MobEnchant {
 
     @Override
     public boolean isCompatibleMob(LivingEntity livingEntity) {
-        return !(livingEntity instanceof Player) || EnchantConfig.COMMON.bigYourSelf.get();
+        return super.isCompatibleMob(livingEntity) || EnchantConfig.COMMON.bigYourSelf.get();
     }
 
     @Override

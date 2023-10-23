@@ -63,6 +63,7 @@ public class EnchantConfig {
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ALLOW_MULTISHOT_PROJECTILE;
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELIST_SHOOT_ENTITY;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLIST_PLAYER_ENCHANT;
 
         public Common(ForgeConfigSpec.Builder builder) {
             naturalSpawnEnchantedMob = builder
@@ -92,6 +93,9 @@ public class EnchantConfig {
                     .comment("Whitelist the projectile mob enchant for mob. Use the full name(eg: minecraft:zombie.")
                     .define("whitelistShootEntity", Lists.newArrayList("minecraft:skeleton", "minecraft:pillager", "minecraft:shulker", "minecraft:llama", "conjurer_illager:conjurer", "earthmobsmod:bone_spider", "earthmobsmod:lobber_zombie", "earthmobsmod:lobber_drowned"
                             , "earthmobsmod:melon_golem", "minecraft:piglin", "minecraft:snow_golem", "minecraft:player"));
+            BLACKLIST_PLAYER_ENCHANT = builder
+                    .comment("Blacklist the mob enchant for player. Use the full name(eg: enchantwithmob:thorn.")
+                    .define("blacklistPlayerEnchant", Lists.newArrayList());
 
             buffedDragon = builder
                     .comment("Set the MobEnchant on the EnderDragon. If you want more harder fight. should set it! eg: enchantwithmob:thorn.")
