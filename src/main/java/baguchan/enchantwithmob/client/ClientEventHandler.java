@@ -122,28 +122,22 @@ public class ClientEventHandler {
 	}
 
 	public static void addVertexPair(VertexConsumer p_229120_0_, Matrix4f p_229120_1_, Matrix3f matrix3f, int p_229120_2_, float p_229120_3_, float p_229120_4_, float p_229120_5_, float p_229120_6_, float p_229120_7_, int p_229120_8_, int p_229120_9_, boolean p_229120_10_, float p_229120_11_, float p_229120_12_) {
-		float f = 0.5F;
-		float f1 = 0.4F;
-		float f2 = 0.3F;
-		if (p_229120_9_ % 2 == 0) {
-			f *= 0.7F;
-			f1 *= 0.7F;
-			f2 *= 0.7F;
-		}
-
 		float f3 = (float) p_229120_9_ / (float) p_229120_8_;
 		float f4 = p_229120_3_ * f3;
 		float f5 = p_229120_4_ > 0.0F ? p_229120_4_ * f3 * f3 : p_229120_4_ - p_229120_4_ * (1.0F - f3) * (1.0F - f3);
 		float f6 = p_229120_5_ * f3;
-		if (!p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
 
-		p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		if (p_229120_10_) {
+		if (!p_229120_10_) {
+			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
 			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
 		}
 
+		if (p_229120_10_) {
+			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		}
 	}
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {
