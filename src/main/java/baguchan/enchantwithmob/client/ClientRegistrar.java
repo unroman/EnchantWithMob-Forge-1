@@ -11,8 +11,10 @@ import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
 import baguchan.enchantwithmob.compat.GeckoLibCompat;
 import baguchan.enchantwithmob.compat.GeckoLibCompatClient;
 import baguchan.enchantwithmob.registry.ModEntities;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -24,8 +26,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -101,4 +106,13 @@ public class ClientRegistrar {
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("mobenchant", new MobEnchantOverlay());
     }
+
+	@SubscribeEvent
+	public static void registerShaders(final RegisterShadersEvent event) {
+		try {
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(EnchantWithMob.MODID, "rendertype_enchant_beam"), DefaultVertexFormat.NEW_ENTITY), ModShaders::setRenderTypeEnchantBeamShader);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
 }

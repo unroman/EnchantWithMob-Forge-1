@@ -89,22 +89,22 @@ public class ClientEventHandler {
 		float f1 = (float) (vector3d.y - d4);
 		float f2 = (float) (vector3d.z - d5);
 		float f3 = 0.1F;
-        VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-        Matrix4f matrix4f = p_229118_3_.last().pose();
-        Matrix3f matrix3f = p_229118_3_.last().normal();
-        float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
-        float f5 = f2 * f4;
-        float f6 = f * f4;
-        BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
-        BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
-        int i = getBlockLightLevel(p_229118_1_, blockpos);
-        int j = getBlockLightLevel(p_229118_5_, blockpos1);
-        int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
-        int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
-        p_229118_3_.popPose();
-    }
+		VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+		Matrix4f matrix4f = p_229118_3_.last().pose();
+		Matrix3f matrix3f = p_229118_3_.last().normal();
+		float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
+		float f5 = f2 * f4;
+		float f6 = f * f4;
+		BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
+		BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
+		int i = getBlockLightLevel(p_229118_1_, blockpos);
+		int j = getBlockLightLevel(p_229118_5_, blockpos1);
+		int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
+		int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
+		renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
+		renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
+		p_229118_3_.popPose();
+	}
 
 
 	public static void renderSide(VertexConsumer p_229119_0_, Matrix4f p_229119_1_, Matrix3f matrix3f, float p_229119_2_, float p_229119_3_, float p_229119_4_, int p_229119_5_, int p_229119_6_, int p_229119_7_, int p_229119_8_, float p_229119_9_, float p_229119_10_, float p_229119_11_, float p_229119_12_) {
@@ -122,28 +122,22 @@ public class ClientEventHandler {
 	}
 
 	public static void addVertexPair(VertexConsumer p_229120_0_, Matrix4f p_229120_1_, Matrix3f matrix3f, int p_229120_2_, float p_229120_3_, float p_229120_4_, float p_229120_5_, float p_229120_6_, float p_229120_7_, int p_229120_8_, int p_229120_9_, boolean p_229120_10_, float p_229120_11_, float p_229120_12_) {
-		float f = 0.5F;
-		float f1 = 0.4F;
-		float f2 = 0.3F;
-		if (p_229120_9_ % 2 == 0) {
-			f *= 0.7F;
-			f1 *= 0.7F;
-			f2 *= 0.7F;
-		}
-
 		float f3 = (float) p_229120_9_ / (float) p_229120_8_;
 		float f4 = p_229120_3_ * f3;
 		float f5 = p_229120_4_ > 0.0F ? p_229120_4_ * f3 * f3 : p_229120_4_ - p_229120_4_ * (1.0F - f3) * (1.0F - f3);
 		float f6 = p_229120_5_ * f3;
-		if (!p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
 
-		p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		if (p_229120_10_) {
+		if (!p_229120_10_) {
+			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
 			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
 		}
 
+		if (p_229120_10_) {
+			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+
+			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
+		}
 	}
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {

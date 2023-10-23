@@ -2,6 +2,7 @@ package baguchan.enchantwithmob.mobenchant;
 
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import baguchan.enchantwithmob.utils.MobEnchantConfigUtils;
 import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,19 +10,25 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureElement;
+import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class MobEnchant {
+public class MobEnchant implements FeatureElement {
 	private final Map<Attribute, AttributeModifier> attributeModifierMap = Maps.newHashMap();
 	protected final Rarity enchantType;
 	private final int level;
 	private int minlevel = 1;
-
+    private final FeatureFlagSet requiredFeatures;
 	public MobEnchant(Properties properties) {
 		this.enchantType = properties.enchantType;
 		this.level = properties.level;
+        this.requiredFeatures = properties.requiredFeatures;
 	}
 
     public Rarity getRarity() {
@@ -75,7 +82,7 @@ public class MobEnchant {
 	}
 
 	public boolean isCompatibleMob(LivingEntity livingEntity) {
-		return true;
+        return !(livingEntity instanceof Player) || MobEnchantConfigUtils.isPlayerEnchantable(this);
 	}
 
 	/**
@@ -99,7 +106,7 @@ public class MobEnchant {
 		for (Map.Entry<Attribute, AttributeModifier> entry : this.attributeModifierMap.entrySet()) {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
-				modifiableattributeinstance.removeModifier(entry.getValue());
+                modifiableattributeinstance.removeModifier(entry.getValue().getId());
 			}
 		}
 
@@ -110,7 +117,7 @@ public class MobEnchant {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
 				AttributeModifier attributemodifier = entry.getValue();
-				modifiableattributeinstance.removeModifier(attributemodifier);
+                modifiableattributeinstance.removeModifier(attributemodifier.getId());
 				modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getId(), MobEnchants.getRegistry().get().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.getOperation()));
 			}
 		}
@@ -128,14 +135,35 @@ public class MobEnchant {
         return false;
     }
 
+    @Override
+    public FeatureFlagSet requiredFeatures() {
+        return this.requiredFeatures;
+    }
+
+    @Override
+    public boolean isEnabled(FeatureFlagSet p_249172_) {
+        return !this.isDisabled() && this.requiredFeatures().isSubsetOf(p_249172_);
+    }
+
 
     public static class Properties {
         private final Rarity enchantType;
         private final int level;
 
+        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
+
         public Properties(Rarity enchantType, int level) {
             this.enchantType = enchantType;
             this.level = level;
+        }
+
+        public FeatureFlagSet getRequiredFeatures() {
+            return requiredFeatures;
+        }
+
+        public Properties requiredFeatures(FeatureFlag... p_250948_) {
+            this.requiredFeatures = FeatureFlags.REGISTRY.subset(p_250948_);
+            return this;
         }
     }
 
@@ -157,5 +185,7 @@ public class MobEnchant {
         public int getWeight() {
             return this.weight;
         }
+
+
     }
 }
