@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(LivingEntity.class)
+@Mixin(value = LivingEntity.class, remap = false)
 public abstract class LivingEntityMixin extends Entity implements IEnchantCap {
     private static final EntityDataAccessor<MobEnchantCapability> MOB_ENCHANT_CAP;
 

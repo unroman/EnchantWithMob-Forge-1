@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(EvokerFangsRenderer.class)
+@Mixin(value = EvokerFangsRenderer.class, remap = false)
 public class EvokerFangsRendererMixin {
 
 	@Shadow

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(WitherSkullRenderer.class)
+@Mixin(value = WitherSkullRenderer.class, remap = false)
 public class WitherSkullRendererMixin {
 
 	@Shadow

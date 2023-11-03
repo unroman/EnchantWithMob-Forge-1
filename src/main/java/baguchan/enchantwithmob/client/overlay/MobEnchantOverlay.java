@@ -10,12 +10,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
 public class MobEnchantOverlay implements IGuiOverlay {
     @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int width, int height) {
+    public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.options.getCameraType().isMirrored()) {

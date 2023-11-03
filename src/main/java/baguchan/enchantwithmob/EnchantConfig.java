@@ -1,33 +1,31 @@
 package baguchan.enchantwithmob;
 
 import com.google.common.collect.Lists;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EnchantConfig {
     public static final Common COMMON;
-    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
     public static final Client CLIENT;
-    public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final ModConfigSpec CLIENT_SPEC;
     static {
-        Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
         COMMON_SPEC = specPair.getRight();
         COMMON = specPair.getLeft();
-        Pair<Client, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(Client::new);
+        Pair<Client, ModConfigSpec> specPair2 = new ModConfigSpec.Builder().configure(Client::new);
         CLIENT_SPEC = specPair2.getRight();
         CLIENT = specPair2.getLeft();
     }
 
     public static class Client {
-        public final ForgeConfigSpec.BooleanValue showEnchantedMobHud;
-        public final ForgeConfigSpec.BooleanValue disablePoisonParticle;
-        public final ForgeConfigSpec.BooleanValue disableAuraRender;
+        public final ModConfigSpec.BooleanValue showEnchantedMobHud;
+        public final ModConfigSpec.BooleanValue disablePoisonParticle;
+        public final ModConfigSpec.BooleanValue disableAuraRender;
 
-        public Client(ForgeConfigSpec.Builder builder) {
+        public Client(ModConfigSpec.Builder builder) {
             showEnchantedMobHud = builder
                     .translation(EnchantWithMob.MODID + ".config.showEnchantedMobHud")
                     .define("Show Enchanted Mob Hud", true);
@@ -42,30 +40,30 @@ public class EnchantConfig {
     }
 
     public static class Common {
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> buffedDragon;
-        public final ForgeConfigSpec.BooleanValue naturalSpawnEnchantedMob;
-        public final ForgeConfigSpec.BooleanValue spawnEnchantedAnimal;
-        public final ForgeConfigSpec.BooleanValue enchantYourSelf;
-        public final ForgeConfigSpec.BooleanValue changeSizeWhenEnchant;
-        public final ForgeConfigSpec.BooleanValue dungeonsLikeHealth;
-        public final ForgeConfigSpec.BooleanValue bigYourSelf;
-        public final ForgeConfigSpec.BooleanValue universalEnchant;
-        public final ForgeConfigSpec.DoubleValue difficultyBasePercent;
-        public final ForgeConfigSpec.DoubleValue effectiveBasePercent;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> buffedDragon;
+        public final ModConfigSpec.BooleanValue naturalSpawnEnchantedMob;
+        public final ModConfigSpec.BooleanValue spawnEnchantedAnimal;
+        public final ModConfigSpec.BooleanValue enchantYourSelf;
+        public final ModConfigSpec.BooleanValue changeSizeWhenEnchant;
+        public final ModConfigSpec.BooleanValue dungeonsLikeHealth;
+        public final ModConfigSpec.BooleanValue bigYourSelf;
+        public final ModConfigSpec.BooleanValue universalEnchant;
+        public final ModConfigSpec.DoubleValue difficultyBasePercent;
+        public final ModConfigSpec.DoubleValue effectiveBasePercent;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANT_ON_SPAWN_EXCLUSION_MOBS;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_MOBS;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_ANCIENT_MOBS;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLE_ENCHANTS;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANT_ON_SPAWN_EXCLUSION_MOBS;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_MOBS;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_ANCIENT_MOBS;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> DISABLE_ENCHANTS;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ALLOW_POISON_CLOUD_PROJECTILE;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> ALLOW_POISON_CLOUD_PROJECTILE;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> ALLOW_MULTISHOT_PROJECTILE;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> ALLOW_MULTISHOT_PROJECTILE;
 
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELIST_SHOOT_ENTITY;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLIST_PLAYER_ENCHANT;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> WHITELIST_SHOOT_ENTITY;
+        public final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLIST_PLAYER_ENCHANT;
 
-        public Common(ForgeConfigSpec.Builder builder) {
+        public Common(ModConfigSpec.Builder builder) {
             naturalSpawnEnchantedMob = builder
                     .comment("Enable the the spawning of enchanted mobs. [true / false]")
                     .translation(EnchantWithMob.MODID + ".config.naturalSpawnEnchantedMob")

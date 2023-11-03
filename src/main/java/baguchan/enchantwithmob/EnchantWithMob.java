@@ -6,22 +6,19 @@ import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.registry.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.raid.Raid;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.capabilities.CapabilityManager;
+import net.neoforged.neoforge.common.capabilities.CapabilityToken;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,8 +31,10 @@ public class EnchantWithMob {
 
 	public static final String MODID = "enchantwithmob";
     public static final String NETWORK_PROTOCOL = "2";
-    public static final SimpleChannel CHANNEL = ChannelBuilder.named(new ResourceLocation(MODID, "net"))
-            .networkProtocolVersion(2)
+	public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(MODID, "net"))
+			.networkProtocolVersion(() -> "2")
+			.clientAcceptedVersions("2"::equals)
+			.serverAcceptedVersions("2"::equals)
             .simpleChannel();
 
     public static Capability<ItemMobEnchantCapability> ITEM_MOB_ENCHANT_CAP = CapabilityManager.get(new CapabilityToken<>() {
@@ -47,22 +46,13 @@ public class EnchantWithMob {
         this.setupMessages();
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-		// Register the doClientStuff method for modloading
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		MobEnchants.MOB_ENCHANT.register(bus);
 		ModArgumentTypeInfos.COMMAND_ARGUMENT_TYPES.register(bus);
 		ModEntities.ENTITIES_REGISTRY.register(bus);
 		ModItems.ITEM_REGISTRY.register(bus);
 
-		// Register ourselves for server and other game events we are interested in
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnchantConfig.COMMON_SPEC);
@@ -101,15 +91,6 @@ public class EnchantWithMob {
                 .consumerMainThread(RemoveMobEnchantOwnerMessage::handle)
                 .add();
     }
-
-	private void doClientStuff(final FMLClientSetupEvent event) {
-	}
-
-	private void enqueueIMC(final InterModEnqueueEvent event) {
-	}
-
-	private void processIMC(final InterModProcessEvent event) {
-	}
 
 	private void registerCommands(RegisterCommandsEvent evt) {
 		MobEnchantingCommand.register(evt.getDispatcher());

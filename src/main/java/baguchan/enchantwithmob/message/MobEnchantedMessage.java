@@ -9,8 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class MobEnchantedMessage {
     private int entityId;
@@ -50,7 +50,7 @@ public class MobEnchantedMessage {
     }
 
 
-    public void handle(CustomPayloadEvent.Context context) {
+    public boolean handle(NetworkEvent.Context context) {
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
                 Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
@@ -64,5 +64,6 @@ public class MobEnchantedMessage {
             });
         }
         context.setPacketHandled(true);
+        return true;
     }
 }

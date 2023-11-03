@@ -5,8 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class RemoveMobEnchantOwnerMessage {
     private int entityId;
@@ -30,7 +30,7 @@ public class RemoveMobEnchantOwnerMessage {
         return new RemoveMobEnchantOwnerMessage(entityId);
     }
 
-    public void handle(CustomPayloadEvent.Context context) {
+    public boolean handle(NetworkEvent.Context context) {
 
         if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
             context.enqueueWork(() -> {
@@ -43,5 +43,6 @@ public class RemoveMobEnchantOwnerMessage {
             });
         }
         context.setPacketHandled(true);
+        return true;
     }
 }

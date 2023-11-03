@@ -15,8 +15,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +50,7 @@ public class EnchanterClothesItem extends ArmorItem {
             ModelPart root = models.bakeLayer(ModModelLayers.ENCHANTER_CLOTHES);
 
             EnchanterClothesModel<?> model2 = new EnchanterClothesModel<>(root);
-            ForgeHooksClient.copyModelProperties(original, model2);
+            ClientHooks.copyModelProperties(original, model2);
             model2.rightBoots.copyFrom(model2.rightLeg);
             model2.leftBoots.copyFrom(model2.leftLeg);
             this.setPartVisibility(model2, equipmentSlot);

@@ -23,13 +23,13 @@ import net.minecraft.world.entity.monster.AbstractSkeleton;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 
 import java.io.IOException;
 
@@ -63,11 +63,14 @@ public class ClientRegistrar {
 
 	@SubscribeEvent
 	public static void registerEntityRenders(EntityRenderersEvent.AddLayers event) {
-		event.getSkins().forEach(skins ->
+		event.getContext().getEntityRenderDispatcher().getSkinMap().forEach((model, player) ->
 		{
-			event.getSkin(skins).addLayer(new EnchantLayer(event.getSkin(skins)));
+			if (event.getSkin(model.id()) != null) {
+				event.getSkin(model.id()).addLayer(new EnchantLayer(event.getSkin(model.id())));
+			}
 		});
-        Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
+
+		Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
 			if (r instanceof SlimeRenderer) {
 				((SlimeRenderer) r).addLayer(new SlimeEnchantLayer<>((SlimeRenderer) r, event.getEntityModels()));
 			}

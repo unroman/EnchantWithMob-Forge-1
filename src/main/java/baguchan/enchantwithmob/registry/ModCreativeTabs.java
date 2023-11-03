@@ -3,9 +3,9 @@ package baguchan.enchantwithmob.registry;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.item.MobEnchantBookItem;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = EnchantWithMob.MODID)
 public class ModCreativeTabs {

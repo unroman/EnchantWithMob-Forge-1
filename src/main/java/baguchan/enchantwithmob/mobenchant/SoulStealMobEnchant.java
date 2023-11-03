@@ -9,10 +9,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class SoulStealMobEnchant extends MobEnchant {
@@ -42,7 +42,7 @@ public class SoulStealMobEnchant extends MobEnchant {
                     }
                     if (!entity.level().isClientSide()) {
                         SoulParticleMessage message = new SoulParticleMessage(entity);
-                        EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
+                        EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
                     }
                 }
             }

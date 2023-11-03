@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(EvokerFangs.class)
+@Mixin(value = EvokerFangs.class, remap = false)
 public abstract class EvokerFangsMixin extends Entity implements TraceableEntity, IEnchantVisual {
     private static final EntityDataAccessor<Boolean> MOB_ENCHANT = SynchedEntityData.defineId(EvokerFangs.class, EntityDataSerializers.BOOLEAN);
 

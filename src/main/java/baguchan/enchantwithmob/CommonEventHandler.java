@@ -31,18 +31,18 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
@@ -444,7 +444,7 @@ public class CommonEventHandler {
         if (player instanceof ServerPlayer) {
             if (player instanceof IEnchantCap cap) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)), PacketDistributor.PLAYER.with((ServerPlayer) player));
+                    EnchantWithMob.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)));
 
                 }
             }
@@ -457,7 +457,7 @@ public class CommonEventHandler {
         if (playerEntity instanceof IEnchantCap cap) {
             if (!playerEntity.level().isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(playerEntity));
+                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
                 }
             }
         }
@@ -472,7 +472,7 @@ public class CommonEventHandler {
                 //Sync Client Enchant
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
                     MobEnchantedMessage message = new MobEnchantedMessage(livingEntity, cap.getEnchantCap().getMobEnchants().get(i));
-                    EnchantWithMob.CHANNEL.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(livingEntity));
+                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
                 }
             }
         }
