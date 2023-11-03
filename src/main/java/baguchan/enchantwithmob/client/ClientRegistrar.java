@@ -65,8 +65,8 @@ public class ClientRegistrar {
 	public static void registerEntityRenders(EntityRenderersEvent.AddLayers event) {
 		event.getContext().getEntityRenderDispatcher().getSkinMap().forEach((model, player) ->
 		{
-			if (event.getSkin(model.id()) != null) {
-				event.getSkin(model.id()).addLayer(new EnchantLayer(event.getSkin(model.id())));
+			if (event.getSkin(model) != null) {
+				event.getSkin(model).addLayer(new EnchantLayer(event.getSkin(model)));
 			}
 		});
 
