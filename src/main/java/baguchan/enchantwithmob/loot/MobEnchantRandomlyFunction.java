@@ -25,10 +25,9 @@ import org.slf4j.Logger;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
-	private static final Codec<MobEnchant> ENCHANTMENT_SET_CODEC = ExtraCodecs.lazyInitializedCodec(() -> MobEnchants.getRegistry().get().getCodec());
+	private static final Codec<MobEnchant> ENCHANTMENT_SET_CODEC = ExtraCodecs.lazyInitializedCodec(() -> MobEnchants.getRegistry().byNameCodec());
 	public static final Codec<MobEnchantRandomlyFunction> CODEC = RecordCodecBuilder.create((p_297085_) -> {
 		return commonFields(p_297085_).and(Codec.list(ENCHANTMENT_SET_CODEC).fieldOf("mob_enchant").forGetter((p_297084_) -> {
 			return p_297084_.enchantments;
@@ -43,7 +42,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 	}
 
 	public LootItemFunctionType getType() {
-		return ModLootItemFunctions.MOB_ENCHANT_RANDOMLY_FUNCTION;
+		return ModLootItemFunctions.MOB_ENCHANT_RANDOMLY_FUNCTION.get();
 	}
 
 	public ItemStack run(ItemStack p_80429_, LootContext p_80430_) {
@@ -51,9 +50,9 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		MobEnchant enchantment;
 		if (this.enchantments.isEmpty()) {
 			boolean flag = p_80429_.is(Items.BOOK) || p_80429_.is(ModItems.MOB_ENCHANT_BOOK.get());
-			List<MobEnchant> list = MobEnchants.getRegistry().get().getValues().stream().filter(MobEnchant::isOnlyChest).filter((p_80436_) -> {
+			List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(MobEnchant::isOnlyChest).filter((p_80436_) -> {
 				return flag;
-			}).collect(Collectors.toList());
+			}).toList();
 			if (list.isEmpty()) {
 				LOGGER.warn("Couldn't find a compatible enchantment for {}", (Object) p_80429_);
 				return p_80429_;

@@ -30,7 +30,7 @@ public class MobEnchantOverlay implements IGuiOverlay {
 
                             ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 
-                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().get().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
 
                             int xOffset = 20;
                             int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;
@@ -52,7 +52,7 @@ public class MobEnchantOverlay implements IGuiOverlay {
 
                             ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 
-                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().get().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().get().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
 
                             int xOffset = 20;
                             int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;

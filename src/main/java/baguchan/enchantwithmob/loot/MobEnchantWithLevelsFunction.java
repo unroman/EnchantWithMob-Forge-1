@@ -40,7 +40,7 @@ public class MobEnchantWithLevelsFunction extends LootItemConditionalFunction {
 	}
 
 	public LootItemFunctionType getType() {
-		return ModLootItemFunctions.MOB_ENCHANT_WITH_LEVELS;
+		return ModLootItemFunctions.MOB_ENCHANT_WITH_LEVELS.get();
 	}
 
 	public Set<LootContextParam<?>> getReferencedContextParams() {

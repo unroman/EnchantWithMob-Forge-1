@@ -11,6 +11,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.capabilities.Capability;
@@ -45,12 +46,13 @@ public class EnchantWithMob {
 
         this.setupMessages();
         // Register the setup method for modloading
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		MobEnchants.MOB_ENCHANT.register(bus);
-		ModArgumentTypeInfos.COMMAND_ARGUMENT_TYPES.register(bus);
 		ModEntities.ENTITIES_REGISTRY.register(bus);
 		ModItems.ITEM_REGISTRY.register(bus);
+		ModLootItemFunctions.LOOT_REGISTRY.register(bus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
@@ -59,9 +61,11 @@ public class EnchantWithMob {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EnchantConfig.CLIENT_SPEC);
 	}
 
+	private void preSetup(final FMLConstructModEvent event) {
+	}
+
 	private void setup(final FMLCommonSetupEvent event) {
 		ModTrackedDatas.init();
-		ModLootItemFunctions.init();
 		Raid.RaiderType.create("enchanter", ModEntities.ENCHANTER.get(), new int[]{0, 0, 1, 0, 1, 1, 2, 1});
 	}
 

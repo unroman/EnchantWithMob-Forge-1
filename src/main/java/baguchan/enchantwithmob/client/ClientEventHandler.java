@@ -69,8 +69,6 @@ public class ClientEventHandler {
                 }
             }
         }
-        ;
-
     }
 
 	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity p_229118_1_, float p_229118_2_, PoseStack p_229118_3_, MultiBufferSource p_229118_4_, Entity p_229118_5_, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {

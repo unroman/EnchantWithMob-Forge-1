@@ -18,7 +18,6 @@ import net.neoforged.neoforge.event.village.WandererTradesEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class TradeEvent {
@@ -38,9 +37,9 @@ public class TradeEvent {
 		@Nullable
 		@Override
 		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
-			List<MobEnchant> list = MobEnchants.getRegistry().get().getValues().stream().filter(mobEnchant -> {
+			List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(mobEnchant -> {
 				return !mobEnchant.isOnlyChest();
-			}).collect(Collectors.toList());
+			}).toList();
 			MobEnchant enchantment = list.get(rand.nextInt(list.size()));
 			int i = Mth.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());

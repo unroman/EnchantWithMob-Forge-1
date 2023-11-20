@@ -7,6 +7,7 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.fml.LogicalSide;
@@ -37,16 +38,16 @@ public class MobEnchantedMessage {
 
     public void serialize(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
-        buffer.writeRegistryId(MobEnchants.getRegistry().get(), this.enchantType);
+        buffer.writeResourceKey(MobEnchants.getRegistry().getResourceKey(this.enchantType).get());
         buffer.writeInt(this.level);
     }
 
     public static MobEnchantedMessage deserialize(FriendlyByteBuf buffer) {
         int entityId = buffer.readInt();
-        MobEnchant enchantType = buffer.readRegistryId();
+        ResourceKey<MobEnchant> enchantType = buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY);
+        MobEnchant mobEnchant = MobEnchants.getRegistry().get(enchantType);
         int level = buffer.readInt();
-
-        return new MobEnchantedMessage(entityId, new MobEnchantHandler(enchantType, level));
+        return new MobEnchantedMessage(entityId, new MobEnchantHandler(mobEnchant, level));
     }
 
 

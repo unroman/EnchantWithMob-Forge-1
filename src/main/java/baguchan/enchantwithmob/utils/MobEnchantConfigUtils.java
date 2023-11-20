@@ -7,6 +7,6 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 public class MobEnchantConfigUtils {
 
     public static boolean isPlayerEnchantable(MobEnchant mobEnchant) {
-        return !EnchantConfig.COMMON.BLACKLIST_PLAYER_ENCHANT.get().contains(MobEnchants.getRegistry().get().getKey(mobEnchant).toString());
+        return !EnchantConfig.COMMON.BLACKLIST_PLAYER_ENCHANT.get().contains(MobEnchants.getRegistry().getKey(mobEnchant).toString());
     }
 }
