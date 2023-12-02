@@ -112,7 +112,7 @@ public class ClientRegistrar {
 
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("mobenchant", new MobEnchantOverlay());
+		event.registerAboveAll(new ResourceLocation(EnchantWithMob.MODID, "mobenchant"), new MobEnchantOverlay());
     }
 
 
