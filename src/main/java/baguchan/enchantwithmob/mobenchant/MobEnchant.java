@@ -5,6 +5,7 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantConfigUtils;
 import com.google.common.collect.Maps;
 import net.minecraft.Util;
+import net.minecraft.world.effect.AttributeModifierTemplate;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -16,16 +17,20 @@ import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
 public class MobEnchant implements FeatureElement {
-	private final Map<Attribute, AttributeModifier> attributeModifierMap = Maps.newHashMap();
+    private final Map<Attribute, MobEnchantAttributeModifierTemplate> attributeModifierMap = Maps.newHashMap();
 	protected final Rarity enchantType;
 	private final int level;
 	private int minlevel = 1;
     private final FeatureFlagSet requiredFeatures;
-	public MobEnchant(Properties properties) {
+    @Nullable
+    private String descriptionId;
+
+    public MobEnchant(Properties properties) {
 		this.enchantType = properties.enchantType;
 		this.level = properties.level;
         this.requiredFeatures = properties.requiredFeatures;
@@ -93,38 +98,37 @@ public class MobEnchant implements FeatureElement {
     }
 
     public MobEnchant addAttributesModifier(Attribute attributeIn, String uuid, double amount, AttributeModifier.Operation operation) {
-        AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString(uuid), Util.makeDescriptionId("mobenchant", MobEnchants.getRegistry().getKey(this)), amount, operation);
-        this.attributeModifierMap.put(attributeIn, attributemodifier);
+        this.attributeModifierMap.put(attributeIn, new MobEnchantAttributeModifierTemplate(UUID.fromString(uuid), amount, operation));
         return this;
     }
 
-    public Map<Attribute, AttributeModifier> getAttributeModifierMap() {
+    public Map<Attribute, MobEnchantAttributeModifierTemplate> getAttributeModifierMap() {
         return this.attributeModifierMap;
     }
 
 	public void removeAttributesModifiersFromEntity(LivingEntity entityLivingBaseIn, AttributeMap attributeMapIn) {
-		for (Map.Entry<Attribute, AttributeModifier> entry : this.attributeModifierMap.entrySet()) {
+        for (Map.Entry<Attribute, MobEnchantAttributeModifierTemplate> entry : this.attributeModifierMap.entrySet()) {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
-                modifiableattributeinstance.removeModifier(entry.getValue().getId());
+                modifiableattributeinstance.removeModifier(entry.getValue().getAttributeModifierId());
 			}
 		}
 
 	}
 
 	public void applyAttributesModifiersToEntity(LivingEntity entityLivingBaseIn, AttributeMap attributeMapIn, int amplifier) {
-		for (Map.Entry<Attribute, AttributeModifier> entry : this.attributeModifierMap.entrySet()) {
+        for (Map.Entry<Attribute, MobEnchantAttributeModifierTemplate> entry : this.attributeModifierMap.entrySet()) {
 			AttributeInstance modifiableattributeinstance = attributeMapIn.getInstance(entry.getKey());
 			if (modifiableattributeinstance != null) {
-				AttributeModifier attributemodifier = entry.getValue();
-                modifiableattributeinstance.removeModifier(attributemodifier.getId());
-                modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getId(), MobEnchants.getRegistry().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.getOperation()));
+                MobEnchantAttributeModifierTemplate attributemodifier = entry.getValue();
+                modifiableattributeinstance.removeModifier(attributemodifier.getAttributeModifierId());
+                modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.getAttributeModifierId(), MobEnchants.getRegistry().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.operation));
 			}
 		}
     }
 
-    public double getAttributeModifierAmount(int amplifier, AttributeModifier modifier) {
-        return modifier.getAmount() * (double) (amplifier);
+    public double getAttributeModifierAmount(int amplifier, MobEnchantAttributeModifierTemplate modifier) {
+        return modifier.amount * (double) (amplifier);
     }
 
     public boolean isDisabled() {
@@ -143,6 +147,18 @@ public class MobEnchant implements FeatureElement {
     @Override
     public boolean isEnabled(FeatureFlagSet p_249172_) {
         return !this.isDisabled() && this.requiredFeatures().isSubsetOf(p_249172_);
+    }
+
+    protected String getOrCreateDescriptionId() {
+        if (this.descriptionId == null) {
+            this.descriptionId = Util.makeDescriptionId("mob_enchant", MobEnchants.getRegistry().getKey(this));
+        }
+
+        return this.descriptionId;
+    }
+
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
     }
 
 
@@ -187,5 +203,39 @@ public class MobEnchant implements FeatureElement {
         }
 
 
+    }
+
+    public class MobEnchantAttributeModifierTemplate implements AttributeModifierTemplate {
+        private final UUID id;
+        private final double amount;
+        private final AttributeModifier.Operation operation;
+
+        public MobEnchantAttributeModifierTemplate(UUID p_295616_, double p_294530_, AttributeModifier.Operation p_294958_) {
+            this.id = p_295616_;
+            this.amount = p_294530_;
+            this.operation = p_294958_;
+        }
+
+        public AttributeModifier.Operation getOperation() {
+            return operation;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public UUID getId() {
+            return id;
+        }
+
+        @Override
+        public UUID getAttributeModifierId() {
+            return this.id;
+        }
+
+        @Override
+        public AttributeModifier create(int p_294228_) {
+            return new AttributeModifier(this.id, MobEnchant.this.getDescriptionId() + " " + p_294228_, this.amount * (double) (p_294228_ + 1), this.operation);
+        }
     }
 }

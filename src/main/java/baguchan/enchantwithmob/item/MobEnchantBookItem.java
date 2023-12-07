@@ -122,7 +122,7 @@ public class MobEnchantBookItem extends Item {
 				}
             }
 
-            List<Pair<Attribute, AttributeModifier>> list1 = Lists.newArrayList();
+			List<Pair<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate>> list1 = Lists.newArrayList();
 
             for (int i = 0; i < listnbt.size(); ++i) {
 				CompoundTag compoundnbt = listnbt.getCompound(i);
@@ -131,12 +131,10 @@ public class MobEnchantBookItem extends Item {
                 int mobEnchantLevel = MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt);
 
                 if (mobEnchant != null) {
-                    Map<Attribute, AttributeModifier> map = mobEnchant.getAttributeModifierMap();
+					Map<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> map = mobEnchant.getAttributeModifierMap();
                     if (!map.isEmpty()) {
-                        for (Map.Entry<Attribute, AttributeModifier> entry : map.entrySet()) {
-                            AttributeModifier attributemodifier = entry.getValue();
-                            AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), mobEnchant.getAttributeModifierAmount(mobEnchantLevel, attributemodifier), attributemodifier.getOperation());
-                            list1.add(new Pair<>(entry.getKey(), attributemodifier1));
+						for (Map.Entry<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> entry : map.entrySet()) {
+							list1.add(new Pair<>(entry.getKey(), entry.getValue()));
                         }
                     }
                 }
@@ -147,8 +145,8 @@ public class MobEnchantBookItem extends Item {
 				//tooltip.add(StringTextComponent.EMPTY);
 				tooltip.add((Component.translatable("mobenchant.enchantwithmob.when_ehcnanted")).withStyle(ChatFormatting.DARK_PURPLE));
 
-				for (Pair<Attribute, AttributeModifier> pair : list1) {
-					AttributeModifier attributemodifier2 = pair.getSecond();
+				for (Pair<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> pair : list1) {
+					MobEnchant.MobEnchantAttributeModifierTemplate attributemodifier2 = pair.getSecond();
 					double d0 = attributemodifier2.getAmount();
 					double d1;
 					if (attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {

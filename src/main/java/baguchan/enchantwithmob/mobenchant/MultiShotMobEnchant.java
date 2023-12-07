@@ -3,6 +3,7 @@ package baguchan.enchantwithmob.mobenchant;
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import baguchan.enchantwithmob.registry.ModCapability;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -75,10 +76,7 @@ public class MultiShotMobEnchant extends MobEnchant {
 			((AbstractArrow) newProjectile).pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 		}
 
-		newProjectile.getCapability(EnchantWithMob.ITEM_MOB_ENCHANT_CAP).ifPresent(cap ->
-		{
-			cap.setHasEnchant(true);
-		});
+		newProjectile.getData(ModCapability.ITEM_MOB_ENCHANT.get()).setHasEnchant(true);
 
 		level.addFreshEntity(newProjectile);
 	}

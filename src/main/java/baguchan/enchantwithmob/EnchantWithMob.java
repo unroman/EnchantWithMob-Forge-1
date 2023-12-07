@@ -1,6 +1,5 @@
 package baguchan.enchantwithmob;
 
-import baguchan.enchantwithmob.capability.ItemMobEnchantCapability;
 import baguchan.enchantwithmob.command.MobEnchantingCommand;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.registry.*;
@@ -14,9 +13,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.CapabilityManager;
-import net.neoforged.neoforge.common.capabilities.CapabilityToken;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.NetworkRegistry;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
@@ -38,8 +34,6 @@ public class EnchantWithMob {
 			.serverAcceptedVersions("2"::equals)
             .simpleChannel();
 
-    public static Capability<ItemMobEnchantCapability> ITEM_MOB_ENCHANT_CAP = CapabilityManager.get(new CapabilityToken<>() {
-    });
 
     public EnchantWithMob() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -53,6 +47,7 @@ public class EnchantWithMob {
 		ModEntities.ENTITIES_REGISTRY.register(bus);
 		ModItems.ITEM_REGISTRY.register(bus);
 		ModLootItemFunctions.LOOT_REGISTRY.register(bus);
+		ModCapability.ATTACHMENT_TYPES.register(bus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
@@ -65,7 +60,6 @@ public class EnchantWithMob {
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
-		ModTrackedDatas.init();
 		Raid.RaiderType.create("enchanter", ModEntities.ENCHANTER.get(), new int[]{0, 0, 1, 0, 1, 1, 2, 1});
 	}
 
