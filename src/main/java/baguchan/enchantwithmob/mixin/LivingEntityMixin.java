@@ -5,7 +5,6 @@ import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModCapability;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -39,18 +38,6 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap {
                 this.playSound(SoundEvents.ITEM_BREAK, 1.5F, 1.6F);
             }
         }
-    }
-
-    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    public void addAdditionalSaveData(CompoundTag nbt, CallbackInfo ci) {
-        nbt.put("MobEnchantData", this.getEnchantCap().serializeNBT());
-    }
-
-    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    public void readAdditionalSaveData(CompoundTag nbt, CallbackInfo ci) {
-        MobEnchantCapability mobEnchantCapability = new MobEnchantCapability();
-        mobEnchantCapability.deserializeNBT(nbt.getCompound("MobEnchantData"));
-        this.setEnchantCap(mobEnchantCapability);
     }
 
     @Override
