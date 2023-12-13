@@ -61,9 +61,9 @@ public class ClientEventHandler {
         MultiBufferSource bufferBuilder = event.getMultiBufferSource();
         float particalTick = event.getPartialTick();
         if (event.getEntity() instanceof IEnchantCap cap) {
-            if (cap.getEnchantCap().getEnchantOwner().isPresent()) {
+			if (cap.getEnchantCap().hasOwner()) {
 
-                LivingEntity entity = cap.getEnchantCap().getEnchantOwner().get();
+				LivingEntity entity = cap.getEnchantCap().getEnchantOwner();
                 if (entity != null) {
                     renderBeam(cap.getEnchantCap(), event.getEntity(), particalTick, matrixStack, bufferBuilder, entity, event.getRenderer());
                 }
@@ -72,7 +72,6 @@ public class ClientEventHandler {
     }
 
 	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity p_229118_1_, float p_229118_2_, PoseStack p_229118_3_, MultiBufferSource p_229118_4_, Entity p_229118_5_, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {
-		float tick = (float) p_229118_1_.tickCount + p_229118_2_;
 		p_229118_3_.pushPose();
 		Vec3 vector3d = p_229118_5_.getRopeHoldPosition(p_229118_2_);
 		double d0 = (double) (Mth.lerp(p_229118_2_, p_229118_1_.yBodyRot, p_229118_1_.yBodyRotO) * ((float) Math.PI / 180F)) + (Math.PI / 2D);

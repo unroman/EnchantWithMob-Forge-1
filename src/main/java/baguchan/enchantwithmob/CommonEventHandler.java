@@ -464,20 +464,6 @@ public class CommonEventHandler {
         ;
     }
 
-    @SubscribeEvent
-    public static void bringBackEnchant(EntityJoinLevelEvent event) {
-        Entity livingEntity = event.getEntity();
-        if (livingEntity instanceof IEnchantCap cap) {
-            if (!event.getLevel().isClientSide()) {
-                //Sync Client Enchant
-                for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    MobEnchantedMessage message = new MobEnchantedMessage(livingEntity, cap.getEnchantCap().getMobEnchants().get(i));
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
-                }
-            }
-        }
-    }
-
 
     @SubscribeEvent
     public static void onClone(PlayerEvent.Clone event) {

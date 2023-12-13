@@ -13,23 +13,22 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
-public class MobEnchantCapability implements INBTSerializable<CompoundTag> {
+public class MobEnchantCapability {
 	private static final UUID HEALTH_MODIFIER_UUID = UUID.fromString("6699a403-e2cc-31e6-195e-4757200e0935");
 
 	private static final AttributeModifier HEALTH_MODIFIER = new AttributeModifier(HEALTH_MODIFIER_UUID, "Health boost", 0.5D, AttributeModifier.Operation.MULTIPLY_BASE);
 
 
 	private List<MobEnchantHandler> mobEnchants = Lists.newArrayList();
-	private Optional<LivingEntity> enchantOwner = Optional.empty();
+	@Nullable
+	private LivingEntity enchantOwner;
 	private boolean fromOwner;
 	private EnchantType enchantType = EnchantType.NORMAL;
 
@@ -90,18 +89,18 @@ public class MobEnchantCapability implements INBTSerializable<CompoundTag> {
 		this.sync(entity);
 	}
 
-	public void addOwner(LivingEntity entity, @Nullable LivingEntity owner) {
+	public void addOwner(LivingEntity entity, LivingEntity owner) {
 		this.fromOwner = true;
-		this.enchantOwner = Optional.ofNullable(owner);
-		this.sync(entity);
+		this.enchantOwner = owner;
 		if (!entity.level().isClientSide) {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
             EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 		}
+		this.sync(entity);
 	}
 
 	public final void sync(LivingEntity entity) {
-		MobEnchantCapability capability = new MobEnchantCapability();
+		MobEnchantCapability capability = this;
 		capability.mobEnchants = this.mobEnchants;
 		capability.enchantOwner = this.enchantOwner;
 		capability.enchantType = this.enchantType;
@@ -111,7 +110,7 @@ public class MobEnchantCapability implements INBTSerializable<CompoundTag> {
 
 	public void removeOwner(LivingEntity livingEntity) {
 		this.fromOwner = false;
-		this.enchantOwner = Optional.empty();
+		this.enchantOwner = null;
 		//Sync Client Enchant
 		if (!livingEntity.level().isClientSide) {
 			RemoveMobEnchantOwnerMessage message = new RemoveMobEnchantOwnerMessage(livingEntity);
@@ -203,12 +202,13 @@ public class MobEnchantCapability implements INBTSerializable<CompoundTag> {
 		return !this.mobEnchants.isEmpty();
 	}
 
-	public Optional<LivingEntity> getEnchantOwner() {
+	@Nullable
+	public LivingEntity getEnchantOwner() {
 		return enchantOwner;
 	}
 
 	public boolean hasOwner() {
-		return this.enchantOwner.isPresent() && this.enchantOwner.get().isAlive();
+		return this.enchantOwner != null && this.enchantOwner.isAlive();
 	}
 
 	//check this enchant from owner
