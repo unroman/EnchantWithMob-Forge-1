@@ -40,14 +40,13 @@ public class EnchantWithMob {
 
         this.setupMessages();
         // Register the setup method for modloading
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		MobEnchants.MOB_ENCHANT.register(bus);
-		ModEntities.ENTITIES_REGISTRY.register(bus);
-		ModItems.ITEM_REGISTRY.register(bus);
-		ModLootItemFunctions.LOOT_REGISTRY.register(bus);
-		ModCapability.ATTACHMENT_TYPES.register(bus);
+		modEventBus.addListener(this::preSetup);
+		modEventBus.addListener(this::setup);
+		MobEnchants.MOB_ENCHANT.register(modEventBus);
+		ModEntities.ENTITIES_REGISTRY.register(modEventBus);
+		ModItems.ITEM_REGISTRY.register(modEventBus);
+		ModLootItemFunctions.LOOT_REGISTRY.register(modEventBus);
+		ModCapability.ATTACHMENT_TYPES.register(modEventBus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
