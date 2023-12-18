@@ -11,7 +11,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.NetworkRegistry;
@@ -35,8 +34,7 @@ public class EnchantWithMob {
             .simpleChannel();
 
 
-    public EnchantWithMob() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public EnchantWithMob(IEventBus modEventBus) {
 
         this.setupMessages();
         // Register the setup method for modloading
