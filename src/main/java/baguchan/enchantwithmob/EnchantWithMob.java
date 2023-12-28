@@ -72,7 +72,6 @@ public class EnchantWithMob {
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
-		ModTrackedDatas.init();
 		ModLootItemFunctions.init();
 		Raid.RaiderType.create("enchanter", ModEntities.ENCHANTER.get(), new int[]{0, 0, 1, 0, 1, 1, 2, 1});
 	}
