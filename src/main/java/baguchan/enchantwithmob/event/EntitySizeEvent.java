@@ -22,7 +22,7 @@ public class EntitySizeEvent {
         Entity entity = event.getEntity();
 
         if (entity instanceof IEnchantCap cap) {
-            if (cap.getEnchantCap().hasEnchant()) {
+            if (cap.getEnchantCap() != null && cap.getEnchantCap().hasEnchant()) {
                 if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get())) {
                     int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get());
                     float cappedScale = Mth.clamp(0.15F * level, 0.0F, 0.9F);
