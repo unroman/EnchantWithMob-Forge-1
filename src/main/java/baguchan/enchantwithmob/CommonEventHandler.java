@@ -441,10 +441,10 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getEntity();
-        if (player instanceof ServerPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             if (player instanceof IEnchantCap cap) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)));
+                    PacketDistributor.PLAYER.with(serverPlayer).send(new MobEnchantedMessage(player, cap.getEnchantCap().getMobEnchants().get(i)));
 
                 }
             }
@@ -457,7 +457,7 @@ public class CommonEventHandler {
         if (playerEntity instanceof IEnchantCap cap) {
             if (!playerEntity.level().isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(playerEntity).send(new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
                 }
             }
         }

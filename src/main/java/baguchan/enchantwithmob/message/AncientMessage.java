@@ -1,15 +1,19 @@
 package baguchan.enchantwithmob.message;
 
+import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class AncientMessage {
+public class AncientMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "ancient");
+
     private int entityId;
     private boolean isAncient;
 
@@ -23,30 +27,30 @@ public class AncientMessage {
         this.isAncient = ancient;
     }
 
-    public void serialize(FriendlyByteBuf buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
         buffer.writeBoolean(this.isAncient);
     }
 
-    public static AncientMessage deserialize(FriendlyByteBuf buffer) {
-        int entityId = buffer.readInt();
-
-        return new AncientMessage(entityId, buffer.readBoolean());
+    public AncientMessage(FriendlyByteBuf buffer) {
+        this(buffer.readInt(), buffer.readBoolean());
     }
 
-    public boolean handle(NetworkEvent.Context context) {
-        if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-            context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
-                if (entity != null && entity instanceof LivingEntity livingEntity) {
-                    if (livingEntity instanceof IEnchantCap cap) {
-                        cap.getEnchantCap().setEnchantType((LivingEntity) entity, isAncient ? MobEnchantCapability.EnchantType.ANCIENT : MobEnchantCapability.EnchantType.NORMAL);
-                    }
-                    ;
+    public static boolean handle(AncientMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
+            Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
+            if (entity != null && entity instanceof LivingEntity livingEntity) {
+                if (livingEntity instanceof IEnchantCap cap) {
+                    cap.getEnchantCap().setEnchantType((LivingEntity) entity, message.isAncient ? MobEnchantCapability.EnchantType.ANCIENT : MobEnchantCapability.EnchantType.NORMAL);
                 }
-            });
-        }
-        context.setPacketHandled(true);
+
+            }
+        });
         return true;
+    }
+
+    @Override
+    public ResourceLocation id() {
+        return ID;
     }
 }

@@ -1,13 +1,17 @@
 package baguchan.enchantwithmob.message;
 
+import baguchan.enchantwithmob.EnchantWithMob;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class SoulParticleMessage {
+public class SoulParticleMessage implements CustomPacketPayload {
+	public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "soul_particle");
+
 	private int entityId;
 
 	public SoulParticleMessage(Entity entity) {
@@ -18,28 +22,28 @@ public class SoulParticleMessage {
 		this.entityId = id;
 	}
 
-	public void serialize(FriendlyByteBuf buffer) {
+	public void write(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.entityId);
 	}
 
-	public static SoulParticleMessage deserialize(FriendlyByteBuf buffer) {
-		int entityId = buffer.readInt();
-
-		return new SoulParticleMessage(entityId);
+	public SoulParticleMessage(FriendlyByteBuf buffer) {
+		this(buffer.readInt());
 	}
 
-	public boolean handle(NetworkEvent.Context context) {
-		if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-			context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().level.getEntity(entityId);
-				if (entity != null) {
-					for (int i = 0; i < 4; i++) {
-						entity.level().addParticle(ParticleTypes.SCULK_SOUL, entity.getRandomX(0.5D), entity.getRandomY(), entity.getRandomZ(0.5D), 0.0F, 0.1F, 0.0F);
-					}
+	@Override
+	public ResourceLocation id() {
+		return ID;
+	}
+
+	public static boolean handle(SoulParticleMessage message, PlayPayloadContext context) {
+		context.workHandler().execute(() -> {
+			Entity entity = Minecraft.getInstance().level.getEntity(message.entityId);
+			if (entity != null) {
+				for (int i = 0; i < 4; i++) {
+					entity.level().addParticle(ParticleTypes.SCULK_SOUL, entity.getRandomX(0.5D), entity.getRandomY(), entity.getRandomZ(0.5D), 0.0F, 0.1F, 0.0F);
 				}
-			});
-		}
-		context.setPacketHandled(true);
+			}
+		});
 		return true;
     }
 }

@@ -1,7 +1,6 @@
 package baguchan.enchantwithmob.capability;
 
 import baguchan.enchantwithmob.EnchantConfig;
-import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
@@ -45,7 +44,7 @@ public class MobEnchantCapability {
 		this.mobEnchants.add(new MobEnchantHandler(mobEnchant, enchantLevel));
 		if (!entity.level().isClientSide) {
 			MobEnchantedMessage message = new MobEnchantedMessage(entity, mobEnchant, enchantLevel);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
 		//Sync Client Enchant
@@ -63,7 +62,7 @@ public class MobEnchantCapability {
 		this.enchantType = enchantType;
 		if (!entity.level().isClientSide) {
 			AncientMessage message = new AncientMessage(entity, enchantType == EnchantType.ANCIENT);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.sync(entity);
 	}
@@ -81,7 +80,7 @@ public class MobEnchantCapability {
 		this.mobEnchants.add(new MobEnchantHandler(mobEnchant, enchantLevel));
 		if (!entity.level().isClientSide) {
 			MobEnchantedMessage message = new MobEnchantedMessage(entity, mobEnchant, enchantLevel);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.addOwner(entity, owner);
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
@@ -94,7 +93,7 @@ public class MobEnchantCapability {
 		this.enchantOwner = owner;
 		if (!entity.level().isClientSide) {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.sync(entity);
 	}
@@ -114,7 +113,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!livingEntity.level().isClientSide) {
 			RemoveMobEnchantOwnerMessage message = new RemoveMobEnchantOwnerMessage(livingEntity);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(livingEntity).send(message);
 		}
 	}
 
@@ -129,7 +128,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!entity.level().isClientSide) {
 			RemoveAllMobEnchantMessage message = new RemoveAllMobEnchantMessage(entity);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.mobEnchants.removeAll(mobEnchants);
 		//size changed like minecraft dungeons
@@ -146,7 +145,7 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		if (!entity.level().isClientSide) {
 			RemoveAllMobEnchantMessage message = new RemoveAllMobEnchantMessage(entity);
-            EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
 		this.mobEnchants.removeAll(mobEnchants);
 		this.removeOwner(entity);

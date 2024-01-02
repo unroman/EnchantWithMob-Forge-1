@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob.message;
 
+import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
@@ -7,13 +8,15 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class MobEnchantedMessage {
+public class MobEnchantedMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "mob_enchant");
+
     private int entityId;
     private MobEnchant enchantType;
     private int level;
@@ -36,35 +39,33 @@ public class MobEnchantedMessage {
         this.level = level;
     }
 
-    public void serialize(FriendlyByteBuf buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
         buffer.writeResourceKey(MobEnchants.getRegistry().getResourceKey(this.enchantType).get());
         buffer.writeInt(this.level);
     }
 
-    public static MobEnchantedMessage deserialize(FriendlyByteBuf buffer) {
-        int entityId = buffer.readInt();
-        ResourceKey<MobEnchant> enchantType = buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY);
-        MobEnchant mobEnchant = MobEnchants.getRegistry().get(enchantType);
-        int level = buffer.readInt();
-        return new MobEnchantedMessage(entityId, new MobEnchantHandler(mobEnchant, level));
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
+
+    public MobEnchantedMessage(FriendlyByteBuf buffer) {
+        this(buffer.readInt(), new MobEnchantHandler(MobEnchants.getRegistry().get(buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY)), buffer.readInt()));
     }
 
 
-    public boolean handle(NetworkEvent.Context context) {
-        if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-            context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
+    public static boolean handle(MobEnchantedMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
+            Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
-                        if (!MobEnchantUtils.findMobEnchantHandler(cap.getEnchantCap().getMobEnchants(), enchantType)) {
-                            cap.getEnchantCap().addMobEnchant((LivingEntity) entity, enchantType, level);
+                        if (!MobEnchantUtils.findMobEnchantHandler(cap.getEnchantCap().getMobEnchants(), message.enchantType)) {
+                            cap.getEnchantCap().addMobEnchant((LivingEntity) entity, message.enchantType, message.level);
                         }
                     }
                 }
-            });
-        }
-        context.setPacketHandled(true);
+        });
         return true;
     }
 }

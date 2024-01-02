@@ -42,7 +42,7 @@ public class SoulStealMobEnchant extends MobEnchant {
                     }
                     if (!entity.level().isClientSide()) {
                         SoulParticleMessage message = new SoulParticleMessage(entity);
-                        EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
                     }
                 }
             }

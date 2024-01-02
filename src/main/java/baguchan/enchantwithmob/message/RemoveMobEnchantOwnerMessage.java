@@ -1,14 +1,18 @@
 package baguchan.enchantwithmob.message;
 
+import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public class RemoveMobEnchantOwnerMessage {
+public class RemoveMobEnchantOwnerMessage implements CustomPacketPayload {
+    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "remove_mob_enchant_owner");
+
     private int entityId;
 
     public RemoveMobEnchantOwnerMessage(Entity entity) {
@@ -19,30 +23,28 @@ public class RemoveMobEnchantOwnerMessage {
         this.entityId = id;
     }
 
+    @Override
+    public ResourceLocation id() {
+        return ID;
+    }
 
-    public void serialize(FriendlyByteBuf buffer) {
+    public void write(FriendlyByteBuf buffer) {
         buffer.writeInt(this.entityId);
     }
 
-    public static RemoveMobEnchantOwnerMessage deserialize(FriendlyByteBuf buffer) {
-        int entityId = buffer.readInt();
-
-        return new RemoveMobEnchantOwnerMessage(entityId);
+    public RemoveMobEnchantOwnerMessage(FriendlyByteBuf buffer) {
+        this(buffer.readInt());
     }
 
-    public boolean handle(NetworkEvent.Context context) {
-
-        if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
-            context.enqueueWork(() -> {
-                Entity entity = Minecraft.getInstance().player.level().getEntity(entityId);
+    public static boolean handle(RemoveMobEnchantOwnerMessage message, PlayPayloadContext context) {
+        context.workHandler().execute(() -> {
+            Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
                         cap.getEnchantCap().removeOwner(livingEntity);
                     }
                 }
             });
-        }
-        context.setPacketHandled(true);
         return true;
     }
 }
