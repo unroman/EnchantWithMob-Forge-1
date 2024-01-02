@@ -60,7 +60,7 @@ public class EnchantWithMob {
 		registrar.play(MobEnchantFromOwnerMessage.ID, MobEnchantFromOwnerMessage::new, payload -> payload.client(MobEnchantFromOwnerMessage::handle));
 		registrar.play(RemoveAllMobEnchantMessage.ID, RemoveAllMobEnchantMessage::new, payload -> payload.client(RemoveAllMobEnchantMessage::handle));
 		registrar.play(RemoveMobEnchantOwnerMessage.ID, RemoveMobEnchantOwnerMessage::new, payload -> payload.client(RemoveMobEnchantOwnerMessage::handle));
-		registrar.play(SoulParticleMessage.ID, SoulParticleMessage::new, payload -> payload.client(SoulParticleMessage::handle));
+		registrar.play(SoulParticleMessage.ID, SoulParticleMessage::new, payload -> payload.server(SoulParticleMessage::handle));
 	}
 
 	private void registerCommands(RegisterCommandsEvent evt) {
