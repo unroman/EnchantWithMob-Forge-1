@@ -29,7 +29,7 @@
           "functions": [
             {
               "function": "enchantwithmob:mob_enchant_randomly_function",
-              "enchantments": [
+              "mob_enchant": [
                 "enchantwithmob:soul_steal"
               ]
             }
