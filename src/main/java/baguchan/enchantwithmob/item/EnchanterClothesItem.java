@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob.item;
 
+import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.client.ModModelLayers;
 import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
 import baguchan.enchantwithmob.registry.ModArmorMaterials;
@@ -10,6 +11,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -27,6 +29,11 @@ public class EnchanterClothesItem extends ArmorItem {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         super.initializeClient(consumer);
         consumer.accept(ArmorRender.INSTANCE);
+    }
+
+    @Override
+    public boolean isEnabled(FeatureFlagSet p_249172_) {
+        return super.isEnabled(p_249172_) && !EnchantConfig.COMMON.disableEnchanterArmor.get();
     }
 
     private static final class ArmorRender implements IClientItemExtensions {
