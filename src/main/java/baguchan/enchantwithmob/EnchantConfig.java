@@ -50,7 +50,7 @@ public class EnchantConfig {
         public final ModConfigSpec.BooleanValue universalEnchant;
         public final ModConfigSpec.DoubleValue difficultyBasePercent;
         public final ModConfigSpec.DoubleValue effectiveBasePercent;
-
+        public final ModConfigSpec.BooleanValue disableEnchanterArmor;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANT_ON_SPAWN_EXCLUSION_MOBS;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_MOBS;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_ANCIENT_MOBS;
@@ -127,6 +127,9 @@ public class EnchantConfig {
             effectiveBasePercent = builder
                     .comment("Set The Effective Difficulty Base Enchanted Mob Spawn Percent [(Difficulty Base Percent * Difficulty id) + (Effective Difficulty Percent * Effective Difficulty)]")
                     .defineInRange("Effective Difficulty Enchanted Spawn Percent", 0.025D, 0.0D, 1D);
+            disableEnchanterArmor = builder
+                    .comment("Disable Enchanter Armor Item. [true / false]")
+                    .define("Disable Enchanter Armor", false);
         }
     }
 

@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob.item;
 
+import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.client.ModModelLayers;
 import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
@@ -13,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.ClientHooks;
@@ -38,6 +40,11 @@ public class EnchanterClothesItem extends ArmorItem {
     @Override
     public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return TEXTURE.toString();
+    }
+
+    @Override
+    public boolean isEnabled(FeatureFlagSet p_249172_) {
+        return super.isEnabled(p_249172_) && !EnchantConfig.COMMON.disableEnchanterArmor.get();
     }
 
     private static final class ArmorRender implements IClientItemExtensions {
