@@ -53,6 +53,7 @@ public class EnchantConfig {
         public final ForgeConfigSpec.DoubleValue difficultyBasePercent;
         public final ForgeConfigSpec.DoubleValue effectiveBasePercent;
         public final ForgeConfigSpec.BooleanValue disableEnchanterArmor;
+        public final ForgeConfigSpec.BooleanValue disableMobEnchantStuffItems;
 
 
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANT_ON_SPAWN_EXCLUSION_MOBS;
@@ -130,6 +131,10 @@ public class EnchantConfig {
             disableEnchanterArmor = builder
                     .comment("Disable Enchanter Armor Item. [true / false]")
                     .define("Disable Enchanter Armor", false);
+            disableMobEnchantStuffItems = builder
+                    .comment("Disable MobEnchant Stuff Items. [true / false]")
+                    .define("Disable MobEnchant Stuff Items", false);
+
         }
     }
 

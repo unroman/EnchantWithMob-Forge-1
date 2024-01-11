@@ -19,6 +19,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -33,6 +34,10 @@ public class MobEnchantBookItem extends Item {
 		super(group);
 	}
 
+	@Override
+	public boolean isEnabled(FeatureFlagSet p_249172_) {
+		return super.isEnabled(p_249172_) && !EnchantConfig.COMMON.disableMobEnchantStuffItems.get();
+	}
 
     /*
      * Implemented onRightClick (method) inside CommonEventHandler instead of this method
