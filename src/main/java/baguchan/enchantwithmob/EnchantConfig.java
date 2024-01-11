@@ -51,6 +51,7 @@ public class EnchantConfig {
         public final ModConfigSpec.DoubleValue difficultyBasePercent;
         public final ModConfigSpec.DoubleValue effectiveBasePercent;
         public final ModConfigSpec.BooleanValue disableEnchanterArmor;
+        public final ModConfigSpec.BooleanValue disableMobEnchantStuffItems;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANT_ON_SPAWN_EXCLUSION_MOBS;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_MOBS;
         public final ModConfigSpec.ConfigValue<List<? extends String>> ALWAY_ENCHANTABLE_ANCIENT_MOBS;
@@ -130,6 +131,9 @@ public class EnchantConfig {
             disableEnchanterArmor = builder
                     .comment("Disable Enchanter Armor Item. [true / false]")
                     .define("Disable Enchanter Armor", false);
+            disableMobEnchantStuffItems = builder
+                    .comment("Disable MobEnchant Stuff Items. [true / false]")
+                    .define("Disable MobEnchant Stuff Items", false);
         }
     }
 

@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob.item;
 
+import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.ChatFormatting;
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,6 +21,11 @@ import java.util.List;
 public class MobUnEnchantBookItem extends Item {
 	public MobUnEnchantBookItem(Properties group) {
 		super(group);
+	}
+
+	@Override
+	public boolean isEnabled(FeatureFlagSet p_249172_) {
+		return super.isEnabled(p_249172_) && !EnchantConfig.COMMON.disableMobEnchantStuffItems.get();
 	}
 
 	@Override
