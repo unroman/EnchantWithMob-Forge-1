@@ -66,7 +66,9 @@ public class ClientRegistrar {
 		event.getContext().getEntityRenderDispatcher().getSkinMap().forEach((model, player) ->
 		{
 			if (event.getSkin(model) != null) {
-				event.getSkin(model).addLayer(new EnchantLayer(event.getSkin(model)));
+				if (player instanceof LivingEntityRenderer) {
+					((LivingEntityRenderer<?, ?>) player).addLayer(new EnchantLayer(event.getSkin(model)));
+				}
 			}
 		});
 
