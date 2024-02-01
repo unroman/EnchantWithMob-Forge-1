@@ -86,55 +86,44 @@ public class ClientEventHandler {
 		float f1 = (float) (vector3d.y - d4);
 		float f2 = (float) (vector3d.z - d5);
 		float f3 = 0.1F;
-        VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-        Matrix4f matrix4f = p_229118_3_.last().pose();
-        Matrix3f matrix3f = p_229118_3_.last().normal();
-        float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
-        float f5 = f2 * f4;
-        float f6 = f * f4;
-        BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
-        BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
-        int i = getBlockLightLevel(p_229118_1_, blockpos);
-        int j = getBlockLightLevel(p_229118_5_, blockpos1);
-        int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
-        int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
-        p_229118_3_.popPose();
-    }
-
-
-	public static void renderSide(VertexConsumer p_229119_0_, Matrix4f p_229119_1_, Matrix3f matrix3f, float p_229119_2_, float p_229119_3_, float p_229119_4_, int p_229119_5_, int p_229119_6_, int p_229119_7_, int p_229119_8_, float p_229119_9_, float p_229119_10_, float p_229119_11_, float p_229119_12_) {
-		int i = 24;
-
-		for (int j = 0; j < 24; ++j) {
-			float f = (float) j / 23.0F;
-			int k = (int) Mth.lerp(f, (float) p_229119_5_, (float) p_229119_6_);
-			int l = (int) Mth.lerp(f, (float) p_229119_7_, (float) p_229119_8_);
-			int i1 = LightTexture.pack(k, l);
-			addVertexPair(p_229119_0_, p_229119_1_, matrix3f, i1, p_229119_2_, p_229119_3_, p_229119_4_, p_229119_9_, p_229119_10_, 24, j, false, p_229119_11_, p_229119_12_);
-			addVertexPair(p_229119_0_, p_229119_1_, matrix3f, i1, p_229119_2_, p_229119_3_, p_229119_4_, p_229119_9_, p_229119_10_, 24, j + 1, true, p_229119_11_, p_229119_12_);
+		VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+		Matrix4f matrix4f = p_229118_3_.last().pose();
+		Matrix3f matrix3f = p_229118_3_.last().normal();
+		float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
+		float f5 = f2 * f4;
+		float f6 = f * f4;
+		BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
+		BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
+		int i = getBlockLightLevel(p_229118_1_, blockpos);
+		int j = getBlockLightLevel(p_229118_5_, blockpos1);
+		int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
+		int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
+		int j1;
+		for (j1 = 0; j1 <= 24; ++j1) {
+			addVertexPair(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.025F, 0.025F, f5, f6, j1, false);
 		}
 
+		for (j1 = 24; j1 >= 0; --j1) {
+			addVertexPair(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.025F, 0.0F, f5, f6, j1, true);
+		}
+		p_229118_3_.popPose();
 	}
 
-	public static void addVertexPair(VertexConsumer p_229120_0_, Matrix4f p_229120_1_, Matrix3f matrix3f, int p_229120_2_, float p_229120_3_, float p_229120_4_, float p_229120_5_, float p_229120_6_, float p_229120_7_, int p_229120_8_, int p_229120_9_, boolean p_229120_10_, float p_229120_11_, float p_229120_12_) {
-		float f3 = (float) p_229120_9_ / (float) p_229120_8_;
-		float f4 = p_229120_3_ * f3;
-		float f5 = p_229120_4_ > 0.0F ? p_229120_4_ * f3 * f3 : p_229120_4_ - p_229120_4_ * (1.0F - f3) * (1.0F - f3);
-		float f6 = p_229120_5_ * f3;
 
-		if (!p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
-
-		if (p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
+	private static void addVertexPair(VertexConsumer p_174308_, Matrix4f p_254405_, Matrix3f matrix3f, float p_174310_, float p_174311_, float p_174312_, int p_174313_, int p_174314_, int p_174315_, int p_174316_, float p_174317_, float p_174318_, float p_174319_, float p_174320_, int p_174321_, boolean p_174322_) {
+		float f = (float) p_174321_ / 24.0F;
+		int i = (int) Mth.lerp(f, (float) p_174313_, (float) p_174314_);
+		int j = (int) Mth.lerp(f, (float) p_174315_, (float) p_174316_);
+		int k = LightTexture.pack(i, j);
+		float f1 = p_174321_ % 2 == (p_174322_ ? 1 : 0) ? 0.7F : 1.0F;
+		float f2 = 0.5F * f1;
+		float f3 = 0.4F * f1;
+		float f4 = 0.3F * f1;
+		float f5 = p_174310_ * f;
+		float f6 = p_174311_ > 0.0F ? p_174311_ * f * f : p_174311_ - p_174311_ * (1.0F - f) * (1.0F - f);
+		float f7 = p_174312_ * f;
+		p_174308_.vertex(p_254405_, f5 - p_174319_, f6 + p_174318_, f7 + p_174320_).color(1F, 1F, 1F, 1.0F).uv(!p_174322_ ? 0 : 1.0F, !p_174322_ ? 0 : 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(k).normal(matrix3f, 0F, 1F, 0F).endVertex();
+		p_174308_.vertex(p_254405_, f5 + p_174319_, f6 + p_174317_ - p_174318_, f7 - p_174320_).color(1F, 1F, 1F, 1.0F).uv(p_174322_ ? 0 : 1.0F, p_174322_ ? 0 : 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(k).normal(matrix3f, 0F, 1F, 0F).endVertex();
 	}
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {
