@@ -1,7 +1,6 @@
 package baguchan.enchantwithmob.capability;
 
 import baguchan.enchantwithmob.EnchantConfig;
-import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
@@ -50,7 +49,6 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		//size changed like minecraft dungeons
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 	public void addMobEnchant(LivingEntity entity, MobEnchant mobEnchant, int enchantLevel, boolean ancient) {
@@ -64,7 +62,6 @@ public class MobEnchantCapability {
 			AncientMessage message = new AncientMessage(entity, enchantType == EnchantType.ANCIENT);
 			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
-		this.sync(entity);
 	}
 
 	/**
@@ -85,7 +82,6 @@ public class MobEnchantCapability {
 		this.addOwner(entity, owner);
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 	public void addOwner(LivingEntity entity, LivingEntity owner) {
@@ -95,18 +91,7 @@ public class MobEnchantCapability {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
 			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity).send(message);
 		}
-		this.sync(entity);
 	}
-
-	public final void sync(LivingEntity entity) {
-		MobEnchantCapability capability = this;
-		capability.mobEnchants = this.mobEnchants;
-		capability.enchantOwner = this.enchantOwner;
-		capability.enchantType = this.enchantType;
-		((IEnchantCap) entity).setEnchantCap(capability);
-
-	}
-
 	public void removeOwner(LivingEntity livingEntity) {
 		this.fromOwner = false;
 		this.enchantOwner = null;
@@ -151,7 +136,6 @@ public class MobEnchantCapability {
 		this.removeOwner(entity);
 		//size changed like minecraft dungeons
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 
