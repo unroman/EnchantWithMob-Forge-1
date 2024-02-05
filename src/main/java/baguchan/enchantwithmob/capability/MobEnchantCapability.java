@@ -2,7 +2,6 @@ package baguchan.enchantwithmob.capability;
 
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.EnchantWithMob;
-import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
@@ -51,7 +50,6 @@ public class MobEnchantCapability {
 		//Sync Client Enchant
 		//size changed like minecraft dungeons
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 	public void addMobEnchant(LivingEntity entity, MobEnchant mobEnchant, int enchantLevel, boolean ancient) {
@@ -65,7 +63,6 @@ public class MobEnchantCapability {
 			AncientMessage message = new AncientMessage(entity, enchantType == EnchantType.ANCIENT);
 			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 		}
-		this.sync(entity);
 	}
 
 	/**
@@ -86,26 +83,15 @@ public class MobEnchantCapability {
 		this.addOwner(entity, owner);
 		this.onNewEnchantEffect(entity, mobEnchant, enchantLevel);
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 	public void addOwner(LivingEntity entity, @Nullable LivingEntity owner) {
 		this.fromOwner = true;
 		this.enchantOwner = Optional.ofNullable(owner);
-		this.sync(entity);
 		if (!entity.level().isClientSide) {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
 			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 		}
-	}
-
-	public final void sync(LivingEntity entity) {
-		MobEnchantCapability capability = new MobEnchantCapability();
-		capability.mobEnchants = this.mobEnchants;
-		capability.enchantOwner = this.enchantOwner;
-		capability.enchantType = this.enchantType;
-		((IEnchantCap) entity).setEnchantCap(capability);
-
 	}
 
 	public void removeOwner(LivingEntity livingEntity) {
@@ -152,7 +138,6 @@ public class MobEnchantCapability {
 		this.removeOwner(entity);
 		//size changed like minecraft dungeons
 		entity.refreshDimensions();
-		this.sync(entity);
 	}
 
 
