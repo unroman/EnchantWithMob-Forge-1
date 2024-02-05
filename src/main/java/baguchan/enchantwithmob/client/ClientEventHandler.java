@@ -72,7 +72,7 @@ public class ClientEventHandler {
 
     }
 
-	private static Vec3 getPosition(Entity p_114803_, double p_114804_, float p_114805_) {
+	public static Vec3 getPosition(Entity p_114803_, double p_114804_, float p_114805_) {
 		double d0 = Mth.lerp((double) p_114805_, p_114803_.xOld, p_114803_.getX());
 		double d1 = Mth.lerp((double) p_114805_, p_114803_.yOld, p_114803_.getY()) + p_114804_;
 		double d2 = Mth.lerp((double) p_114805_, p_114803_.zOld, p_114803_.getZ());
