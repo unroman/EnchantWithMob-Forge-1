@@ -7,10 +7,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -30,7 +30,6 @@ import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Vector3d;
 
 import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.ANCIENT_GLINT;
 import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.enchantBeamSwirl;
@@ -73,77 +72,73 @@ public class ClientEventHandler {
 
     }
 
-	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity p_229118_1_, float p_229118_2_, PoseStack p_229118_3_, MultiBufferSource p_229118_4_, Entity p_229118_5_, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {
-		float tick = (float) p_229118_1_.tickCount + p_229118_2_;
-		p_229118_3_.pushPose();
-		Vec3 vector3d = p_229118_5_.getRopeHoldPosition(p_229118_2_);
-		double d0 = (double) (Mth.lerp(p_229118_2_, p_229118_1_.yBodyRot, p_229118_1_.yBodyRotO) * ((float) Math.PI / 180F)) + (Math.PI / 2D);
-		Vector3d vector3d1 = new Vector3d(0.0D, (double) p_229118_1_.getEyeHeight() / 2, 0.0F);
-		double d1 = Math.cos(d0) * vector3d1.z + Math.sin(d0) * vector3d1.x;
-		double d2 = Math.sin(d0) * vector3d1.z - Math.cos(d0) * vector3d1.x;
-		double d3 = Mth.lerp((double) p_229118_2_, p_229118_1_.xo, p_229118_1_.getX()) + d1;
-		double d4 = Mth.lerp((double) p_229118_2_, p_229118_1_.yo, p_229118_1_.getY()) + vector3d1.y;
-		double d5 = Mth.lerp((double) p_229118_2_, p_229118_1_.zo, p_229118_1_.getZ()) + d2;
-		p_229118_3_.translate(d1, vector3d1.y, d2);
-		float f = (float) (vector3d.x - d3);
-		float f1 = (float) (vector3d.y - d4);
-		float f2 = (float) (vector3d.z - d5);
-		float f3 = 0.1F;
-        VertexConsumer ivertexbuilder = p_229118_4_.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-        Matrix4f matrix4f = p_229118_3_.last().pose();
-        Matrix3f matrix3f = p_229118_3_.last().normal();
-        float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
-        float f5 = f2 * f4;
-        float f6 = f * f4;
-        BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
-        BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
-        int i = getBlockLightLevel(p_229118_1_, blockpos);
-        int j = getBlockLightLevel(p_229118_5_, blockpos1);
-        int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
-        int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
-        renderSide(ivertexbuilder, matrix4f, matrix3f, f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
-        p_229118_3_.popPose();
-    }
-
-
-	public static void renderSide(VertexConsumer p_229119_0_, Matrix4f p_229119_1_, Matrix3f matrix3f, float p_229119_2_, float p_229119_3_, float p_229119_4_, int p_229119_5_, int p_229119_6_, int p_229119_7_, int p_229119_8_, float p_229119_9_, float p_229119_10_, float p_229119_11_, float p_229119_12_) {
-		int i = 24;
-
-		for (int j = 0; j < 24; ++j) {
-			float f = (float) j / 23.0F;
-			int k = (int) Mth.lerp(f, (float) p_229119_5_, (float) p_229119_6_);
-			int l = (int) Mth.lerp(f, (float) p_229119_7_, (float) p_229119_8_);
-			int i1 = LightTexture.pack(k, l);
-			addVertexPair(p_229119_0_, p_229119_1_, matrix3f, i1, p_229119_2_, p_229119_3_, p_229119_4_, p_229119_9_, p_229119_10_, 24, j, false, p_229119_11_, p_229119_12_);
-			addVertexPair(p_229119_0_, p_229119_1_, matrix3f, i1, p_229119_2_, p_229119_3_, p_229119_4_, p_229119_9_, p_229119_10_, 24, j + 1, true, p_229119_11_, p_229119_12_);
-		}
-
+	private static Vec3 getPosition(Entity p_114803_, double p_114804_, float p_114805_) {
+		double d0 = Mth.lerp((double) p_114805_, p_114803_.xOld, p_114803_.getX());
+		double d1 = Mth.lerp((double) p_114805_, p_114803_.yOld, p_114803_.getY()) + p_114804_;
+		double d2 = Mth.lerp((double) p_114805_, p_114803_.zOld, p_114803_.getZ());
+		return new Vec3(d0, d1, d2);
 	}
 
-	public static void addVertexPair(VertexConsumer p_229120_0_, Matrix4f p_229120_1_, Matrix3f matrix3f, int p_229120_2_, float p_229120_3_, float p_229120_4_, float p_229120_5_, float p_229120_6_, float p_229120_7_, int p_229120_8_, int p_229120_9_, boolean p_229120_10_, float p_229120_11_, float p_229120_12_) {
-		float f = 0.5F;
-		float f1 = 0.4F;
-		float f2 = 0.3F;
-		if (p_229120_9_ % 2 == 0) {
-			f *= 0.7F;
-			f1 *= 0.7F;
-			f2 *= 0.7F;
-		}
+	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity livingEntity, float partialTick, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity target, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {
+		float tick = (float) livingEntity.tickCount + partialTick;
+		poseStack.pushPose();
+		Vec3 vector3d = target.getRopeHoldPosition(partialTick);
+		float f3 = target.getEyeHeight();
+		Vec3 vec3 = getPosition(livingEntity, (double) livingEntity.getBbHeight() * 0.5D, partialTick);
+		Vec3 vec31 = getPosition(target, (double) f3, partialTick);
+		Vec3 vec32 = vec3.subtract(vec31);
+		float f4 = (float) (vec32.length() + 1.0D);
+		vec32 = vec32.normalize();
+		float f5 = (float) Math.acos(vec32.y);
+		float f6 = (float) Math.atan2(vec32.z, vec32.x);
+		poseStack.mulPose(Axis.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+		poseStack.mulPose(Axis.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+		int i = 1;
+		float f7 = partialTick * 0.05F * -1.5F;
+		float f9 = 0.2F;
+		float f10 = 0.282F;
+		float f11 = Mth.cos(f7 + 2.3561945F) * 0.282F;
+		float f12 = Mth.sin(f7 + 2.3561945F) * 0.282F;
+		float f13 = Mth.cos(f7 + ((float) Math.PI / 4F)) * 0.282F;
+		float f14 = Mth.sin(f7 + ((float) Math.PI / 4F)) * 0.282F;
+		float f15 = Mth.cos(f7 + 3.926991F) * 0.282F;
+		float f16 = Mth.sin(f7 + 3.926991F) * 0.282F;
+		float f17 = Mth.cos(f7 + 5.4977875F) * 0.282F;
+		float f18 = Mth.sin(f7 + 5.4977875F) * 0.282F;
+		float f19 = Mth.cos(f7 + (float) Math.PI) * 0.2F;
+		float f20 = Mth.sin(f7 + (float) Math.PI) * 0.2F;
+		float f21 = Mth.cos(f7 + 0.0F) * 0.2F;
+		float f22 = Mth.sin(f7 + 0.0F) * 0.2F;
+		float f23 = Mth.cos(f7 + ((float) Math.PI / 2F)) * 0.2F;
+		float f24 = Mth.sin(f7 + ((float) Math.PI / 2F)) * 0.2F;
+		float f25 = Mth.cos(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+		float f26 = Mth.sin(f7 + ((float) Math.PI * 1.5F)) * 0.2F;
+		float f27 = 0.0F;
+		float f28 = 0.4999F;
+		float f29 = -1.0F + partialTick;
+		float f30 = f4 * 2.5F + f29;
+		float f31 = 0.0F;
+		VertexConsumer vertexconsumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+		Matrix4f matrix4f = poseStack.last().pose();
+		Matrix3f matrix3f = poseStack.last().normal();
+		vertex(vertexconsumer, matrix4f, matrix3f, f19, f4, f20, 1F, 1F, 1F, 0.4999F, f30);
+		vertex(vertexconsumer, matrix4f, matrix3f, f19, 0.0F, f20, 1F, 1F, 1F, 0.4999F, f29);
+		vertex(vertexconsumer, matrix4f, matrix3f, f21, 0.0F, f22, 1F, 1F, 1F, 0.0F, f29);
+		vertex(vertexconsumer, matrix4f, matrix3f, f21, f4, f22, 1F, 1F, 1F, 0.0F, f30);
+		vertex(vertexconsumer, matrix4f, matrix3f, f23, f4, f24, 1F, 1F, 1F, 0.4999F, f30);
+		vertex(vertexconsumer, matrix4f, matrix3f, f23, 0.0F, f24, 1F, 1F, 1F, 0.4999F, f29);
+		vertex(vertexconsumer, matrix4f, matrix3f, f25, 0.0F, f26, 1F, 1F, 1F, 0.0F, f29);
+		vertex(vertexconsumer, matrix4f, matrix3f, f25, f4, f26, 1F, 1F, 1F, 0.0F, f30);
 
-		float f3 = (float) p_229120_9_ / (float) p_229120_8_;
-		float f4 = p_229120_3_ * f3;
-		float f5 = p_229120_4_ > 0.0F ? p_229120_4_ * f3 * f3 : p_229120_4_ - p_229120_4_ * (1.0F - f3) * (1.0F - f3);
-		float f6 = p_229120_5_ * f3;
-		if (!p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(0.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
+		vertex(vertexconsumer, matrix4f, matrix3f, f11, f4, f12, 1F, 1F, 1F, 0.5F, f31 + 0.5F);
+		vertex(vertexconsumer, matrix4f, matrix3f, f13, f4, f14, 1F, 1F, 1F, 1.0F, f31 + 0.5F);
+		vertex(vertexconsumer, matrix4f, matrix3f, f17, f4, f18, 1F, 1F, 1F, 1.0F, f31);
+		vertex(vertexconsumer, matrix4f, matrix3f, f15, f4, f16, 1F, 1F, 1F, 0.5F, f31);
+		poseStack.popPose();
+	}
 
-		p_229120_0_.vertex(p_229120_1_, f4 - p_229120_11_, f5 + p_229120_7_, f6 + p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 1.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		if (p_229120_10_) {
-			p_229120_0_.vertex(p_229120_1_, f4 + p_229120_11_, f5 + p_229120_6_ - p_229120_7_, f6 - p_229120_12_).color(1.0F, 1.0F, 1.0F, 1.0F).uv(1.0F, 0.0F).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229120_2_).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		}
-
+	private static void vertex(VertexConsumer p_253637_, Matrix4f p_253920_, Matrix3f p_253881_, float p_253994_, float p_254492_, float p_254474_, float red, float green, float blue, float u, float v) {
+		p_253637_.vertex(p_253920_, p_253994_, p_254492_, p_254474_).color(red, green, blue, 255).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(p_253881_, 0.0F, 1.0F, 0.0F).endVertex();
 	}
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {
