@@ -13,6 +13,7 @@
   "client": [
     "ArrowRendererMixin",
     "client.EnderDragonRendererMixin",
+    "client.EntityRendererMixin",
     "client.EvokerFangsRendererMixin",
     "client.HierarchicalModelMixin",
     "client.LivingEntityRendererMixin",
