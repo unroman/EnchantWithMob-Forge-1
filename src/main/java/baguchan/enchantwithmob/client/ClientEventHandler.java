@@ -110,7 +110,7 @@ public class ClientEventHandler {
 		poseStack.pushPose();
 
 		double d3 = Mth.lerp((double) totalTickTime, livingEntity.xo, livingEntity.getX());
-		double d4 = Mth.lerp((double) totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getEyeHeight();
+		double d4 = Mth.lerp((double) totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getBbHeight() * 0.5F;
 		double d5 = Mth.lerp((double) totalTickTime, livingEntity.zo, livingEntity.getZ());
 		Vec3 vector3d = target.getRopeHoldPosition(totalTickTime);
 		Vec3 vec31 = new Vec3(d3, d4, d5);
@@ -135,7 +135,7 @@ public class ClientEventHandler {
 		float ux1 = 0.4999f;
 		float ux2 = 0.0f;
 
-		poseStack.translate(lookAngle.x(), livingEntity.getEyeHeight() + lookAngle.y(), lookAngle.z());
+		poseStack.translate(0, livingEntity.getBbHeight() * 0.5F, 0);
 		int j1;
 
 		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
