@@ -32,12 +32,12 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap, I
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo callbackInfo) {
-        if ((this.getEnchantCap().getEnchantOwner().isPresent() || this.getEnchantCap().isFromOwner()) && this.getEnchantCap().hasEnchant()) {
-            if (this.getEnchantCap().getEnchantOwner().isEmpty() || !this.getEnchantCap().getEnchantOwner().get().isAlive()) {
+        if ((this.getEnchantCap().hasOwner() || this.getEnchantCap().isFromOwner()) && this.getEnchantCap().hasEnchant()) {
+            if (this.getEnchantCap().getEnchantOwner() == null || !this.getEnchantCap().getEnchantOwner().isAlive()) {
                 LivingEntity livingEntity = (LivingEntity) ((Object) this);
                 this.getEnchantCap().removeMobEnchantFromOwner(livingEntity);
                 this.playSound(SoundEvents.ITEM_BREAK, 1.5F, 1.6F);
-            } else if (this.distanceToSqr(this.getEnchantCap().getEnchantOwner().get()) > 512) {
+            } else if (this.distanceToSqr(this.getEnchantCap().getEnchantOwner()) > 512) {
                 LivingEntity livingEntity = (LivingEntity) ((Object) this);
                 this.getEnchantCap().removeMobEnchantFromOwner(livingEntity);
                 this.playSound(SoundEvents.ITEM_BREAK, 1.5F, 1.6F);

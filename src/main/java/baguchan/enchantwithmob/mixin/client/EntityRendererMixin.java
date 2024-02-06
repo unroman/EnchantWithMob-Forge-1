@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
 @Mixin(EntityRenderer.class)
 public class EntityRendererMixin<T extends Entity> {
     @Inject(method = "shouldRender", at = @At("RETURN"), cancellable = true)
@@ -22,10 +20,9 @@ public class EntityRendererMixin<T extends Entity> {
         if (!cir.getReturnValue()) {
 
             if (p_114491_ instanceof IEnchantCap enchantCap) {
-                Optional<LivingEntity> optional = enchantCap.getEnchantCap().getEnchantOwner();
-                if (optional.isPresent()) {
-                    LivingEntity livingentity = optional.get();
-                    Vec3 vec3 = ClientEventHandler.getPosition(livingentity, (double) livingentity.getBbHeight() * 0.5D, 1.0F);
+                LivingEntity livingentity = enchantCap.getEnchantCap().getEnchantOwner();
+                if (livingentity != null) {
+                    Vec3 vec3 = ClientEventHandler.getPosition(livingentity, (double) livingentity.getEyeHeight(), 1.0F);
                     Vec3 vec31 = ClientEventHandler.getPosition(p_114491_, (double) p_114491_.getEyeHeight(), 1.0F);
                     cir.setReturnValue(p_114492_.isVisible(new AABB(vec31.x, vec31.y, vec31.z, vec3.x, vec3.y, vec3.z)));
 

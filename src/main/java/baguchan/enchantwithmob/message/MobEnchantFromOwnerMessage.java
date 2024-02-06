@@ -48,7 +48,6 @@ public class MobEnchantFromOwnerMessage {
                     if (livingEntity instanceof IEnchantCap cap) {
                         cap.getEnchantCap().addOwner((LivingEntity) entity, (LivingEntity) ownerEntity);
                     }
-                    ;
                 }
             });
         }

@@ -16,7 +16,6 @@ import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -27,7 +26,8 @@ public class MobEnchantCapability {
 
 
 	private List<MobEnchantHandler> mobEnchants = Lists.newArrayList();
-	private Optional<LivingEntity> enchantOwner = Optional.empty();
+    @Nullable
+    private LivingEntity enchantOwner;
 	private boolean fromOwner;
 	private EnchantType enchantType = EnchantType.NORMAL;
 
@@ -85,9 +85,9 @@ public class MobEnchantCapability {
 		entity.refreshDimensions();
 	}
 
-	public void addOwner(LivingEntity entity, @Nullable LivingEntity owner) {
+    public void addOwner(LivingEntity entity, LivingEntity owner) {
 		this.fromOwner = true;
-		this.enchantOwner = Optional.ofNullable(owner);
+        this.enchantOwner = owner;
 		if (!entity.level().isClientSide) {
 			MobEnchantFromOwnerMessage message = new MobEnchantFromOwnerMessage(entity, owner);
 			EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
@@ -96,7 +96,7 @@ public class MobEnchantCapability {
 
 	public void removeOwner(LivingEntity livingEntity) {
 		this.fromOwner = false;
-		this.enchantOwner = Optional.empty();
+        this.enchantOwner = null;
 		//Sync Client Enchant
 		if (!livingEntity.level().isClientSide) {
 			RemoveMobEnchantOwnerMessage message = new RemoveMobEnchantOwnerMessage(livingEntity);
@@ -187,12 +187,12 @@ public class MobEnchantCapability {
 		return !this.mobEnchants.isEmpty();
 	}
 
-	public Optional<LivingEntity> getEnchantOwner() {
+    public LivingEntity getEnchantOwner() {
 		return enchantOwner;
 	}
 
 	public boolean hasOwner() {
-		return this.enchantOwner.isPresent() && this.enchantOwner.get().isAlive();
+        return this.enchantOwner != null && this.enchantOwner.isAlive();
 	}
 
 	//check this enchant from owner

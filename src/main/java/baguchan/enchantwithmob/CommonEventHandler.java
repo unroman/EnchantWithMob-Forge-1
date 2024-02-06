@@ -240,7 +240,6 @@ public class CommonEventHandler {
             }
 
         }
-        ;
     }
 
 
@@ -456,21 +455,6 @@ public class CommonEventHandler {
             if (!playerEntity.level().isClientSide()) {
                 for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
                     EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new MobEnchantedMessage(playerEntity, cap.getEnchantCap().getMobEnchants().get(i)));
-                }
-            }
-        }
-        ;
-    }
-
-    @SubscribeEvent
-    public static void bringBackEnchant(EntityJoinLevelEvent event) {
-        Entity livingEntity = event.getEntity();
-        if (livingEntity instanceof IEnchantCap cap) {
-            if (!event.getLevel().isClientSide()) {
-                //Sync Client Enchant
-                for (int i = 0; i < cap.getEnchantCap().getMobEnchants().size(); i++) {
-                    MobEnchantedMessage message = new MobEnchantedMessage(livingEntity, cap.getEnchantCap().getMobEnchants().get(i));
-                    EnchantWithMob.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntity), message);
                 }
             }
         }
