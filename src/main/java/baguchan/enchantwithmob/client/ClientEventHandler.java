@@ -16,11 +16,9 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -112,7 +110,7 @@ public class ClientEventHandler {
 		poseStack.pushPose();
 
 		double d3 = Mth.lerp((double) totalTickTime, livingEntity.xo, livingEntity.getX());
-		double d4 = Mth.lerp((double) totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getEyeHeight();
+		double d4 = Mth.lerp((double) totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getBbHeight() * 0.5F;
 		double d5 = Mth.lerp((double) totalTickTime, livingEntity.zo, livingEntity.getZ());
 		Vec3 vector3d = target.getRopeHoldPosition(totalTickTime);
 		Vec3 vec31 = new Vec3(d3, d4, d5);
@@ -121,7 +119,7 @@ public class ClientEventHandler {
 		float q = totalTickTime * 0.05f * -1.5f;
 		float v = 0.2f;
 		float w2 = 0.5f;
-		float length = (float) (vec32.length() + 0.01D);
+		float length = (float) (vec32.length() - 1D);
 		float uv2 = -1.0f + (totalTickTime * -0.2f % 1.0f);
 		float uv1 = length * 2.5f + uv2;
 		float x1 = Mth.cos(q + (float) Math.PI) * v;
@@ -137,7 +135,7 @@ public class ClientEventHandler {
 		float ux1 = 0.4999f;
 		float ux2 = 0.0f;
 
-		poseStack.translate(lookAngle.x(), livingEntity.getEyeHeight() + lookAngle.y(), lookAngle.z());
+		poseStack.translate(lookAngle.x(), +livingEntity.getBbHeight() * 0.5F + lookAngle.y(), lookAngle.z());
 		int j1;
 
 		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
@@ -169,11 +167,6 @@ public class ClientEventHandler {
 				.uv2(0xF000F0)
 				.normal(matrix3f, 0.0f, 1.0f, 0.0f)
 				.endVertex();
-	}
-
-
-	protected static int getBlockLightLevel(Entity p_225624_1_, BlockPos p_225624_2_) {
-        return p_225624_1_.isOnFire() ? 15 : p_225624_1_.level().getBrightness(LightLayer.BLOCK, p_225624_2_);
 	}
 
 	private static void setupGlintTexturing(float p_110187_) {

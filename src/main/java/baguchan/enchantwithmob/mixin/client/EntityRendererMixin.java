@@ -22,8 +22,8 @@ public class EntityRendererMixin<T extends Entity> {
             if (p_114491_ instanceof IEnchantCap enchantCap) {
                 LivingEntity livingentity = enchantCap.getEnchantCap().getEnchantOwner();
                 if (livingentity != null) {
-                    Vec3 vec3 = ClientEventHandler.getPosition(livingentity, (double) livingentity.getEyeHeight(), 1.0F);
-                    Vec3 vec31 = ClientEventHandler.getPosition(p_114491_, (double) p_114491_.getEyeHeight(), 1.0F);
+                    Vec3 vec3 = ClientEventHandler.getPosition(livingentity, (double) livingentity.getBbHeight() * 0.5F, 1.0F);
+                    Vec3 vec31 = ClientEventHandler.getPosition(p_114491_, (double) p_114491_.getBbHeight() * 0.5F, 1.0F);
                     cir.setReturnValue(p_114492_.isVisible(new AABB(vec31.x, vec31.y, vec31.z, vec3.x, vec3.y, vec3.z)));
 
                 }
