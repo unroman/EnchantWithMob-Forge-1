@@ -70,57 +70,45 @@ public class ClientEventHandler {
                 }
             }
         }
-        ;
 
     }
 
 	public static Vec3 getPosition(Entity p_114803_, double p_114804_, float p_114805_) {
-		double d0 = Mth.lerp((double) p_114805_, p_114803_.xOld, p_114803_.getX());
-		double d1 = Mth.lerp((double) p_114805_, p_114803_.yOld, p_114803_.getY()) + p_114804_;
-		double d2 = Mth.lerp((double) p_114805_, p_114803_.zOld, p_114803_.getZ());
+		double d0 = Mth.lerp(p_114805_, p_114803_.xOld, p_114803_.getX());
+		double d1 = Mth.lerp(p_114805_, p_114803_.yOld, p_114803_.getY()) + p_114804_;
+		double d2 = Mth.lerp(p_114805_, p_114803_.zOld, p_114803_.getZ());
 		return new Vec3(d0, d1, d2);
 	}
 
-	protected static float getXRotD(LivingEntity livingEntity, Entity target) {
-		double d0 = target.getX() - livingEntity.getX();
-		double d1 = target.getEyeY() - livingEntity.getEyeY();
-		double d2 = target.getZ() - livingEntity.getZ();
+	protected static float getXRotD(LivingEntity livingEntity, Entity target, float totalTick) {
+		double d0 = target.getPosition(totalTick).x - livingEntity.getPosition(totalTick).x;
+		double d1 = target.getPosition(totalTick).y - livingEntity.getPosition(totalTick).y;
+		double d2 = target.getPosition(totalTick).z - livingEntity.getPosition(totalTick).z;
 		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 		return (float) (-(Mth.atan2(d1, d3) * (double) (180F / (float) Math.PI)));
 	}
 
-	protected static float getYRotD(LivingEntity livingEntity, Entity target) {
-		double d0 = target.getX() - livingEntity.getX();
-		double d1 = target.getZ() - livingEntity.getZ();
+	protected static float getYRotD(LivingEntity livingEntity, Entity target, float totalTick) {
+		double d0 = target.getPosition(totalTick).x - livingEntity.getPosition(totalTick).x;
+		double d1 = target.getPosition(totalTick).z - livingEntity.getPosition(totalTick).z;
 		return (float) (Mth.atan2(d1, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-	}
-
-	protected static Vec3 calculateViewVector(float p_20172_, float p_20173_) {
-		float f = p_20172_ * ((float) Math.PI / 180F);
-		float f1 = -p_20173_ * ((float) Math.PI / 180F);
-		float f2 = Mth.cos(f1);
-		float f3 = Mth.sin(f1);
-		float f4 = Mth.cos(f);
-		float f5 = Mth.sin(f);
-		return new Vec3((double) (f3 * f4), (double) (-f5), (double) (f2 * f4));
 	}
 
 	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity livingEntity, float totalTickTime, PoseStack poseStack, MultiBufferSource multiBufferSource, Entity target, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {
 
 		poseStack.pushPose();
 
-		double d3 = Mth.lerp((double) totalTickTime, livingEntity.xo, livingEntity.getX());
-		double d4 = Mth.lerp((double) totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getBbHeight() * 0.5F;
-		double d5 = Mth.lerp((double) totalTickTime, livingEntity.zo, livingEntity.getZ());
-		Vec3 vector3d = target.getRopeHoldPosition(totalTickTime);
+		double d3 = Mth.lerp(totalTickTime, livingEntity.xo, livingEntity.getX());
+		double d4 = Mth.lerp(totalTickTime, livingEntity.yo, livingEntity.getY()) + livingEntity.getBbHeight() * 0.5F;
+		double d5 = Mth.lerp(totalTickTime, livingEntity.zo, livingEntity.getZ());
+		Vec3 vector3d = target.getEyePosition(totalTickTime);
 		Vec3 vec31 = new Vec3(d3, d4, d5);
 		Vec3 vec32 = vector3d.subtract(vec31);
-		Vec3 lookAngle = calculateViewVector(getXRotD(livingEntity, target), getYRotD(livingEntity, target));
-		float q = totalTickTime * 0.05f * -1.5f;
+		float q = 0 * 0.05f * -1.5f;
 		float v = 0.2f;
 		float w2 = 0.5f;
-		float length = (float) (vec32.length() - 1D);
-		float uv2 = -1.0f + (totalTickTime * -0.2f % 1.0f);
+		float length = (float) (vec32.length());
+		float uv2 = -1.0f + (0 * -0.2f % 1.0f);
 		float uv1 = length * 2.5f + uv2;
 		float x1 = Mth.cos(q + (float) Math.PI) * v;
 		float z1 = Mth.sin(q + (float) Math.PI) * v;
@@ -135,30 +123,37 @@ public class ClientEventHandler {
 		float ux1 = 0.4999f;
 		float ux2 = 0.0f;
 
-		poseStack.translate(lookAngle.x(), +livingEntity.getBbHeight() * 0.5F + lookAngle.y(), lookAngle.z());
+		poseStack.translate(0, +livingEntity.getBbHeight() * 0.5F, 0);
 		int j1;
 
 		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-		poseStack.mulPose(Axis.YP.rotationDegrees(-getYRotD(livingEntity, target)));
-		poseStack.mulPose(Axis.XP.rotationDegrees(getXRotD(livingEntity, target)));
+
+		float xRot = getXRotD(livingEntity, target, totalTickTime);
+		float yRot = getYRotD(livingEntity, target, totalTickTime);
+
+
+		poseStack.mulPose(Axis.YP.rotationDegrees(-yRot));
+		poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
 		poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
 
 		Matrix4f matrix4f = poseStack.last().pose();
 		Matrix3f matrix3f = poseStack.last().normal();
-		vertex(consumer, matrix4f, matrix3f, x1, y1, z1, 255, 255, 255, ux1, uv1);
-		vertex(consumer, matrix4f, matrix3f, x1, y2, z1, 255, 255, 255, ux1, uv2);
-		vertex(consumer, matrix4f, matrix3f, x2, y2, z2, 255, 255, 255, ux2, uv2);
-		vertex(consumer, matrix4f, matrix3f, x2, y1, z2, 255, 255, 255, ux2, uv1);
-		vertex(consumer, matrix4f, matrix3f, x3, y1, z3, 255, 255, 255, ux1, uv1);
-		vertex(consumer, matrix4f, matrix3f, x3, y2, z3, 255, 255, 255, ux1, uv2);
-		vertex(consumer, matrix4f, matrix3f, x4, y2, z4, 255, 255, 255, ux2, uv2);
-		vertex(consumer, matrix4f, matrix3f, x4, y1, z4, 255, 255, 255, ux2, uv1);
+		float intensity = cap.getMobEnchants().size() < 3 ? ((float) cap.getMobEnchants().size() / 3) : 3;
+		int intensityCacl = (int) (intensity / 3 * 255);
+		vertex(consumer, matrix4f, matrix3f, x1, y1, z1, 255, 255, 255, intensityCacl, ux1, uv1);
+		vertex(consumer, matrix4f, matrix3f, x1, y2, z1, 255, 255, 255, intensityCacl, ux1, uv2);
+		vertex(consumer, matrix4f, matrix3f, x2, y2, z2, 255, 255, 255, intensityCacl, ux2, uv2);
+		vertex(consumer, matrix4f, matrix3f, x2, y1, z2, 255, 255, 255, intensityCacl, ux2, uv1);
+		vertex(consumer, matrix4f, matrix3f, x3, y1, z3, 255, 255, 255, intensityCacl, ux1, uv1);
+		vertex(consumer, matrix4f, matrix3f, x3, y2, z3, 255, 255, 255, intensityCacl, ux1, uv2);
+		vertex(consumer, matrix4f, matrix3f, x4, y2, z4, 255, 255, 255, intensityCacl, ux2, uv2);
+		vertex(consumer, matrix4f, matrix3f, x4, y1, z4, 255, 255, 255, intensityCacl, ux2, uv1);
 
 		poseStack.popPose();
 	}
 
 
-	private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int red, int green, int blue, float ux, float uz) {
+	private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int red, int green, int blue, int alpha, float ux, float uz) {
 		vertexConsumer
 				.vertex(matrix4f, x, y, z)
 				.color(red, green, blue, 255)
