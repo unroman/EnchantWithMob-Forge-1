@@ -1,6 +1,7 @@
 package baguchan.enchantwithmob.item;
 
 import baguchan.enchantwithmob.EnchantConfig;
+import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.client.ModModelLayers;
 import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
 import baguchan.enchantwithmob.registry.ModArmorMaterials;
@@ -9,6 +10,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -18,12 +21,21 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class EnchanterClothesItem extends ArmorItem {
+    public static final ResourceLocation TEXTURE = new ResourceLocation(EnchantWithMob.MODID, "textures/models/armor/enchanter_clothes.png");
+
     public EnchanterClothesItem(ArmorItem.Type type, Properties p_40388_) {
         super(ModArmorMaterials.ENCHANTER_CLOTHES, type, p_40388_);
     }
+
+    @Override
+    public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return TEXTURE.toString();
+    }
+
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
@@ -47,10 +59,13 @@ public class EnchanterClothesItem extends ArmorItem {
 
             EnchanterClothesModel<?> model2 = new EnchanterClothesModel<>(root);
             ForgeHooksClient.copyModelProperties(original, model2);
+            model2.rightBoots.copyFrom(model2.rightLeg);
+            model2.leftBoots.copyFrom(model2.leftLeg);
+            this.setPartVisibility(model2, equipmentSlot);
             return model2;
         }
-/*
-        protected void setPartVisibility(HumanoidModel p_117126_, EquipmentSlot p_117127_) {
+
+        protected void setPartVisibility(EnchanterClothesModel p_117126_, EquipmentSlot p_117127_) {
             p_117126_.setAllVisible(false);
             switch (p_117127_) {
                 case HEAD:
@@ -63,16 +78,15 @@ public class EnchanterClothesItem extends ArmorItem {
                     p_117126_.leftArm.visible = true;
                     break;
                 case LEGS:
-                    p_117126_.body.visible = true;
                     p_117126_.rightLeg.visible = true;
                     p_117126_.leftLeg.visible = true;
                     break;
                 case FEET:
-                    p_117126_.rightLeg.visible = true;
-                    p_117126_.leftLeg.visible = true;
+                    p_117126_.rightBoots.visible = true;
+                    p_117126_.leftBoots.visible = true;
             }
 
-        }*/
+        }
 
     }
 }
