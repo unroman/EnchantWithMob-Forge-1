@@ -395,7 +395,7 @@ public class EnchanterEntity extends SpellcasterIllager {
             } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                return this.getAttackReachSqr(livingentity) >= this.enchanter.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
+                return this.canPerformAttack(livingentity);
             }
         }
 
@@ -423,7 +423,7 @@ public class EnchanterEntity extends SpellcasterIllager {
 
             if (livingentity != null && livingentity.isAlive()) {
                 this.enchanter.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
-                if (this.getAttackReachSqr(livingentity) >= this.enchanter.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ())) {
+                if (this.canPerformAttack(livingentity)) {
                     if (this.tick == this.enchanter.attackAnimationActionPoint) {
                         this.enchanter.swing(InteractionHand.MAIN_HAND);
                         this.enchanter.doHurtTarget(livingentity);
@@ -435,8 +435,8 @@ public class EnchanterEntity extends SpellcasterIllager {
             ++this.tick;
         }
 
-        protected double getAttackReachSqr(LivingEntity attackTarget) {
-            return (double) (this.enchanter.getBbWidth() * 1.5F * this.enchanter.getBbWidth() * 1.5F + attackTarget.getBbWidth());
+        protected boolean canPerformAttack(LivingEntity p_301299_) {
+            return this.enchanter.isWithinMeleeAttackRange(p_301299_) && this.enchanter.getSensing().hasLineOfSight(p_301299_);
         }
 
         @Override
