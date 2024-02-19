@@ -401,7 +401,7 @@ public class EnchanterEntity extends SpellcasterIllager {
 
         @Override
         public boolean canContinueToUse() {
-            return super.canContinueToUse() && this.tick < this.enchanter.attackAnimationLength;
+            return super.canContinueToUse() && this.tick < 20;
         }
 
         @Override
