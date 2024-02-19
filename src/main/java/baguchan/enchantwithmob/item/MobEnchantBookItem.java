@@ -121,10 +121,7 @@ public class MobEnchantBookItem extends Item {
 				int enchantmentLevel = MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt);
 
 				if (mobEnchant != null) {
-					ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
-					ChatFormatting[] textformatting3 = new ChatFormatting[]{ChatFormatting.RED};
-
-					tooltip.add(Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting).append(" ").append(Component.translatable("enchantment.level." + enchantmentLevel).withStyle(mobEnchant.isCursedEnchant() ? textformatting3 : textformatting)));
+                    tooltip.add(mobEnchant.getFullname(enchantmentLevel));
 				}
             }
 

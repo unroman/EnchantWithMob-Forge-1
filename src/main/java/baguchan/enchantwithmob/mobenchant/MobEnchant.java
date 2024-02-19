@@ -4,7 +4,11 @@ import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantConfigUtils;
 import com.google.common.collect.Maps;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.effect.AttributeModifierTemplate;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -159,6 +163,21 @@ public class MobEnchant implements FeatureElement {
 
     public String getDescriptionId() {
         return this.getOrCreateDescriptionId();
+    }
+
+    public Component getFullname(int p_44701_) {
+        MutableComponent mutablecomponent = Component.translatable(this.getDescriptionId());
+        if (this.isCursedEnchant()) {
+            mutablecomponent.withStyle(ChatFormatting.RED);
+        } else {
+            mutablecomponent.withStyle(ChatFormatting.AQUA);
+        }
+
+        if (p_44701_ != 1 || this.getMaxLevel() != 1) {
+            mutablecomponent.append(CommonComponents.SPACE).append(Component.translatable("enchantment.level." + p_44701_));
+        }
+
+        return mutablecomponent;
     }
 
 

@@ -4,12 +4,10 @@ import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import baguchan.enchantwithmob.registry.MobEnchants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
@@ -30,7 +28,7 @@ public class MobEnchantOverlay implements IGuiOverlay {
 
                             ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 
-                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+                            Component s = mobEnchant.getFullname(mobEnchantLevel);
 
                             int xOffset = 20;
                             int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;
@@ -52,7 +50,7 @@ public class MobEnchantOverlay implements IGuiOverlay {
 
                             ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
 
-                            MutableComponent s = Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + mobEnchantLevel)).withStyle(textformatting);
+                            Component s = mobEnchant.getFullname(mobEnchantLevel);
 
                             int xOffset = 20;
                             int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;

@@ -3,7 +3,6 @@ package baguchan.enchantwithmob.item;
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
-import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
@@ -120,9 +119,7 @@ public class EnchantersBookItem extends Item {
 				int enchantmentLevel = MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt);
 
 				if (mobEnchant != null) {
-					ChatFormatting[] textformatting = new ChatFormatting[]{ChatFormatting.AQUA};
-
-					tooltip.add(Component.translatable("mobenchant." + MobEnchants.getRegistry().getKey(mobEnchant).getNamespace() + "." + MobEnchants.getRegistry().getKey(mobEnchant).getPath()).withStyle(textformatting).append(" ").append(Component.translatable("enchantment.level." + enchantmentLevel).withStyle(textformatting)));
+					tooltip.add(mobEnchant.getFullname(enchantmentLevel));
 				}
 			}
 
