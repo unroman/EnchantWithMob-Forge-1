@@ -17,9 +17,9 @@ out vec4 vertexColor;
 out vec2 texCoord0;
 
 void main() {
-    float wave = sin(length(Position.x) * GameTime * 10) * 0.1;
-    float wave2 = sin(length(Position.y) * GameTime * 10) * 0.1;
-    float wave3 = sin(length(Position.z) * GameTime * 10) * 0.1;
+    float wave = cos(length(Position.x) * 0.1 + GameTime * 100) * 0.15;
+    float wave2 = cos(length(Position.y) * 0.1 + GameTime * 100) * 0.1;
+    float wave3 = cos(length(Position.z) * 0.1 + GameTime * 100) * 0.15;
     gl_Position = ProjMat * ModelViewMat * vec4(Position + vec3(wave, wave2, wave3), 1.0);
 
     vertexDistance = fog_distance(ModelViewMat, Position, FogShape);

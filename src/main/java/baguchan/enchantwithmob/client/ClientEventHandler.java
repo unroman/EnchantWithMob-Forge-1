@@ -105,29 +105,9 @@ public class ClientEventHandler {
 		Vec3 vector3d = target.getEyePosition(totalTickTime);
 		Vec3 vec31 = new Vec3(d3, d4, d5);
 		Vec3 vec32 = vector3d.subtract(vec31);
-		float q = 0 * 0.05f * -1.5f;
-		float v = 0.2f;
-		float w2 = 0.5f;
-		float length = (float) (vec32.length());
-		float uv2 = -1.0f + (0 * -0.2f % 1.0f);
-		float uv1 = length * 2.5f + uv2;
-		float x1 = Mth.cos(q + (float) Math.PI) * v;
-		float z1 = Mth.sin(q + (float) Math.PI) * v;
-		float x2 = Mth.cos(q + 0.0f) * v;
-		float z2 = Mth.sin(q + 0.0f) * v;
-		float x3 = Mth.cos(q + 1.5707964f) * v;
-		float z3 = Mth.sin(q + 1.5707964f) * v;
-		float x4 = Mth.cos(q + 4.712389f) * v;
-		float z4 = Mth.sin(q + 4.712389f) * v;
-		float y1 = length;
-		float y2 = 0.0f;
-		float ux1 = 0.4999f;
-		float ux2 = 0.0f;
 
 		poseStack.translate(0, +livingEntity.getBbHeight() * 0.5F, 0);
 		int j1;
-
-		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
 
 		float xRot = getXRotD(livingEntity, target, totalTickTime);
 		float yRot = getYRotD(livingEntity, target, totalTickTime);
@@ -141,23 +121,60 @@ public class ClientEventHandler {
 		Matrix3f matrix3f = poseStack.last().normal();
 		float intensity = cap.getMobEnchants().size() < 3 ? ((float) cap.getMobEnchants().size() / 3) : 3;
 		int intensityCacl = (int) (intensity / 3 * 255);
-		vertex(consumer, matrix4f, matrix3f, x1, y1, z1, 255, 255, 255, intensityCacl, ux1, uv1);
-		vertex(consumer, matrix4f, matrix3f, x1, y2, z1, 255, 255, 255, intensityCacl, ux1, uv2);
-		vertex(consumer, matrix4f, matrix3f, x2, y2, z2, 255, 255, 255, intensityCacl, ux2, uv2);
-		vertex(consumer, matrix4f, matrix3f, x2, y1, z2, 255, 255, 255, intensityCacl, ux2, uv1);
-		vertex(consumer, matrix4f, matrix3f, x3, y1, z3, 255, 255, 255, intensityCacl, ux1, uv1);
-		vertex(consumer, matrix4f, matrix3f, x3, y2, z3, 255, 255, 255, intensityCacl, ux1, uv2);
-		vertex(consumer, matrix4f, matrix3f, x4, y2, z4, 255, 255, 255, intensityCacl, ux2, uv2);
-		vertex(consumer, matrix4f, matrix3f, x4, y1, z4, 255, 255, 255, intensityCacl, ux2, uv1);
+		int i = 1;
+		float f = 1.0F;
+		float f1 = totalTickTime;
+		float f2 = f1 * 0.5F % 1.0F;
+		float f4 = (float) (vec32.length() + 1.0);
+		float f7 = f1 * 0.05F * -1.5F;
+		int j = 255;
+		int k = 255;
+		int l = 255;
+		float f11 = Mth.cos(f7 + (float) (Math.PI * 3.0 / 4.0)) * 0.282F;
+		float f12 = Mth.sin(f7 + (float) (Math.PI * 3.0 / 4.0)) * 0.282F;
+		float f13 = Mth.cos(f7 + (float) (Math.PI / 4)) * 0.282F;
+		float f14 = Mth.sin(f7 + (float) (Math.PI / 4)) * 0.282F;
+		float f15 = Mth.cos(f7 + ((float) Math.PI * 5.0F / 4.0F)) * 0.282F;
+		float f16 = Mth.sin(f7 + ((float) Math.PI * 5.0F / 4.0F)) * 0.282F;
+		float f17 = Mth.cos(f7 + ((float) Math.PI * 7.0F / 4.0F)) * 0.282F;
+		float f18 = Mth.sin(f7 + ((float) Math.PI * 7.0F / 4.0F)) * 0.282F;
+		float f19 = Mth.cos(f7 + (float) Math.PI) * 0.2F;
+		float f20 = Mth.sin(f7 + (float) Math.PI) * 0.2F;
+		float f21 = Mth.cos(f7 + 0.0F) * 0.2F;
+		float f22 = Mth.sin(f7 + 0.0F) * 0.2F;
+		float f23 = Mth.cos(f7 + (float) (Math.PI / 2)) * 0.2F;
+		float f24 = Mth.sin(f7 + (float) (Math.PI / 2)) * 0.2F;
+		float f25 = Mth.cos(f7 + (float) (Math.PI * 3.0 / 2.0)) * 0.2F;
+		float f26 = Mth.sin(f7 + (float) (Math.PI * 3.0 / 2.0)) * 0.2F;
+		float f27 = 0.0F;
+		float f28 = 0.4999F;
+		float f29 = -1.0F + f2;
+		float f30 = f4 * 2.5F + f29;
 
+		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+		PoseStack.Pose posestack$pose = poseStack.last();
+		vertex(consumer, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30, intensity);
+		vertex(consumer, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29, intensity);
+		vertex(consumer, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29, intensity);
+		vertex(consumer, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30, intensity);
+		vertex(consumer, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30, intensity);
+		vertex(consumer, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29, intensity);
+		vertex(consumer, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29, intensity);
+		vertex(consumer, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30, intensity);
+		float f31 = 0.0F;
+
+		vertex(consumer, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F, intensity);
+		vertex(consumer, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F, intensity);
+		vertex(consumer, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31, intensity);
+		vertex(consumer, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31, intensity);
 		poseStack.popPose();
 	}
 
 
-	private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int red, int green, int blue, int alpha, float ux, float uz) {
+	private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int red, int green, int blue, float ux, float uz, float alpha) {
 		vertexConsumer
 				.vertex(matrix4f, x, y, z)
-				.color(red, green, blue, 255)
+				.color(red, green, blue, alpha)
 				.uv(ux, uz)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(0xF000F0)
