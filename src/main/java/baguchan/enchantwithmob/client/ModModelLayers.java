@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ModModelLayers {
 	public static ModelLayerLocation ENCHANTER = new ModelLayerLocation(new ResourceLocation(EnchantWithMob.MODID, "enchanter"), "main");
+    public static ModelLayerLocation ENCHANTED_WIND = new ModelLayerLocation(new ResourceLocation(EnchantWithMob.MODID, "enchanted_wind"), "main");
 	public static ModelLayerLocation ENCHANTER_CLOTHES = new ModelLayerLocation(new ResourceLocation(EnchantWithMob.MODID, "enchanter_clothes"), "main");
 
 }

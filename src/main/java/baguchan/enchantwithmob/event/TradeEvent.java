@@ -37,9 +37,7 @@ public class TradeEvent {
 		@Nullable
 		@Override
 		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
-			List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(mobEnchant -> {
-				return !mobEnchant.isOnlyChest();
-			}).toList();
+            List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(MobEnchant::isDiscoverable).toList();
 			MobEnchant enchantment = list.get(rand.nextInt(list.size()));
 			int i = Mth.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());

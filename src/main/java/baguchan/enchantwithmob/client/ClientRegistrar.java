@@ -1,12 +1,14 @@
 package baguchan.enchantwithmob.client;
 
 import baguchan.enchantwithmob.EnchantWithMob;
+import baguchan.enchantwithmob.client.model.EnchantedWindModel;
 import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
 import baguchan.enchantwithmob.client.model.EnchanterModel;
 import baguchan.enchantwithmob.client.overlay.MobEnchantOverlay;
 import baguchan.enchantwithmob.client.render.EnchanterRenderer;
 import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedEyesLayer;
+import baguchan.enchantwithmob.client.render.layer.EnchantedWindLayer;
 import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
 import baguchan.enchantwithmob.compat.GeckoLibCompat;
 import baguchan.enchantwithmob.compat.GeckoLibCompatClient;
@@ -58,7 +60,8 @@ public class ClientRegistrar {
 	@SubscribeEvent
 	public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.ENCHANTER, EnchanterModel::createBodyLayer);
-        event.registerLayerDefinition(ModModelLayers.ENCHANTER_CLOTHES, EnchanterClothesModel::createBodyLayer);
+		event.registerLayerDefinition(ModModelLayers.ENCHANTED_WIND, EnchantedWindModel::createWindBodyLayer);
+		event.registerLayerDefinition(ModModelLayers.ENCHANTER_CLOTHES, EnchanterClothesModel::createBodyLayer);
 	}
 
 	@SubscribeEvent
@@ -68,6 +71,8 @@ public class ClientRegistrar {
 			if (event.getSkin(model) != null) {
 				if (player instanceof LivingEntityRenderer) {
 					((LivingEntityRenderer<?, ?>) player).addLayer(new EnchantLayer(event.getSkin(model)));
+					((LivingEntityRenderer<?, ?>) player).addLayer(new EnchantedWindLayer(event.getSkin(model), event.getEntityModels()));
+
 				}
 			}
 		});
@@ -79,6 +84,7 @@ public class ClientRegistrar {
 
 			if (r instanceof LivingEntityRenderer) {
 				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantLayer((LivingEntityRenderer<?, ?>) r));
+				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedWindLayer((LivingEntityRenderer<?, ?>) r, event.getEntityModels()));
 
 			}
 			if (GeckoLibCompat.isLoaded) {

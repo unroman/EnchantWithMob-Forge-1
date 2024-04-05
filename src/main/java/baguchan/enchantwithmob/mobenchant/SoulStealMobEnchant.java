@@ -56,7 +56,7 @@ public class SoulStealMobEnchant extends MobEnchant {
     }
 
     @Override
-    public boolean isOnlyChest() {
-        return true;
+    public boolean isDiscoverable() {
+        return false;
     }
 }

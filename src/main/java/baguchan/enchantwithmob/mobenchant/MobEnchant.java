@@ -86,11 +86,12 @@ public class MobEnchant implements FeatureElement {
 		return false;
 	}
 
-	public boolean isOnlyChest() {
-		return false;
+    public boolean isDiscoverable() {
+        return true;
 	}
 
-	public boolean isCompatibleMob(LivingEntity livingEntity) {
+
+    public boolean isCompatibleMob(LivingEntity livingEntity) {
         return !(livingEntity instanceof Player) || MobEnchantConfigUtils.isPlayerEnchantable(this);
 	}
 

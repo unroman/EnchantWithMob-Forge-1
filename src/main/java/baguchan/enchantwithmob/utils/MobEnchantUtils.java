@@ -38,8 +38,11 @@ public class MobEnchantUtils {
 					runnable.run();
 				}
 			}
-			;
 		}
+	}
+
+	public static boolean hasWindEnchant(List<MobEnchantHandler> list) {
+		return findMobEnchantFromHandler(list, MobEnchants.WIND.get());
 	}
 
 	public static void executeIfPresent(Entity entity, Runnable runnable) {
@@ -444,7 +447,7 @@ public class MobEnchantUtils {
 		List<MobEnchantmentData> list = Lists.newArrayList();
 
 		for (MobEnchant enchantment : MobEnchants.getRegistry()) {
-			if ((!enchantment.isCursedEnchant() || allowCursed) && (!enchantment.isTresureEnchant() || allowTresure) && !enchantment.isOnlyChest()) {
+			if ((!enchantment.isCursedEnchant() || allowCursed) && (!enchantment.isTresureEnchant() || allowTresure) && enchantment.isDiscoverable()) {
 				for (int i = enchantment.getMaxLevel(); i > enchantment.getMinLevel() - 1; --i) {
 					if (p_185291_0_ >= enchantment.getMinEnchantability(i) && p_185291_0_ <= enchantment.getMaxEnchantability(i)) {
 						list.add(new MobEnchantmentData(enchantment, i));

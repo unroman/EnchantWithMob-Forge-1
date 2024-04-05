@@ -50,7 +50,7 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		MobEnchant enchantment;
 		if (this.enchantments.isEmpty()) {
 			boolean flag = p_80429_.is(Items.BOOK) || p_80429_.is(ModItems.MOB_ENCHANT_BOOK.get());
-			List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(MobEnchant::isOnlyChest).filter((p_80436_) -> {
+            List<MobEnchant> list = MobEnchants.getRegistry().stream().filter(MobEnchant::isDiscoverable).filter((p_80436_) -> {
 				return flag;
 			}).toList();
 			if (list.isEmpty()) {

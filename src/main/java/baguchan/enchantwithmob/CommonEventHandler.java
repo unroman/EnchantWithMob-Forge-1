@@ -9,6 +9,7 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantCombatRules;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
+import baguchan.enchantwithmob.utils.MobEnchantmentData;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -212,6 +213,13 @@ public class CommonEventHandler {
                                 }
                             }
                         }
+
+                        if (event.getSpawnType() == MobSpawnType.TRIAL_SPAWNER) {
+                            if (world.getRandom().nextFloat() < 0.25) {
+                                MobEnchantUtils.addEnchantmentToEntity(livingEntity, cap, new MobEnchantmentData(MobEnchants.WIND.get(), 1));
+                            }
+                        }
+
                     }
                 }
             }
