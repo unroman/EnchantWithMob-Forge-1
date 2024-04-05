@@ -215,7 +215,7 @@ public class CommonEventHandler {
                         }
 
                         if (event.getSpawnType() == MobSpawnType.TRIAL_SPAWNER) {
-                            if (world.getRandom().nextFloat() < 0.25) {
+                            if (world.getRandom().nextFloat() < 1.0) {
                                 MobEnchantUtils.addEnchantmentToEntity(livingEntity, cap, new MobEnchantmentData(MobEnchants.WIND.get(), 1));
                             }
                         }
