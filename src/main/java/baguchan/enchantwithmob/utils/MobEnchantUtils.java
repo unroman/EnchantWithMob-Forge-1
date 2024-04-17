@@ -52,7 +52,6 @@ public class MobEnchantUtils {
 					runnable.run();
 				}
 			}
-			;
 		}
 	}
 
