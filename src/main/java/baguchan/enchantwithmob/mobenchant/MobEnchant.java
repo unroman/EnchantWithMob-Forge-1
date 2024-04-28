@@ -35,20 +35,13 @@ public class MobEnchant implements FeatureElement {
     @Nullable
     private String descriptionId;
 
-    private final Holder<MobEnchant> builtInRegistryHolder;
-
     public MobEnchant(Properties properties) {
-        this.builtInRegistryHolder = MobEnchants.getRegistry().wrapAsHolder(this);
 
         this.enchantType = properties.enchantType;
 		this.level = properties.level;
         this.anvilCost = properties.getAnvilCost();
         this.requiredFeatures = properties.requiredFeatures;
 	}
-
-    public Holder<MobEnchant> builtInRegistryHolder() {
-        return this.builtInRegistryHolder;
-    }
 
 
     public Rarity getRarity() {

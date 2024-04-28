@@ -4,6 +4,7 @@ import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import baguchan.enchantwithmob.registry.ModDataCompnents;
 import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.Lists;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MobEnchantBookItem extends Item {
 	public MobEnchantBookItem(Item.Properties group) {
@@ -85,14 +87,14 @@ public class MobEnchantBookItem extends Item {
 		for (MobEnchant mobEnchant : MobEnchants.getRegistry()) {
 			if (!mobEnchant.isDisabled()) {
 				ItemStack stack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-				MobEnchantUtils.enchantForItem(mobEnchant, stack, mobEnchant.getMaxLevel());
+                MobEnchantUtils.enchant(mobEnchant, stack, mobEnchant.getMaxLevel());
 				items.add(stack);
 			}
 		}
 		for (MobEnchant mobEnchant : MobEnchants.getRegistry()) {
 			if (!mobEnchant.isDisabled()) {
 				ItemStack stack2 = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
-				MobEnchantUtils.enchantForItem(mobEnchant, stack2, mobEnchant.getMaxLevel());
+                MobEnchantUtils.enchant(mobEnchant, stack2, mobEnchant.getMaxLevel());
 				items.add(stack2);
 			}
 		}
@@ -103,7 +105,8 @@ public class MobEnchantBookItem extends Item {
 	public void appendHoverText(ItemStack stack, @Nullable TooltipContext level, List<Component> tooltip, TooltipFlag p_41424_) {
 		super.appendHoverText(stack, level, tooltip, p_41424_);
 		ChatFormatting[] textformatting2 = new ChatFormatting[]{ChatFormatting.DARK_PURPLE};
-
+        Consumer<Component> consumer = tooltip::add;
+        stack.addToTooltip(ModDataCompnents.MOB_ENCHANTMENTS.get(), level, consumer, p_41424_);
 		tooltip.add(Component.translatable("mobenchant.enchantwithmob.mob_enchant_book.tooltip").withStyle(textformatting2));
 	}
 

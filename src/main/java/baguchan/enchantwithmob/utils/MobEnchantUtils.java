@@ -126,6 +126,10 @@ public class MobEnchantUtils {
 		return compoundnbt != null ? compoundnbt.getList(TAG_STORED_MOBENCHANTS, 10) : new ListTag();
 	}
 
+
+	/*
+	 * item Mob Enchant Start
+	 */
     public static ItemMobEnchantments getEnchantmentsForCrafting(ItemStack stack) {
         return stack.getOrDefault(ModDataCompnents.MOB_ENCHANTMENTS.get(), ItemMobEnchantments.EMPTY);
 	}
@@ -138,23 +142,27 @@ public class MobEnchantUtils {
         return p_330666_.has(ModDataCompnents.MOB_ENCHANTMENTS.get());
 	}
 
-    public static void enchantForItem(MobEnchant p_41664_, ItemStack stack, int p_41665_) {
+	//if using make mob enchant. use this
+	public static void enchant(MobEnchant p_41664_, ItemStack stack, int p_41665_) {
         updateEnchantments(stack, p_330091_ -> p_330091_.upgrade(p_41664_, p_41665_));
     }
 
     public static ItemMobEnchantments updateEnchantments(ItemStack p_331034_, Consumer<ItemMobEnchantments.Mutable> p_332031_) {
         DataComponentType<ItemMobEnchantments> datacomponenttype = ModDataCompnents.MOB_ENCHANTMENTS.get();
-        ItemMobEnchantments itemenchantments = p_331034_.get(datacomponenttype);
-        if (itemenchantments == null) {
-            return ItemMobEnchantments.EMPTY;
-        } else {
-            ItemMobEnchantments.Mutable itemenchantments$mutable = new ItemMobEnchantments.Mutable(itemenchantments);
-            p_332031_.accept(itemenchantments$mutable);
-            ItemMobEnchantments itemenchantments1 = itemenchantments$mutable.toImmutable();
-            p_331034_.set(datacomponenttype, itemenchantments1);
-            return itemenchantments1;
-        }
-    }
+		ItemMobEnchantments itemenchantments = p_331034_.getOrDefault(datacomponenttype, ItemMobEnchantments.EMPTY);
+
+		ItemMobEnchantments.Mutable itemenchantments$mutable = new ItemMobEnchantments.Mutable(itemenchantments);
+		p_332031_.accept(itemenchantments$mutable);
+		ItemMobEnchantments itemenchantments1 = itemenchantments$mutable.toImmutable();
+		p_331034_.set(datacomponenttype, itemenchantments1);
+		return itemenchantments1;
+	}
+
+	/*
+	 * item Mob Enchant End
+	 */
+
+
 	/**
 	 * add Mob Enchantments From ItemStack
 	 *
@@ -288,7 +296,7 @@ public class MobEnchantUtils {
 
 		for (MobEnchantmentData enchantmentdata : list) {
 			if (!enchantmentdata.enchantment.isDisabled()) {
-                enchantForItem(enchantmentdata.enchantment, stack, enchantmentdata.enchantmentLevel);
+				enchant(enchantmentdata.enchantment, stack, enchantmentdata.enchantmentLevel);
 			}
 		}
 

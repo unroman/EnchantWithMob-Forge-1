@@ -45,7 +45,7 @@ public class MobEnchants {
 
 	@SubscribeEvent
 	public static void onNewRegistry(NewRegistryEvent event) {
-        registry = event.create(new RegistryBuilder<>(MOB_ENCHANT_REGISTRY));
+        registry = event.create(new RegistryBuilder<>(MOB_ENCHANT_REGISTRY).sync(true));
 	}
 
     public static Registry<MobEnchant> getRegistry() {

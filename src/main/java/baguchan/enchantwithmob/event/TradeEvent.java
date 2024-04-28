@@ -42,7 +42,7 @@ public class TradeEvent {
 			MobEnchant enchantment = list.get(rand.nextInt(list.size()));
 			int i = Mth.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-            MobEnchantUtils.enchantForItem(enchantment, itemstack, i);
+            MobEnchantUtils.enchant(enchantment, itemstack, i);
 			int j = 2 + rand.nextInt(5 + i * 10) + 3 * i;
 
 			if (enchantment.isTresureEnchant()) {

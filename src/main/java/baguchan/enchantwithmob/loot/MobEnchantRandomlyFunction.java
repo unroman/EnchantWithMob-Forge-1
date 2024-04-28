@@ -70,9 +70,9 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		int i = Mth.nextInt(p_230982_, p_230981_.getMinLevel(), p_230981_.getMaxLevel());
 		if (p_230980_.is(Items.BOOK)) {
 			p_230980_ = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-			MobEnchantUtils.enchantForItem(p_230981_, p_230980_, i);
+            MobEnchantUtils.enchant(p_230981_, p_230980_, i);
 		} else {
-			MobEnchantUtils.enchantForItem(p_230981_, p_230980_, i);
+            MobEnchantUtils.enchant(p_230981_, p_230980_, i);
 		}
 
 		return p_230980_;

@@ -2,6 +2,7 @@ package baguchan.enchantwithmob.item;
 
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
+import baguchan.enchantwithmob.registry.ModDataCompnents;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EnchantersBookItem extends Item {
 	private final TargetingConditions enchantTargeting = TargetingConditions.forNonCombat().range(16.0D).ignoreLineOfSight().ignoreInvisibilityTesting();
@@ -98,6 +100,9 @@ public class EnchantersBookItem extends Item {
 	public void appendHoverText(ItemStack stack, @Nullable TooltipContext level, List<Component> tooltip, TooltipFlag p_41424_) {
 		super.appendHoverText(stack, level, tooltip, p_41424_);
 		ChatFormatting[] textformatting2 = new ChatFormatting[]{ChatFormatting.DARK_PURPLE};
+
+		Consumer<Component> consumer = tooltip::add;
+		stack.addToTooltip(ModDataCompnents.MOB_ENCHANTMENTS.get(), level, consumer, p_41424_);
 
 		tooltip.add(Component.translatable("mobenchant.enchantwithmob.enchanter_book.tooltip").withStyle(textformatting2));
 	}

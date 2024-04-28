@@ -63,7 +63,7 @@ public class ItemMobEnchantments implements TooltipProvider {
     }
 
     public int getLevel(MobEnchant p_330552_) {
-        return this.enchantments.getInt(p_330552_);
+        return this.enchantments.getInt(getHolder(p_330552_));
     }
 
     public void addToTooltip(Item.TooltipContext p_341290_, Consumer<Component> p_331119_, TooltipFlag p_330400_) {
@@ -169,6 +169,10 @@ public class ItemMobEnchantments implements TooltipProvider {
         }, ItemMobEnchantments::new);
     }
 
+    public static Holder<MobEnchant> getHolder(MobEnchant mobEnchant) {
+        return MobEnchants.getRegistry().wrapAsHolder(mobEnchant);
+    }
+
     public static class Mutable {
         private final Object2IntOpenHashMap<Holder<MobEnchant>> enchantments = new Object2IntOpenHashMap();
         private final boolean showInTooltip;
@@ -180,16 +184,16 @@ public class ItemMobEnchantments implements TooltipProvider {
 
         public void set(MobEnchant p_331872_, int p_330832_) {
             if (p_330832_ <= 0) {
-                this.enchantments.removeInt(p_331872_.builtInRegistryHolder());
+                this.enchantments.removeInt(getHolder(p_331872_));
             } else {
-                this.enchantments.put(p_331872_.builtInRegistryHolder(), Math.min(p_330832_, 255));
+                this.enchantments.put(getHolder(p_331872_), Math.min(p_330832_, 255));
             }
 
         }
 
         public void upgrade(MobEnchant p_330536_, int p_331153_) {
             if (p_331153_ > 0) {
-                this.enchantments.merge(p_330536_.builtInRegistryHolder(), Math.min(p_331153_, 255), Integer::max);
+                this.enchantments.merge(getHolder(p_330536_), Math.min(p_331153_, 255), Integer::max);
             }
 
         }
@@ -199,7 +203,7 @@ public class ItemMobEnchantments implements TooltipProvider {
         }
 
         public int getLevel(MobEnchant p_331330_) {
-            return this.enchantments.getOrDefault(p_331330_.builtInRegistryHolder(), 0);
+            return this.enchantments.getOrDefault(getHolder(p_331330_), 0);
         }
 
         public Set<Holder<MobEnchant>> keySet() {
