@@ -3,6 +3,7 @@ package baguchan.enchantwithmob.loot;
 import baguchan.enchantwithmob.registry.ModLootItemFunctions;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MobEnchantWithLevelsFunction extends LootItemConditionalFunction {
-    public static final Codec<MobEnchantWithLevelsFunction> CODEC = RecordCodecBuilder.create((p_298285_) -> {
+	public static final MapCodec<MobEnchantWithLevelsFunction> CODEC = RecordCodecBuilder.mapCodec((p_298285_) -> {
         return commonFields(p_298285_).and(p_298285_.group(NumberProviders.CODEC.fieldOf("levels").forGetter((p_298991_) -> {
             return p_298991_.levels;
         }), Codec.BOOL.fieldOf("treasure").orElse(false).forGetter((p_298792_) -> {

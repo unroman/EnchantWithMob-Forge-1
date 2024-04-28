@@ -8,9 +8,9 @@ import baguchan.enchantwithmob.client.animation.FloatAnimation;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT)
 public class ClientModelEvent {
     @SubscribeEvent
     public static void modelEventInit(BagusModelEvent.Init event) {

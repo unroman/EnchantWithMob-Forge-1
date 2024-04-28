@@ -4,13 +4,19 @@ import baguchan.enchantwithmob.EnchantWithMob;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class SoulParticleMessage implements CustomPacketPayload {
-	public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "soul_particle");
+public class SoulParticleMessage implements CustomPacketPayload, IPayloadHandler<SoulParticleMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, SoulParticleMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            SoulParticleMessage::write, SoulParticleMessage::new
+    );
+    public static final CustomPacketPayload.Type<SoulParticleMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("soul_particle").toString());
+
 
 	private int entityId;
 
@@ -31,12 +37,12 @@ public class SoulParticleMessage implements CustomPacketPayload {
 	}
 
 	@Override
-	public ResourceLocation id() {
-		return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
 	}
 
-	public static boolean handle(SoulParticleMessage message, PlayPayloadContext context) {
-		context.workHandler().execute(() -> {
+    public void handle(SoulParticleMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
 			Entity entity = Minecraft.getInstance().level.getEntity(message.entityId);
 			if (entity != null) {
 				for (int i = 0; i < 4; i++) {
@@ -44,6 +50,5 @@ public class SoulParticleMessage implements CustomPacketPayload {
 				}
 			}
 		});
-		return true;
     }
 }

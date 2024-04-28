@@ -3,12 +3,14 @@ package baguchan.enchantwithmob.utils;
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
+import baguchan.enchantwithmob.item.mobenchant.ItemMobEnchantments;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
-import baguchan.enchantwithmob.registry.ModItems;
+import baguchan.enchantwithmob.registry.ModDataCompnents;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 public class MobEnchantUtils {
 	public static final String TAG_MOBENCHANT = "MobEnchant";
@@ -111,8 +113,8 @@ public class MobEnchantUtils {
 	 * @param stack MobEnchanted Item
 	 */
 	public static boolean hasMobEnchant(ItemStack stack) {
-		CompoundTag compoundnbt = stack.getTag();
-		return compoundnbt != null && compoundnbt.contains(TAG_STORED_MOBENCHANTS);
+        @Nullable ItemMobEnchantments itemMobEnchantments = stack.get(ModDataCompnents.MOB_ENCHANTMENTS);
+        return itemMobEnchantments != null;
 	}
 
 	/**
@@ -124,88 +126,35 @@ public class MobEnchantUtils {
 		return compoundnbt != null ? compoundnbt.getList(TAG_STORED_MOBENCHANTS, 10) : new ListTag();
 	}
 
-	/**
-	 * get Mob Enchantments From ItemStack
-	 *
-	 * @param stack MobEnchanted Item
-	 */
-	public static Map<MobEnchant, Integer> getEnchantments(ItemStack stack) {
-		ListTag listnbt = getEnchantmentListForNBT(stack.getTag());
-		return makeMobEnchantListFromListNBT(listnbt);
+    public static ItemMobEnchantments getEnchantmentsForCrafting(ItemStack stack) {
+        return stack.getOrDefault(ModDataCompnents.MOB_ENCHANTMENTS.get(), ItemMobEnchantments.EMPTY);
 	}
 
-	/**
-	 * set Mob Enchantments From ItemStack
-	 *
-	 * @param enchMap MobEnchants and those level map
-	 * @param stack   MobEnchanted Item
-	 */
-	public static void setEnchantments(Map<MobEnchant, Integer> enchMap, ItemStack stack) {
-		ListTag listnbt = new ListTag();
+    public static void setEnchantments(ItemStack stack, ItemMobEnchantments p_332148_) {
+        stack.set(ModDataCompnents.MOB_ENCHANTMENTS.get(), p_332148_);
+    }
 
-		for (Map.Entry<MobEnchant, Integer> entry : enchMap.entrySet()) {
-			MobEnchant enchantment = entry.getKey();
-			if (enchantment != null) {
-				int i = entry.getValue();
-				CompoundTag compoundnbt = new CompoundTag();
-				compoundnbt.putString(TAG_MOBENCHANT, String.valueOf((Object) MobEnchants.getRegistry().getKey(enchantment)));
-				compoundnbt.putShort(TAG_ENCHANT_LEVEL, (short) i);
-				listnbt.add(compoundnbt);
-				if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get()) {
-					addMobEnchantToItemStack(stack, enchantment, i);
-				}
-			}
-		}
-
-		if (listnbt.isEmpty()) {
-			stack.removeTagKey(TAG_STORED_MOBENCHANTS);
-		}
+    public static boolean canStoreEnchantments(ItemStack p_330666_) {
+        return p_330666_.has(ModDataCompnents.MOB_ENCHANTMENTS.get());
 	}
 
-	private static Map<MobEnchant, Integer> makeMobEnchantListFromListNBT(ListTag p_226652_0_) {
-		Map<MobEnchant, Integer> map = Maps.newLinkedHashMap();
+    public static void enchantForItem(MobEnchant p_41664_, ItemStack stack, int p_41665_) {
+        updateEnchantments(stack, p_330091_ -> p_330091_.upgrade(p_41664_, p_41665_));
+    }
 
-		for (int i = 0; i < p_226652_0_.size(); ++i) {
-			CompoundTag compoundnbt = p_226652_0_.getCompound(i);
-			MobEnchant mobEnchant = getEnchantFromString(compoundnbt.getString(TAG_MOBENCHANT));
-			map.put(mobEnchant, compoundnbt.getInt(TAG_ENCHANT_LEVEL));
-
-		}
-
-		return map;
-	}
-
-	//add MobEnchantToItemstack (example,this method used to MobEnchantBook)
-	public static void addMobEnchantToItemStack(ItemStack itemIn, MobEnchant mobenchant, int level) {
-		ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
-
-		boolean flag = true;
-		ResourceLocation resourcelocation = MobEnchants.getRegistry().getKey(mobenchant);
-
-
-		for (int i = 0; i < listnbt.size(); ++i) {
-			CompoundTag compoundnbt = listnbt.getCompound(i);
-			ResourceLocation resourcelocation1 = ResourceLocation.tryParse(compoundnbt.getString("MobEnchant"));
-			if (resourcelocation1 != null && resourcelocation1.equals(resourcelocation)) {
-				if (compoundnbt.getInt(TAG_ENCHANT_LEVEL) < level) {
-					compoundnbt.putInt(TAG_ENCHANT_LEVEL, level);
-				}
-
-				flag = false;
-				break;
-			}
-		}
-
-		if (flag) {
-			CompoundTag compoundnbt1 = new CompoundTag();
-			compoundnbt1.putString(TAG_MOBENCHANT, String.valueOf((Object) resourcelocation));
-			compoundnbt1.putInt(TAG_ENCHANT_LEVEL, level);
-			listnbt.add(compoundnbt1);
-		}
-
-		itemIn.getTag().put(TAG_STORED_MOBENCHANTS, listnbt);
-	}
-
+    public static ItemMobEnchantments updateEnchantments(ItemStack p_331034_, Consumer<ItemMobEnchantments.Mutable> p_332031_) {
+        DataComponentType<ItemMobEnchantments> datacomponenttype = ModDataCompnents.MOB_ENCHANTMENTS.get();
+        ItemMobEnchantments itemenchantments = p_331034_.get(datacomponenttype);
+        if (itemenchantments == null) {
+            return ItemMobEnchantments.EMPTY;
+        } else {
+            ItemMobEnchantments.Mutable itemenchantments$mutable = new ItemMobEnchantments.Mutable(itemenchantments);
+            p_332031_.accept(itemenchantments$mutable);
+            ItemMobEnchantments itemenchantments1 = itemenchantments$mutable.toImmutable();
+            p_331034_.set(datacomponenttype, itemenchantments1);
+            return itemenchantments1;
+        }
+    }
 	/**
 	 * add Mob Enchantments From ItemStack
 	 *
@@ -214,17 +163,17 @@ public class MobEnchantUtils {
 	 * @param capability MobEnchant Capability
 	 */
 	public static boolean addItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity user, IEnchantCap capability) {
-		ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
+        ItemMobEnchantments itemMobEnchantments = getEnchantmentsForCrafting(itemIn);
 		boolean flag = false;
 
-		for (int i = 0; i < listnbt.size(); ++i) {
-			CompoundTag compoundnbt = listnbt.getCompound(i);
-			if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
-				capability.getEnchantCap().addMobEnchant(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt));
+        for (Holder<MobEnchant> mobEnchant : itemMobEnchantments.keySet()) {
+            int level = itemMobEnchantments.getLevel(mobEnchant.value());
+            if (checkAllowMobEnchantFromMob(mobEnchant.value(), entity, capability)) {
+                capability.getEnchantCap().addMobEnchant(entity, mobEnchant.value(), level);
 				flag = true;
 
 				if (!user.level().isClientSide()) {
-					itemIn.hurtAndBreak(1, user, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                    itemIn.hurtAndBreak(1, user, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND));
 
 				}
 			}
@@ -233,23 +182,23 @@ public class MobEnchantUtils {
 	}
 
 	public static boolean addUnstableItemMobEnchantToEntity(ItemStack itemIn, LivingEntity entity, LivingEntity owner, IEnchantCap capability) {
-		ListTag listnbt = getEnchantmentListForNBT(itemIn.getTag());
+        ItemMobEnchantments itemMobEnchantments = getEnchantmentsForCrafting(itemIn);
 		boolean flag = false;
 
-		for (int i = 0; i < listnbt.size(); ++i) {
-			CompoundTag compoundnbt = listnbt.getCompound(i);
-			if (checkAllowMobEnchantFromMob(MobEnchantUtils.getEnchantFromNBT(compoundnbt), entity, capability)) {
-				capability.getEnchantCap().addMobEnchantFromOwner(entity, MobEnchantUtils.getEnchantFromNBT(compoundnbt), MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt), owner);
+        for (Holder<MobEnchant> mobEnchant : itemMobEnchantments.keySet()) {
+            int level = itemMobEnchantments.getLevel(mobEnchant.value());
+            if (checkAllowMobEnchantFromMob(mobEnchant.value(), entity, capability)) {
+                capability.getEnchantCap().addMobEnchantFromOwner(entity, mobEnchant.value(), level, owner);
 				flag = true;
+
 				if (!owner.level().isClientSide()) {
-					itemIn.hurtAndBreak(1, owner, (userEntity) -> userEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+                    itemIn.hurtAndBreak(1, owner, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND));
 
 				}
 			}
 		}
 		return flag;
 	}
-
 	public static void removeMobEnchantToEntity(LivingEntity entity, IEnchantCap capability) {
 		capability.getEnchantCap().removeAllMobEnchant(entity);
 	}
@@ -339,7 +288,7 @@ public class MobEnchantUtils {
 
 		for (MobEnchantmentData enchantmentdata : list) {
 			if (!enchantmentdata.enchantment.isDisabled()) {
-				addMobEnchantToItemStack(stack, enchantmentdata.enchantment, enchantmentdata.enchantmentLevel);
+                enchantForItem(enchantmentdata.enchantment, stack, enchantmentdata.enchantmentLevel);
 			}
 		}
 

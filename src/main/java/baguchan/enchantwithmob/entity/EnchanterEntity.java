@@ -7,9 +7,13 @@ import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import baguchan.enchantwithmob.utils.MobEnchantmentData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -110,12 +114,6 @@ public class EnchanterEntity extends SpellcasterIllager {
             super.handleEntityEvent(p_21375_);
         }
     }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-    }
-
     public static AttributeSupplier.Builder createAttributeMap() {
         return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, (double) 0.3F).add(Attributes.MAX_HEALTH, 24.0D).add(Attributes.FOLLOW_RANGE, 24.0D).add(Attributes.ATTACK_DAMAGE, 2.0F);
     }
@@ -134,18 +132,6 @@ public class EnchanterEntity extends SpellcasterIllager {
             this.idleAnimationState.stop();
         } else {
             this.idleAnimationState.startIfStopped(this.tickCount);
-        }
-    }
-
-
-    @Override
-    public boolean isAlliedTo(Entity p_184191_1_) {
-        if (super.isAlliedTo(p_184191_1_)) {
-            return true;
-        } else if (p_184191_1_ instanceof LivingEntity && ((LivingEntity) p_184191_1_).getMobType() == MobType.ILLAGER) {
-            return this.getTeam() == null && p_184191_1_.getTeam() == null;
-        } else {
-            return false;
         }
     }
 
@@ -282,7 +268,7 @@ public class EnchanterEntity extends SpellcasterIllager {
                     //set enchant limit
                     if (enchanted_list.size() < 5) {
                         LivingEntity target = list.get(EnchanterEntity.this.random.nextInt(list.size()));
-                        if (target != EnchanterEntity.this.getTarget() && target != EnchanterEntity.this && target.isAlliedTo(EnchanterEntity.this) && EnchanterEntity.this.isAlliedTo(target) && (target.getTeam() == EnchanterEntity.this.getTeam() || target.getMobType() == MobType.ILLAGER && target.getTeam() == null)) {
+                        if (target != EnchanterEntity.this.getTarget() && target != EnchanterEntity.this && target.isAlliedTo(EnchanterEntity.this) && EnchanterEntity.this.isAlliedTo(target) && (target.getTeam() == EnchanterEntity.this.getTeam() || target.getType().is(EntityTypeTags.ILLAGER_FRIENDS) && target.getTeam() == null)) {
                             EnchanterEntity.this.setEnchantTarget(target);
                             EnchanterEntity.this.level().broadcastEntityEvent(EnchanterEntity.this, (byte) 61);
                             return true;

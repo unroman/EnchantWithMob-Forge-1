@@ -1,7 +1,9 @@
 package baguchan.enchantwithmob.capability;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.UnknownNullability;
 
 public class ItemMobEnchantCapability implements INBTSerializable<CompoundTag> {
 	private boolean hasEnchant;
@@ -15,16 +17,17 @@ public class ItemMobEnchantCapability implements INBTSerializable<CompoundTag> {
 	}
 
 
-	public CompoundTag serializeNBT() {
+	@Override
+	public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
 		CompoundTag nbt = new CompoundTag();
 
 		nbt.putBoolean("HasEnchant", hasEnchant);
 
-
 		return nbt;
 	}
 
-	public void deserializeNBT(CompoundTag nbt) {
-		hasEnchant = nbt.getBoolean("HasEnchant");
+	@Override
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
+		hasEnchant = compoundTag.getBoolean("HasEnchant");
 	}
 }

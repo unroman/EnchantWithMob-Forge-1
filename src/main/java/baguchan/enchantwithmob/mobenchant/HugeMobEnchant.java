@@ -8,10 +8,10 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
+@EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class HugeMobEnchant extends MobEnchant {
     public HugeMobEnchant(Properties properties) {
         super(properties);

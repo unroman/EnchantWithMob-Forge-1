@@ -20,9 +20,9 @@ public class ModItems {
     public static final Supplier<Item> MOB_ENCHANT_BOOK = ITEM_REGISTRY.register("mob_enchant_book", () -> new MobEnchantBookItem((new Item.Properties()).stacksTo(1).durability(5)));
     public static final Supplier<Item> MOB_UNENCHANT_BOOK = ITEM_REGISTRY.register("mob_unenchant_book", () -> new MobUnEnchantBookItem((new Item.Properties()).stacksTo(1).durability(5)));
     public static final Supplier<Item> ENCHANTER_SPAWNEGG = ITEM_REGISTRY.register("enchanter_spawn_egg", () -> new DeferredSpawnEggItem(ModEntities.ENCHANTER, 9804699, 0x81052d, (new Item.Properties())));
-    public static final Supplier<Item> ENCHANTER_CLOTHES = ITEM_REGISTRY.register("enchanter_clothes", () -> new EnchanterClothesItem(ArmorItem.Type.CHESTPLATE, (new Item.Properties())));
-    public static final Supplier<Item> ENCHANTER_HAT = ITEM_REGISTRY.register("enchanter_hat", () -> new EnchanterClothesItem(ArmorItem.Type.HELMET, (new Item.Properties())));
-    public static final Supplier<Item> ENCHANTER_BOOTS = ITEM_REGISTRY.register("enchanter_boots", () -> new EnchanterClothesItem(ArmorItem.Type.BOOTS, (new Item.Properties())));
-    public static final Supplier<Item> ENCHANTER_LEGGINGS = ITEM_REGISTRY.register("enchanter_leggings", () -> new EnchanterClothesItem(ArmorItem.Type.LEGGINGS, (new Item.Properties())));
+    public static final Supplier<Item> ENCHANTER_CLOTHES = ITEM_REGISTRY.register("enchanter_clothes", () -> new EnchanterClothesItem(ArmorItem.Type.CHESTPLATE, (new Item.Properties().durability(214))));
+    public static final Supplier<Item> ENCHANTER_HAT = ITEM_REGISTRY.register("enchanter_hat", () -> new EnchanterClothesItem(ArmorItem.Type.HELMET, (new Item.Properties().durability(162))));
+    public static final Supplier<Item> ENCHANTER_BOOTS = ITEM_REGISTRY.register("enchanter_boots", () -> new EnchanterClothesItem(ArmorItem.Type.BOOTS, (new Item.Properties().durability(154))));
+    public static final Supplier<Item> ENCHANTER_LEGGINGS = ITEM_REGISTRY.register("enchanter_leggings", () -> new EnchanterClothesItem(ArmorItem.Type.LEGGINGS, (new Item.Properties().durability(182))));
 
 }

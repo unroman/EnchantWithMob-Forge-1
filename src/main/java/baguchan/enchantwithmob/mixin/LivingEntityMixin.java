@@ -61,7 +61,7 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap, I
         if (!this.level().isClientSide) {
             for (int i = 0; i < this.getEnchantCap().getMobEnchants().size(); i++) {
                 MobEnchantedMessage message = new MobEnchantedMessage(this, this.getEnchantCap().getMobEnchants().get(i));
-                PacketDistributor.TRACKING_ENTITY_AND_SELF.with(this).send(message);
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, message);
             }
         }
     }

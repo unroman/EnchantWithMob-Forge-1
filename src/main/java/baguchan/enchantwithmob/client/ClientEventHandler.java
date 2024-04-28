@@ -25,7 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
@@ -39,7 +39,7 @@ import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.enchantBe
  * https://github.com/TelepathicGrunt/Bumblezone/blob/1.20-Arch/common/src/main/java/com/telepathicgrunt/the_bumblezone/client/rendering/cosmiccrystal/CosmicCrystalRenderer.java
  */
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
 	protected static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
 	protected static final RenderStateShard.TransparencyStateShard ADDITIVE_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("additive_transparency", () -> {
@@ -153,32 +153,32 @@ public class ClientEventHandler {
 
 		VertexConsumer consumer = multiBufferSource.getBuffer(enchantBeamSwirl(cap.isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
 		PoseStack.Pose posestack$pose = poseStack.last();
-		vertex(consumer, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30, intensity);
-		vertex(consumer, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29, intensity);
-		vertex(consumer, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29, intensity);
-		vertex(consumer, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30, intensity);
-		vertex(consumer, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30, intensity);
-		vertex(consumer, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29, intensity);
-		vertex(consumer, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29, intensity);
-		vertex(consumer, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f19, f4, f20, j, k, l, 0.4999F, f30, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f19, 0.0F, f20, j, k, l, 0.4999F, f29, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f21, 0.0F, f22, j, k, l, 0.0F, f29, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f21, f4, f22, j, k, l, 0.0F, f30, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f23, f4, f24, j, k, l, 0.4999F, f30, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f23, 0.0F, f24, j, k, l, 0.4999F, f29, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f25, 0.0F, f26, j, k, l, 0.0F, f29, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f25, f4, f26, j, k, l, 0.0F, f30, intensity);
 		float f31 = 0.0F;
 
-		vertex(consumer, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F, intensity);
-		vertex(consumer, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F, intensity);
-		vertex(consumer, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31, intensity);
-		vertex(consumer, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f17, f4, f18, j, k, l, 1.0F, f31, intensity);
+        vertex(consumer, matrix4f, posestack$pose, f15, f4, f16, j, k, l, 0.5F, f31, intensity);
 		poseStack.popPose();
 	}
 
 
-	private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, Matrix3f matrix3f, float x, float y, float z, int red, int green, int blue, float ux, float uz, float alpha) {
+    private static void vertex(VertexConsumer vertexConsumer, Matrix4f matrix4f, PoseStack.Pose pose, float x, float y, float z, int red, int green, int blue, float ux, float uz, float alpha) {
 		vertexConsumer
 				.vertex(matrix4f, x, y, z)
 				.color(red, green, blue, alpha)
 				.uv(ux, uz)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(0xF000F0)
-				.normal(matrix3f, 0.0f, 1.0f, 0.0f)
+                .normal(pose, 0.0f, 1.0f, 0.0f)
 				.endVertex();
 	}
 

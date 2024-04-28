@@ -7,13 +7,12 @@ import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
 
-public class MobEnchantOverlay implements IGuiOverlay {
+public class MobEnchantOverlay implements LayeredDraw.Layer {
     @Override
-    public void render(ExtendedGui gui, GuiGraphics guiGraphics, float partialTick, int width, int height) {
+    public void render(GuiGraphics guiGraphics, float partialTick) {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.options.getCameraType().isMirrored()) {

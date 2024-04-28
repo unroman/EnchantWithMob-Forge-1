@@ -6,13 +6,13 @@ import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
 import net.neoforged.neoforge.event.entity.living.MobSplitEvent;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
+@EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class MobEnchantMargeEvent {
 
 	@SubscribeEvent

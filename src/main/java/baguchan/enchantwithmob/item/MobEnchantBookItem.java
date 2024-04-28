@@ -7,17 +7,12 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
@@ -27,7 +22,6 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 public class MobEnchantBookItem extends Item {
 	public MobEnchantBookItem(Item.Properties group) {
@@ -91,14 +85,14 @@ public class MobEnchantBookItem extends Item {
 		for (MobEnchant mobEnchant : MobEnchants.getRegistry()) {
 			if (!mobEnchant.isDisabled()) {
 				ItemStack stack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-				MobEnchantUtils.addMobEnchantToItemStack(stack, mobEnchant, mobEnchant.getMaxLevel());
+				MobEnchantUtils.enchantForItem(mobEnchant, stack, mobEnchant.getMaxLevel());
 				items.add(stack);
 			}
 		}
 		for (MobEnchant mobEnchant : MobEnchants.getRegistry()) {
 			if (!mobEnchant.isDisabled()) {
 				ItemStack stack2 = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
-				MobEnchantUtils.addMobEnchantToItemStack(stack2, mobEnchant, mobEnchant.getMaxLevel());
+				MobEnchantUtils.enchantForItem(mobEnchant, stack2, mobEnchant.getMaxLevel());
 				items.add(stack2);
 			}
 		}
@@ -106,68 +100,12 @@ public class MobEnchantBookItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag p_41424_) {
+	public void appendHoverText(ItemStack stack, @Nullable TooltipContext level, List<Component> tooltip, TooltipFlag p_41424_) {
 		super.appendHoverText(stack, level, tooltip, p_41424_);
 		ChatFormatting[] textformatting2 = new ChatFormatting[]{ChatFormatting.DARK_PURPLE};
 
 		tooltip.add(Component.translatable("mobenchant.enchantwithmob.mob_enchant_book.tooltip").withStyle(textformatting2));
-		if (MobEnchantUtils.hasMobEnchant(stack)) {
-			ListTag listnbt = MobEnchantUtils.getEnchantmentListForNBT(stack.getTag());
-
-			for (int i = 0; i < listnbt.size(); ++i) {
-				CompoundTag compoundnbt = listnbt.getCompound(i);
-
-				MobEnchant mobEnchant = MobEnchantUtils.getEnchantFromNBT(compoundnbt);
-				int enchantmentLevel = MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt);
-
-				if (mobEnchant != null) {
-                    tooltip.add(mobEnchant.getFullname(enchantmentLevel));
-				}
-            }
-
-			List<Pair<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate>> list1 = Lists.newArrayList();
-
-            for (int i = 0; i < listnbt.size(); ++i) {
-				CompoundTag compoundnbt = listnbt.getCompound(i);
-
-                MobEnchant mobEnchant = MobEnchantUtils.getEnchantFromNBT(compoundnbt);
-                int mobEnchantLevel = MobEnchantUtils.getEnchantLevelFromNBT(compoundnbt);
-
-                if (mobEnchant != null) {
-					Map<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> map = mobEnchant.getAttributeModifierMap();
-                    if (!map.isEmpty()) {
-						for (Map.Entry<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> entry : map.entrySet()) {
-							list1.add(new Pair<>(entry.getKey(), entry.getValue()));
-                        }
-                    }
-                }
-            }
-
-
-            if (!list1.isEmpty()) {
-				//tooltip.add(StringTextComponent.EMPTY);
-				tooltip.add((Component.translatable("mobenchant.enchantwithmob.when_ehcnanted")).withStyle(ChatFormatting.DARK_PURPLE));
-
-				for (Pair<Attribute, MobEnchant.MobEnchantAttributeModifierTemplate> pair : list1) {
-					MobEnchant.MobEnchantAttributeModifierTemplate attributemodifier2 = pair.getSecond();
-					double d0 = attributemodifier2.getAmount();
-					double d1;
-					if (attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_BASE && attributemodifier2.getOperation() != AttributeModifier.Operation.MULTIPLY_TOTAL) {
-						d1 = attributemodifier2.getAmount();
-					} else {
-						d1 = attributemodifier2.getAmount() * 100.0D;
-					}
-
-                    if (d0 > 0.0D) {
-						tooltip.add((Component.translatable("attribute.modifier.plus." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.BLUE));
-                    } else if (d0 < 0.0D) {
-						d1 = d1 * -1.0D;
-						tooltip.add((Component.translatable("attribute.modifier.take." + attributemodifier2.getOperation().toValue(), ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(d1), Component.translatable(pair.getFirst().getDescriptionId()))).withStyle(ChatFormatting.RED));
-                    }
-                }
-            }
-        }
-    }
+	}
 
     @Override
     public boolean isFoil(ItemStack p_77636_1_) {

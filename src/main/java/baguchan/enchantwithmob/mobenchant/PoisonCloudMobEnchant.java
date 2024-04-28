@@ -14,10 +14,10 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
+@EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class PoisonCloudMobEnchant extends MobEnchant {
 	public PoisonCloudMobEnchant(Properties properties) {
 		super(properties);

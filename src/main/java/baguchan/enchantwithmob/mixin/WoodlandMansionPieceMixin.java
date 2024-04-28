@@ -3,7 +3,6 @@ package baguchan.enchantwithmob.mixin;
 import baguchan.enchantwithmob.entity.EnchanterEntity;
 import baguchan.enchantwithmob.registry.ModEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -24,7 +23,7 @@ public class WoodlandMansionPieceMixin {
 			EnchanterEntity entity = ModEntities.ENCHANTER.get().create(p_230215_.getLevel());
 			entity.setPersistenceRequired();
 			entity.moveTo(p_230214_, 0.0F, 0.0F);
-			entity.finalizeSpawn(p_230215_, p_230215_.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, (SpawnGroupData) null, (CompoundTag) null);
+            entity.finalizeSpawn(p_230215_, p_230215_.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, (SpawnGroupData) null);
 			p_230215_.addFreshEntityWithPassengers(entity);
 			p_230215_.setBlock(p_230214_, Blocks.AIR.defaultBlockState(), 2);
 			callbackInfo.cancel();

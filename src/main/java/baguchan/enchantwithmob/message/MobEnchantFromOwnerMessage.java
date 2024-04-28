@@ -4,14 +4,20 @@ import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class MobEnchantFromOwnerMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "mob_enchant_from_owner");
+public class MobEnchantFromOwnerMessage implements CustomPacketPayload, IPayloadHandler<MobEnchantFromOwnerMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, MobEnchantFromOwnerMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            MobEnchantFromOwnerMessage::write, MobEnchantFromOwnerMessage::new
+    );
+    public static final CustomPacketPayload.Type<MobEnchantFromOwnerMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("mob_enchant_from_owner").toString());
+
 
     private int entityId;
     private int ownerID;
@@ -33,16 +39,17 @@ public class MobEnchantFromOwnerMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public MobEnchantFromOwnerMessage(FriendlyByteBuf buffer) {
         this(buffer.readInt(), buffer.readInt());
     }
 
-    public static boolean handle(MobEnchantFromOwnerMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    @Override
+    public void handle(MobEnchantFromOwnerMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
             Entity ownerEntity = Minecraft.getInstance().player.level().getEntity(message.ownerID);
             if (entity instanceof LivingEntity livingEntity && ownerEntity instanceof LivingEntity) {
@@ -51,6 +58,5 @@ public class MobEnchantFromOwnerMessage implements CustomPacketPayload {
                     }
                 }
             });
-        return true;
     }
 }

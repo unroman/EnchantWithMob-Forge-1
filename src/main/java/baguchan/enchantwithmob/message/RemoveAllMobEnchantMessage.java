@@ -4,14 +4,20 @@ import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class RemoveAllMobEnchantMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "remove_all_mob_enchant");
+public class RemoveAllMobEnchantMessage implements CustomPacketPayload, IPayloadHandler<RemoveAllMobEnchantMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, RemoveAllMobEnchantMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            RemoveAllMobEnchantMessage::write, RemoveAllMobEnchantMessage::new
+    );
+    public static final CustomPacketPayload.Type<RemoveAllMobEnchantMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("remove_all_mob_enchant").toString());
+
 
     private int entityId;
 
@@ -32,12 +38,13 @@ public class RemoveAllMobEnchantMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static boolean handle(RemoveAllMobEnchantMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    @Override
+    public void handle(RemoveAllMobEnchantMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
@@ -45,7 +52,5 @@ public class RemoveAllMobEnchantMessage implements CustomPacketPayload {
                     }
                 }
             });
-
-        return true;
     }
 }

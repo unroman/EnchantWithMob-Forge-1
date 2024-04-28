@@ -8,10 +8,10 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
+@EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class DeflectMobEnchant extends MobEnchant {
     public DeflectMobEnchant(Properties properties) {
         super(properties);

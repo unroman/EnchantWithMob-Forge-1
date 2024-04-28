@@ -2,6 +2,7 @@ package baguchan.enchantwithmob.mobenchant;
 
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Bee;
@@ -25,7 +26,9 @@ public class PoisonMobEnchant extends MobEnchant {
         super.tick(entity, level);
 
         if (entity.level().isClientSide() && !EnchantConfig.CLIENT.disablePoisonParticle.get()) {
-            entity.level().addParticle(ParticleTypes.ENTITY_EFFECT, entity.getRandomX(0.5D), entity.getRandomY(), entity.getRandomZ(0.5D), 0.4F, 0.8F, 0.4F);
+            entity.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.4F, 0.8F, 0.4F), entity.getRandomX(0.5D), entity.getRandomY(), entity.getRandomZ(0.5D), 0.0,
+                    0.0,
+                    0.0);
         }
     }
 

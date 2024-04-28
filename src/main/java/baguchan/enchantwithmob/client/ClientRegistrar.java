@@ -13,10 +13,8 @@ import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
 import baguchan.enchantwithmob.compat.GeckoLibCompat;
 import baguchan.enchantwithmob.compat.GeckoLibCompatClient;
 import baguchan.enchantwithmob.registry.ModEntities;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -28,15 +26,12 @@ import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
-
-import java.io.IOException;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientRegistrar {
     private static final RenderType BLAZE_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_blaze_eyes.png"));
     private static final RenderType CREEPER_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_creeper_eyes.png"));
@@ -119,17 +114,7 @@ public class ClientRegistrar {
     }
 
     @SubscribeEvent
-    public static void registerOverlay(RegisterGuiOverlaysEvent event) {
+	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		event.registerAboveAll(new ResourceLocation(EnchantWithMob.MODID, "mobenchant"), new MobEnchantOverlay());
     }
-
-
-	@SubscribeEvent
-	public static void registerShaders(final RegisterShadersEvent event) {
-		try {
-			event.registerShader(new ShaderInstance(event.getResourceProvider(), new ResourceLocation(EnchantWithMob.MODID, "rendertype_enchant_beam"), DefaultVertexFormat.NEW_ENTITY), ModShaders::setRenderTypeEnchantBeamShader);
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-	}
 }

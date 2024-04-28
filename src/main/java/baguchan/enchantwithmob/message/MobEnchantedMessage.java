@@ -8,14 +8,20 @@ import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 
-public class MobEnchantedMessage implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(EnchantWithMob.MODID, "mob_enchant");
+public class MobEnchantedMessage implements CustomPacketPayload, IPayloadHandler<MobEnchantedMessage> {
+
+    public static final StreamCodec<FriendlyByteBuf, MobEnchantedMessage> STREAM_CODEC = CustomPacketPayload.codec(
+            MobEnchantedMessage::write, MobEnchantedMessage::new
+    );
+    public static final CustomPacketPayload.Type<MobEnchantedMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("mob_enchant").toString());
+
 
     private int entityId;
     private MobEnchant enchantType;
@@ -46,17 +52,17 @@ public class MobEnchantedMessage implements CustomPacketPayload {
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public MobEnchantedMessage(FriendlyByteBuf buffer) {
         this(buffer.readInt(), new MobEnchantHandler(MobEnchants.getRegistry().get(buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY)), buffer.readInt()));
     }
 
-
-    public static boolean handle(MobEnchantedMessage message, PlayPayloadContext context) {
-        context.workHandler().execute(() -> {
+    @Override
+    public void handle(MobEnchantedMessage message, IPayloadContext context) {
+        context.enqueueWork(() -> {
             Entity entity = Minecraft.getInstance().player.level().getEntity(message.entityId);
                 if (entity != null && entity instanceof LivingEntity livingEntity) {
                     if (livingEntity instanceof IEnchantCap cap) {
@@ -66,6 +72,5 @@ public class MobEnchantedMessage implements CustomPacketPayload {
                     }
                 }
         });
-        return true;
     }
 }

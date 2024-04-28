@@ -9,8 +9,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
-	private static final Codec<MobEnchant> ENCHANTMENT_SET_CODEC = ExtraCodecs.lazyInitializedCodec(() -> MobEnchants.getRegistry().byNameCodec());
-	public static final Codec<MobEnchantRandomlyFunction> CODEC = RecordCodecBuilder.create((p_297085_) -> {
+	private static final Codec<MobEnchant> ENCHANTMENT_SET_CODEC = Codec.lazyInitialized(() -> MobEnchants.getRegistry().byNameCodec());
+	public static final MapCodec<MobEnchantRandomlyFunction> CODEC = RecordCodecBuilder.mapCodec((p_297085_) -> {
 		return commonFields(p_297085_).and(Codec.list(ENCHANTMENT_SET_CODEC).fieldOf("mob_enchant").forGetter((p_297084_) -> {
 			return p_297084_.enchantments;
 		})).apply(p_297085_, MobEnchantRandomlyFunction::new);
@@ -70,9 +70,9 @@ public class MobEnchantRandomlyFunction extends LootItemConditionalFunction {
 		int i = Mth.nextInt(p_230982_, p_230981_.getMinLevel(), p_230981_.getMaxLevel());
 		if (p_230980_.is(Items.BOOK)) {
 			p_230980_ = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-			MobEnchantUtils.addMobEnchantToItemStack(p_230980_, p_230981_, i);
+			MobEnchantUtils.enchantForItem(p_230981_, p_230980_, i);
 		} else {
-			MobEnchantUtils.addMobEnchantToItemStack(p_230980_, p_230981_, i);
+			MobEnchantUtils.enchantForItem(p_230981_, p_230980_, i);
 		}
 
 		return p_230980_;

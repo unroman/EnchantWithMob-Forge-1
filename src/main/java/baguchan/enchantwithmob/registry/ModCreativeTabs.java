@@ -4,10 +4,10 @@ import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.item.MobEnchantBookItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = EnchantWithMob.MODID)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = EnchantWithMob.MODID)
 public class ModCreativeTabs {
     @SubscribeEvent
     public static void registerCreativeTab(BuildCreativeModeTabContentsEvent event) {

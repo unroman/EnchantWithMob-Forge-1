@@ -11,15 +11,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.village.WandererTradesEvent;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = EnchantWithMob.MODID)
+@EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class TradeEvent {
     @SubscribeEvent
     public static void wanderTradeEvent(WandererTradesEvent event) {
@@ -41,7 +42,7 @@ public class TradeEvent {
 			MobEnchant enchantment = list.get(rand.nextInt(list.size()));
 			int i = Mth.nextInt(rand, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-			MobEnchantUtils.addMobEnchantToItemStack(itemstack, enchantment, i);
+            MobEnchantUtils.enchantForItem(enchantment, itemstack, i);
 			int j = 2 + rand.nextInt(5 + i * 10) + 3 * i;
 
 			if (enchantment.isTresureEnchant()) {
@@ -52,7 +53,7 @@ public class TradeEvent {
 				j = 64;
 			}
 
-			return new MerchantOffer(new ItemStack(Items.EMERALD, j), ItemStack.EMPTY, itemstack, 12, this.xpValue, 0.2F);
+            return new MerchantOffer(new ItemCost(Items.EMERALD, j), itemstack, 12, this.xpValue, 0.2F);
 		}
     }
 }

@@ -3,21 +3,22 @@ package baguchan.enchantwithmob;
 import baguchan.enchantwithmob.command.MobEnchantingCommand;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.registry.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.raid.Raid;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(EnchantWithMob.MODID)
 public class EnchantWithMob {
 
@@ -28,22 +29,24 @@ public class EnchantWithMob {
     public static final String NETWORK_PROTOCOL = "2";
 
 
-	public EnchantWithMob(IEventBus modEventBus) {
+    public EnchantWithMob(ModContainer modContainer, IEventBus modEventBus) {
         // Register the setup method for modloading
 		modEventBus.addListener(this::preSetup);
 		modEventBus.addListener(this::setup);
 		modEventBus.addListener(this::setupPackets);
 		MobEnchants.MOB_ENCHANT.register(modEventBus);
 		ModEntities.ENTITIES_REGISTRY.register(modEventBus);
+        ModDataCompnents.DATA_COMPONENT_TYPES.register(modEventBus);
 		ModItems.ITEM_REGISTRY.register(modEventBus);
+        ModArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
 		ModLootItemFunctions.LOOT_REGISTRY.register(modEventBus);
 		ModCapability.ATTACHMENT_TYPES.register(modEventBus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
 
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnchantConfig.COMMON_SPEC);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EnchantConfig.CLIENT_SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, EnchantConfig.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, EnchantConfig.CLIENT_SPEC);
 	}
 
 	private void preSetup(final FMLConstructModEvent event) {
@@ -53,15 +56,20 @@ public class EnchantWithMob {
 		Raid.RaiderType.create("enchanter", ModEntities.ENCHANTER.get(), new int[]{0, 0, 1, 0, 1, 1, 2, 1});
 	}
 
-	public void setupPackets(RegisterPayloadHandlerEvent event) {
-		IPayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
-		registrar.play(AncientMessage.ID, AncientMessage::new, payload -> payload.client(AncientMessage::handle));
-		registrar.play(MobEnchantedMessage.ID, MobEnchantedMessage::new, payload -> payload.client(MobEnchantedMessage::handle));
-		registrar.play(MobEnchantFromOwnerMessage.ID, MobEnchantFromOwnerMessage::new, payload -> payload.client(MobEnchantFromOwnerMessage::handle));
-		registrar.play(RemoveAllMobEnchantMessage.ID, RemoveAllMobEnchantMessage::new, payload -> payload.client(RemoveAllMobEnchantMessage::handle));
-		registrar.play(RemoveMobEnchantOwnerMessage.ID, RemoveMobEnchantOwnerMessage::new, payload -> payload.client(RemoveMobEnchantOwnerMessage::handle));
-		registrar.play(SoulParticleMessage.ID, SoulParticleMessage::new, payload -> payload.server(SoulParticleMessage::handle));
+    public void setupPackets(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(MODID).versioned("1.0.0").optional();
+        registrar.playBidirectional(AncientMessage.TYPE, AncientMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(MobEnchantedMessage.TYPE, MobEnchantedMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(MobEnchantFromOwnerMessage.TYPE, MobEnchantFromOwnerMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(RemoveAllMobEnchantMessage.TYPE, RemoveAllMobEnchantMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(RemoveMobEnchantOwnerMessage.TYPE, RemoveMobEnchantOwnerMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
+        registrar.playBidirectional(SoulParticleMessage.TYPE, SoulParticleMessage.STREAM_CODEC, (handler, payload) -> handler.handle(handler, payload));
 	}
+
+    public static ResourceLocation prefix(String path) {
+        return new ResourceLocation(EnchantWithMob.MODID, path);
+    }
+
 
 	private void registerCommands(RegisterCommandsEvent evt) {
 		MobEnchantingCommand.register(evt.getDispatcher());
