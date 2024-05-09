@@ -41,9 +41,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -131,15 +131,16 @@ public class CommonEventHandler {
      * handle the Normal Entity Mob Enchant
      */
     @SubscribeEvent
-    public static void onSpawnEntity(MobSpawnEvent.FinalizeSpawn event) {
+    public static void onSpawnEntity(FinalizeSpawnEvent event) {
         if (event.getEntity() instanceof IEnchantCap cap) {
             LevelAccessor world = event.getLevel();
             if (!world.isClientSide()) {
                 LivingEntity livingEntity = event.getEntity();
+                float difficultScale = world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() - 0.2F;
+                float difficultScaleOnPercent = world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty();
 
                 if (isSpawnAlwayEnchantableAncientEntity(livingEntity)) {
                     int i = 0;
-                    float difficultScale = world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() - 0.2F;
                     switch (world.getDifficulty()) {
                         case EASY:
                             i = (int) Mth.clamp((5 + world.getRandom().nextInt(10)) * difficultScale, 1, 30);
@@ -164,7 +165,6 @@ public class CommonEventHandler {
                 // On add MobEnchant Alway Enchantable Mob
                 if (isSpawnAlwayEnchantableEntity(livingEntity)) {
                     int i = 0;
-                    float difficultScale = world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() - 0.2F;
                     switch (world.getDifficulty()) {
                         case EASY:
                             i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale, 1, 20);
@@ -191,10 +191,9 @@ public class CommonEventHandler {
 
                     if (!(livingEntity instanceof Animal) && !(livingEntity instanceof WaterAnimal) || EnchantConfig.COMMON.spawnEnchantedAnimal.get()) {
                         if (event.getSpawnType() != MobSpawnType.BREEDING && event.getSpawnType() != MobSpawnType.CONVERSION && event.getSpawnType() != MobSpawnType.STRUCTURE && event.getSpawnType() != MobSpawnType.MOB_SUMMONED) {
-                            if (world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() * EnchantConfig.COMMON.effectiveBasePercent.get()) {
+                            if (world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 if (!world.isClientSide()) {
                                     int i = 0;
-                                    float difficultScale = world.getCurrentDifficultyAt(livingEntity.blockPosition()).getEffectiveDifficulty() - 0.2F;
                                     switch (world.getDifficulty()) {
                                         case EASY:
                                             i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale, 1, 20);
@@ -219,7 +218,7 @@ public class CommonEventHandler {
                         }
 
                         if (event.getSpawnType() == MobSpawnType.TRIAL_SPAWNER) {
-                            if (world.getRandom().nextFloat() < 1.0) {
+                            if (world.getRandom().nextFloat() < 0.1F + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 MobEnchantUtils.addEnchantmentToEntity(livingEntity, cap, new MobEnchantmentData(MobEnchants.WIND.get(), 1));
                             }
                         }
