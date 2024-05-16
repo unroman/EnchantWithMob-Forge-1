@@ -3,6 +3,7 @@ package baguchan.enchantwithmob.entity;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
+import baguchan.enchantwithmob.registry.ModSounds;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import baguchan.enchantwithmob.utils.MobEnchantmentData;
 import net.minecraft.sounds.SoundEvent;
@@ -192,27 +193,27 @@ public class EnchanterEntity extends SpellcasterIllager {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ILLUSIONER_AMBIENT;
+        return ModSounds.ENCHANTER_IDLE.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ILLUSIONER_DEATH;
+        return ModSounds.ENCHANTER_DEATH.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ILLUSIONER_HURT;
+        return ModSounds.ENCHANTER_HURT.get();
     }
 
     @Override
     protected SoundEvent getCastingSoundEvent() {
-        return SoundEvents.ENCHANTMENT_TABLE_USE;
+        return ModSounds.ENCHANTER_SPELL.get();
     }
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.ILLUSIONER_AMBIENT;
+        return ModSounds.ENCHANTER_IDLE.get();
     }
 
     @Override
@@ -427,7 +428,7 @@ public class EnchanterEntity extends SpellcasterIllager {
                     if (this.tick == this.enchanter.attackAnimationActionPoint) {
                         this.enchanter.swing(InteractionHand.MAIN_HAND);
                         this.enchanter.doHurtTarget(livingentity);
-                        this.enchanter.playSound(SoundEvents.ILLUSIONER_AMBIENT);
+                        this.enchanter.playSound(ModSounds.ENCHANTER_ATTACK.get());
                     }
                     this.enchanter.getNavigation().stop();
                 }
