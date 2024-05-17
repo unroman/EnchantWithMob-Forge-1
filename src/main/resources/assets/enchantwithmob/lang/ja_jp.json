@@ -34,7 +34,7 @@
   "enchantwithmob.cannot.enchant": "このmobはそのエンチャントを付与できない、または既に持っています",
   "enchantwithmob.cannot.enchant_yourself": "あなたはそのエンチャントを付与できない、または既に持っています",
   "enchantwithmob.cannot.no_enchantable_ally": "あなたはエンチャントできる仲間を持っていないため、エンチャントできません",
-  "subtitles.entity.enchanter.ambient": "エンチャンターがつぶやく",
+  "subtitles.entity.enchanter.idle": "エンチャンターがつぶやく",
   "subtitles.entity.enchanter.hurt": "エンチャンターがダメージを受ける",
   "subtitles.entity.enchanter.death": "エンチャンターが死ぬ",
   "subtitles.entity.enchanter.spell": "エンチャンターがスペルを唱える",

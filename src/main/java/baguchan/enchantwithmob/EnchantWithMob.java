@@ -41,6 +41,7 @@ public class EnchantWithMob {
         ModArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
 		ModLootItemFunctions.LOOT_REGISTRY.register(modEventBus);
 		ModCapability.ATTACHMENT_TYPES.register(modEventBus);
+		ModSounds.SOUND_EVENTS.register(modEventBus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 
