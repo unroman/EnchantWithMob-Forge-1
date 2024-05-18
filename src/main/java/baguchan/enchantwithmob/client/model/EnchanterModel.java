@@ -9,7 +9,6 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.monster.AbstractIllager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -17,20 +16,50 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel<T> implements IArmor {
 	private final ModelPart realRoot;
 	private final ModelPart everything;
-	private final ModelPart head;
+	private final ModelPart left_leg;
+	private final ModelPart right_leg;
 	private final ModelPart body;
-	private final ModelPart leftLeg;
-	private final ModelPart rightLeg;
-	private final ModelPart cape;
+	private final ModelPart Cape;
+	private final ModelPart head;
+	private final ModelPart hat;
+	private final ModelPart leftEye;
+	private final ModelPart rightEye;
+	private final ModelPart righteyebrows;
+	private final ModelPart lefteyebrows;
+	private final ModelPart left_arm;
+	private final ModelPart leftHand;
+	private final ModelPart right_arm;
+	private final ModelPart rightHand;
+	private final ModelPart arms;
+	private final ModelPart book;
+	private final ModelPart leftBookCover;
+	private final ModelPart leftPage;
+	private final ModelPart rightBookCover;
+	private final ModelPart rightPage;
 
-	public EnchanterModel(ModelPart everything) {
-		this.realRoot = everything;
-		this.everything = everything.getChild("everything");
+	public EnchanterModel(ModelPart root) {
+		this.realRoot = root;
+		this.everything = root.getChild("everything");
+		this.left_leg = this.everything.getChild("left_leg");
+		this.right_leg = this.everything.getChild("right_leg");
 		this.body = this.everything.getChild("body");
-		this.cape = this.body.getChild("Cape");
+		this.Cape = this.body.getChild("Cape");
 		this.head = this.body.getChild("head");
-		this.leftLeg = this.everything.getChild("left_leg");
-		this.rightLeg = this.everything.getChild("right_leg");
+		this.hat = this.head.getChild("hat");
+		this.leftEye = this.head.getChild("leftEye");
+		this.rightEye = this.head.getChild("rightEye");
+		this.righteyebrows = this.head.getChild("righteyebrows");
+		this.lefteyebrows = this.head.getChild("lefteyebrows");
+		this.left_arm = this.body.getChild("left_arm");
+		this.leftHand = this.left_arm.getChild("leftHand");
+		this.right_arm = this.body.getChild("right_arm");
+		this.rightHand = this.right_arm.getChild("rightHand");
+		this.arms = this.body.getChild("arms");
+		this.book = this.everything.getChild("book");
+		this.leftBookCover = this.book.getChild("leftBookCover");
+		this.leftPage = this.leftBookCover.getChild("leftPage");
+		this.rightBookCover = this.book.getChild("rightBookCover");
+		this.rightPage = this.rightBookCover.getChild("rightPage");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -49,10 +78,9 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 		PartDefinition Cape = body.addOrReplaceChild("Cape", CubeListBuilder.create().texOffs(0, 64).addBox(-6.0F, 0.0F, 0.0F, 12.0F, 23.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -12.0F, 3.0F, 0.1309F, 0.0F, 0.0F));
 
 		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(24, 0).addBox(-1.0F, -3.0F, -6.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
-				.texOffs(1, 91).addBox(-5.0F, -14.0F, -5.0F, 10.0F, 8.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, 0.0F));
+				.texOffs(24, 0).addBox(-1.0F, -3.0F, -6.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -12.0F, 0.0F));
 
-		PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+		PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(1, 91).addBox(-5.0F, -8.0F, -5.0F, 10.0F, 8.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -6.0F, 0.0F));
 
 		PartDefinition leftEye = head.addOrReplaceChild("leftEye", CubeListBuilder.create().texOffs(6, 5).addBox(0.0F, -1.4604F, 0.74F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.0F, -2.5F, -4.75F));
 
@@ -99,26 +127,24 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
 		this.head.xRot = headPitch * ((float) Math.PI / 180F);
 
-		this.cape.xRot = 0.1F + limbSwingAmount * 0.6F;
+		this.Cape.xRot = 0.1F + limbSwingAmount * 0.6F;
 
-		AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = entity.getArmPose();
 		if (this.riding) {
-			this.applyStatic(EnchanterAnimation.ENCHANTER_SIT);
+			this.applyStatic(EnchanterAnimation.SIT);
 		}
 
 		if (entity.castingAnimationState.isStarted()) {
-			this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANTER_ENCHANCE, ageInTicks);
+			this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANCE, ageInTicks);
+		} else if (entity.attackAnimationState.isStarted()) {
+			this.animate(entity.attackAnimationState, EnchanterAnimation.ATTACK, ageInTicks);
+		} else if (!entity.castingAnimationState.isStarted() && !entity.attackAnimationState.isStarted()) {
+			if (!entity.idleAnimationState.isStarted()) {
+				this.animateWalk(EnchanterAnimation.WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
+				this.applyStatic(EnchanterAnimation.WALK_STOP);
+			} else {
+				this.animate(entity.idleAnimationState, EnchanterAnimation.IDLE, ageInTicks);
+			}
 		}
-
-		if (entity.attackAnimationState.isStarted()) {
-			this.animate(entity.attackAnimationState, EnchanterAnimation.ENCHANTER_ATTACK, ageInTicks);
-		}
-
-		if (!entity.castingAnimationState.isStarted() && !entity.attackAnimationState.isStarted()) {
-			this.animate(entity.idleAnimationState, EnchanterAnimation.ENCHANTER_IDLE, ageInTicks);
-			this.applyStatic(EnchanterAnimation.ENCHANTER_NO_ARM);
-		}
-		this.animateWalk(EnchanterAnimation.ENCHANTER_WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
 	}
 
 	@Override
@@ -131,12 +157,16 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 		this.everything.translateAndRotate(poseStack);
 		this.body.translateAndRotate(poseStack);
 		modelPart.translateAndRotate(poseStack);
+		poseStack.translate(0, -0.2F, 0);
+		poseStack.scale(1.05F, 1.05F, 1.05F);
 	}
 
 	@Override
 	public void translateToChest(ModelPart modelPart, PoseStack poseStack) {
 		this.everything.translateAndRotate(poseStack);
 		modelPart.translateAndRotate(poseStack);
+		poseStack.translate(0, -(12F / 16F), 0);
+		poseStack.scale(1.05F, 1.05F, 1.05F);
 	}
 
 	@Override
@@ -147,17 +177,27 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 
 	@Override
 	public void translateToChestPat(ModelPart modelPart, PoseStack poseStack) {
-
+		this.everything.translateAndRotate(poseStack);
+		this.body.translateAndRotate(poseStack);
+		if (this.rightHand == modelPart) {
+			this.right_arm.translateAndRotate(poseStack);
+		}
+		if (this.leftHand == modelPart) {
+			this.left_arm.translateAndRotate(poseStack);
+		}
+		modelPart.translateAndRotate(poseStack);
+		poseStack.translate(0, -(12F / 16F), 0);
+		poseStack.scale(1.05F, 1.05F, 1.05F);
 	}
 
 	@Override
 	public Iterable<ModelPart> rightLegPartArmors() {
-		return ImmutableList.of(this.rightLeg);
+		return ImmutableList.of(this.right_leg);
 	}
 
 	@Override
 	public Iterable<ModelPart> leftLegPartArmors() {
-		return ImmutableList.of(this.leftLeg);
+		return ImmutableList.of(this.left_leg);
 	}
 
 	@Override
@@ -168,5 +208,15 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 	@Override
 	public Iterable<ModelPart> headPartArmors() {
 		return ImmutableList.of(this.head);
+	}
+
+	@Override
+	public Iterable<ModelPart> rightHandArmors() {
+		return ImmutableList.of(this.rightHand);
+	}
+
+	@Override
+	public Iterable<ModelPart> leftHandArmors() {
+		return ImmutableList.of(this.leftHand);
 	}
 }

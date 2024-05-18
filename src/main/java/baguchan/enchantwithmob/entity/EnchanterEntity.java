@@ -46,7 +46,7 @@ public class EnchanterEntity extends SpellcasterIllager {
     public final AnimationState castingAnimationState = new AnimationState();
 
     public int attackAnimationTick;
-    public final int attackAnimationLength = 19;
+    public final int attackAnimationLength = 20;
     public final int attackAnimationActionPoint = 10;
 
     public int castingAnimationTick;
