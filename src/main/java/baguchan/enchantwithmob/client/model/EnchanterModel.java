@@ -2,7 +2,7 @@ package baguchan.enchantwithmob.client.model;
 
 import bagu_chan.bagus_lib.client.layer.IArmor;
 import baguchan.enchantwithmob.client.animation.EnchanterAnimation;
-import baguchan.enchantwithmob.entity.EnchanterEntity;
+import baguchan.enchantwithmob.entity.Enchanter;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HierarchicalModel;
@@ -13,7 +13,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel<T> implements IArmor {
+public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> implements IArmor {
 	private final ModelPart realRoot;
 	private final ModelPart everything;
 	private final ModelPart left_leg;

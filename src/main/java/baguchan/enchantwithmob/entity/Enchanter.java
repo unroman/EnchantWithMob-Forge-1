@@ -38,7 +38,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class EnchanterEntity extends SpellcasterIllager {
+public class Enchanter extends SpellcasterIllager {
     private LivingEntity enchantTarget;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -52,7 +52,7 @@ public class EnchanterEntity extends SpellcasterIllager {
     public int castingAnimationTick;
     public final int castingAnimationLength = 72;
 
-    public EnchanterEntity(EntityType<? extends EnchanterEntity> type, Level p_i48551_2_) {
+    public Enchanter(EntityType<? extends Enchanter> type, Level p_i48551_2_) {
         super(type, p_i48551_2_);
         this.xpReward = 12;
     }
@@ -61,11 +61,11 @@ public class EnchanterEntity extends SpellcasterIllager {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new EnchanterEntity.CastingSpellGoal());
+        this.goalSelector.addGoal(1, new Enchanter.CastingSpellGoal());
         this.goalSelector.addGoal(1, new AttackGoal(this));
         this.goalSelector.addGoal(3, new AvoidTargetEntityGoal<>(this, Mob.class, 6.5F, 0.8D, 1.05D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class, 8.0F, 0.8D, 1.15D));
-        this.goalSelector.addGoal(4, new EnchanterEntity.SpellGoal());
+        this.goalSelector.addGoal(4, new Enchanter.SpellGoal());
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
@@ -230,10 +230,10 @@ public class EnchanterEntity extends SpellcasterIllager {
 
         @Override
         public void tick() {
-            if (EnchanterEntity.this.isCastingSpell() && EnchanterEntity.this.getEnchantTarget() != null) {
-                EnchanterEntity.this.getLookControl().setLookAt(EnchanterEntity.this.getEnchantTarget(), (float) EnchanterEntity.this.getMaxHeadYRot(), (float) EnchanterEntity.this.getMaxHeadXRot());
-            } else if (EnchanterEntity.this.isCastingSpell() && EnchanterEntity.this.getTarget() != null) {
-                EnchanterEntity.this.getLookControl().setLookAt(EnchanterEntity.this.getTarget(), (float) EnchanterEntity.this.getMaxHeadYRot(), (float) EnchanterEntity.this.getMaxHeadXRot());
+            if (Enchanter.this.isCastingSpell() && Enchanter.this.getEnchantTarget() != null) {
+                Enchanter.this.getLookControl().setLookAt(Enchanter.this.getEnchantTarget(), (float) Enchanter.this.getMaxHeadYRot(), (float) Enchanter.this.getMaxHeadXRot());
+            } else if (Enchanter.this.isCastingSpell() && Enchanter.this.getTarget() != null) {
+                Enchanter.this.getLookControl().setLookAt(Enchanter.this.getTarget(), (float) Enchanter.this.getMaxHeadYRot(), (float) Enchanter.this.getMaxHeadXRot());
             }
         }
     }
@@ -241,11 +241,11 @@ public class EnchanterEntity extends SpellcasterIllager {
 
     public class SpellGoal extends SpellcasterIllager.SpellcasterUseSpellGoal {
         private final Predicate<LivingEntity> fillter = (entity) -> {
-            return !(entity instanceof EnchanterEntity) && entity instanceof IEnchantCap enchantCap && !enchantCap.getEnchantCap().hasEnchant();
+            return !(entity instanceof Enchanter) && entity instanceof IEnchantCap enchantCap && !enchantCap.getEnchantCap().hasEnchant();
         };
 
         private final Predicate<LivingEntity> enchanted_fillter = (entity) -> {
-            return !(entity instanceof EnchanterEntity) && entity instanceof IEnchantCap enchantCap && enchantCap.getEnchantCap().hasEnchant();
+            return !(entity instanceof Enchanter) && entity instanceof IEnchantCap enchantCap && enchantCap.getEnchantCap().hasEnchant();
         };
 
         /**
@@ -253,25 +253,25 @@ public class EnchanterEntity extends SpellcasterIllager {
          * method as well.
          */
         public boolean canUse() {
-            if (EnchanterEntity.this.getTarget() == null) {
+            if (Enchanter.this.getTarget() == null) {
                 return false;
-            } else if (EnchanterEntity.this.isCastingSpell()) {
+            } else if (Enchanter.this.isCastingSpell()) {
                 return false;
-            } else if (EnchanterEntity.this.tickCount < this.nextAttackTickCount) {
+            } else if (Enchanter.this.tickCount < this.nextAttackTickCount) {
                 return false;
             } else {
-                List<LivingEntity> list = EnchanterEntity.this.level().getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.fillter);
+                List<LivingEntity> list = Enchanter.this.level().getEntitiesOfClass(LivingEntity.class, Enchanter.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.fillter);
                 if (list.isEmpty()) {
                     return false;
                 } else {
-                    List<LivingEntity> enchanted_list = EnchanterEntity.this.level().getEntitiesOfClass(LivingEntity.class, EnchanterEntity.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.enchanted_fillter);
+                    List<LivingEntity> enchanted_list = Enchanter.this.level().getEntitiesOfClass(LivingEntity.class, Enchanter.this.getBoundingBox().expandTowards(16.0D, 8.0D, 16.0D), this.enchanted_fillter);
 
                     //set enchant limit
                     if (enchanted_list.size() < 5) {
-                        LivingEntity target = list.get(EnchanterEntity.this.random.nextInt(list.size()));
-                        if (target != EnchanterEntity.this.getTarget() && target != EnchanterEntity.this && target.isAlliedTo(EnchanterEntity.this) && EnchanterEntity.this.isAlliedTo(target) && (target.getTeam() == EnchanterEntity.this.getTeam() || target.getType().is(EntityTypeTags.ILLAGER_FRIENDS) && target.getTeam() == null)) {
-                            EnchanterEntity.this.setEnchantTarget(target);
-                            EnchanterEntity.this.level().broadcastEntityEvent(EnchanterEntity.this, (byte) 61);
+                        LivingEntity target = list.get(Enchanter.this.random.nextInt(list.size()));
+                        if (target != Enchanter.this.getTarget() && target != Enchanter.this && target.isAlliedTo(Enchanter.this) && Enchanter.this.isAlliedTo(target) && (target.getTeam() == Enchanter.this.getTeam() || target.getType().is(EntityTypeTags.ILLAGER_FRIENDS) && target.getTeam() == null)) {
+                            Enchanter.this.setEnchantTarget(target);
+                            Enchanter.this.level().broadcastEntityEvent(Enchanter.this, (byte) 61);
                             return true;
                         } else {
                             return false;
@@ -287,7 +287,7 @@ public class EnchanterEntity extends SpellcasterIllager {
          * Returns whether an in-progress EntityAIBase should continue executing
          */
         public boolean canContinueToUse() {
-            return EnchanterEntity.this.getEnchantTarget() != null && EnchanterEntity.this.getEnchantTarget() != EnchanterEntity.this.getTarget() && this.attackWarmupDelay > 0;
+            return Enchanter.this.getEnchantTarget() != null && Enchanter.this.getEnchantTarget() != Enchanter.this.getTarget() && this.attackWarmupDelay > 0;
         }
 
         /**
@@ -295,14 +295,14 @@ public class EnchanterEntity extends SpellcasterIllager {
          */
         public void stop() {
             super.stop();
-            EnchanterEntity.this.setEnchantTarget(null);
+            Enchanter.this.setEnchantTarget(null);
         }
 
         protected void performSpellCasting() {
-            LivingEntity entity = EnchanterEntity.this.getEnchantTarget();
+            LivingEntity entity = Enchanter.this.getEnchantTarget();
             if (entity != null && entity.isAlive()) {
                 if (entity instanceof IEnchantCap cap) {
-                    MobEnchantUtils.addUnstableRandomEnchantmentToEntity(entity, EnchanterEntity.this, cap, entity.getRandom(), 12, false, false);
+                    MobEnchantUtils.addUnstableRandomEnchantmentToEntity(entity, Enchanter.this, cap, entity.getRandom(), 12, false, false);
                 }
             }
         }
@@ -329,9 +329,9 @@ public class EnchanterEntity extends SpellcasterIllager {
     }
 
     class AvoidTargetEntityGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
-        private final EnchanterEntity enchanter;
+        private final Enchanter enchanter;
 
-        public AvoidTargetEntityGoal(EnchanterEntity enchanterIn, Class<T> entityClassToAvoidIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
+        public AvoidTargetEntityGoal(Enchanter enchanterIn, Class<T> entityClassToAvoidIn, float avoidDistanceIn, double farSpeedIn, double nearSpeedIn) {
             super(enchanterIn, entityClassToAvoidIn, avoidDistanceIn, farSpeedIn, nearSpeedIn);
             this.enchanter = enchanterIn;
         }
@@ -352,7 +352,7 @@ public class EnchanterEntity extends SpellcasterIllager {
          * Execute a one shot task or start executing a continuous task
          */
         public void start() {
-            EnchanterEntity.this.setTarget((LivingEntity) null);
+            Enchanter.this.setTarget((LivingEntity) null);
             super.start();
         }
 
@@ -360,16 +360,16 @@ public class EnchanterEntity extends SpellcasterIllager {
          * Keep ticking a continuous task that has already been started
          */
         public void tick() {
-            EnchanterEntity.this.setTarget((LivingEntity) null);
+            Enchanter.this.setTarget((LivingEntity) null);
             super.tick();
         }
     }
 
     static class AttackGoal extends Goal {
-        private final EnchanterEntity enchanter;
+        private final Enchanter enchanter;
         private int tick;
 
-        AttackGoal(EnchanterEntity enchanter) {
+        AttackGoal(Enchanter enchanter) {
             this.enchanter = enchanter;
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
