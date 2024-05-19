@@ -108,19 +108,19 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 				.texOffs(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(0.0F))
 				.texOffs(44, 22).addBox(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.0F, -0.95F, -0.7854F, 0.0F, 0.0F));
 
-		PartDefinition book = everything.addOrReplaceChild("book", CubeListBuilder.create().texOffs(44, 75).addBox(-2.0F, -5.0F, -1.0F, 3.0F, 11.0F, 1.0F, new CubeDeformation(0.01F)), PartPose.offset(0.5F, -18.5F, -9.0F));
+		PartDefinition book = everything.addOrReplaceChild("book", CubeListBuilder.create().texOffs(43, 72).addBox(-2.0F, -3.0F, -1.0F, 3.0F, 9.0F, 1.0F, new CubeDeformation(0.01F)), PartPose.offset(0.5F, -18.5F, -9.0F));
 
-		PartDefinition leftBookCover = book.addOrReplaceChild("leftBookCover", CubeListBuilder.create().texOffs(26, 75).mirror().addBox(-8.0F, -5.0F, -1.0F, 8.0F, 11.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(44, 63).addBox(-6.9F, -4.5F, -0.5F, 7.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
+		PartDefinition leftBookCover = book.addOrReplaceChild("leftBookCover", CubeListBuilder.create().texOffs(26, 72).mirror().addBox(-8.0F, -3.0F, -1.0F, 8.0F, 9.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false)
+				.texOffs(44, 62).addBox(-6.9F, -2.5F, -0.5F, 7.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 0.0F, 0.0F, 0.0F, 1.5708F, 0.0F));
 
-		PartDefinition rightBookCover = book.addOrReplaceChild("rightBookCover", CubeListBuilder.create().texOffs(26, 63).addBox(0.0F, -5.0F, -1.0F, 8.0F, 11.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(44, 63).addBox(-0.1F, -4.5F, -0.5F, 7.0F, 10.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
+		PartDefinition rightBookCover = book.addOrReplaceChild("rightBookCover", CubeListBuilder.create().texOffs(26, 62).addBox(0.0F, -3.0F, -1.0F, 8.0F, 9.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(44, 62).addBox(-0.1F, -2.5F, -0.5F, 7.0F, 8.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
 		PartDefinition pages = book.addOrReplaceChild("pages", CubeListBuilder.create(), PartPose.offsetAndRotation(-0.5F, 0.0F, -0.1F, 0.0F, 1.5708F, 0.0F));
 
-		PartDefinition leftPage = pages.addOrReplaceChild("leftPage", CubeListBuilder.create().texOffs(45, 64).addBox(-7.0F, -5.0F, 0.01F, 7.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 0.0F));
+		PartDefinition leftPage = pages.addOrReplaceChild("leftPage", CubeListBuilder.create().texOffs(26, 82).addBox(-7.0F, -3.0F, 0.01F, 7.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 0.0F));
 
-		PartDefinition leftPage2 = pages.addOrReplaceChild("leftPage2", CubeListBuilder.create().texOffs(45, 64).addBox(-7.0F, -5.0F, 0.01F, 7.0F, 10.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 0.0F));
+		PartDefinition leftPage2 = pages.addOrReplaceChild("leftPage2", CubeListBuilder.create().texOffs(26, 82).addBox(-7.0F, -3.0F, 0.01F, 7.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 128);
 	}
