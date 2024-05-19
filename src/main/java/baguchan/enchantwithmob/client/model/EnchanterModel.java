@@ -33,9 +33,10 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 	private final ModelPart arms;
 	private final ModelPart book;
 	private final ModelPart leftBookCover;
-	private final ModelPart leftPage;
 	private final ModelPart rightBookCover;
-	private final ModelPart rightPage;
+	private final ModelPart pages;
+	private final ModelPart leftPage;
+	private final ModelPart leftPage2;
 
 	public EnchanterModel(ModelPart root) {
 		this.realRoot = root;
@@ -57,9 +58,10 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 		this.arms = this.body.getChild("arms");
 		this.book = this.everything.getChild("book");
 		this.leftBookCover = this.book.getChild("leftBookCover");
-		this.leftPage = this.leftBookCover.getChild("leftPage");
 		this.rightBookCover = this.book.getChild("rightBookCover");
-		this.rightPage = this.rightBookCover.getChild("rightPage");
+		this.pages = this.book.getChild("pages");
+		this.leftPage = this.pages.getChild("leftPage");
+		this.leftPage2 = this.pages.getChild("leftPage2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
