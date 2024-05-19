@@ -51,21 +51,17 @@ public class EnchanterAnimation {
 			.addAnimation("leftPage", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(1.76F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+					new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 135.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(4.0F, KeyframeAnimations.degreeVec(0.0F, 135.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.addAnimation("rightBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
-			.build();
-	public static final AnimationDefinition WALK_STOP = AnimationDefinition.Builder.withLength(0.0F)
-			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
-					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-			))
-			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
-					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			.addAnimation("pages", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -70.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
 			))
 			.build();
+
 	public static final AnimationDefinition WALK = AnimationDefinition.Builder.withLength(1.0F).looping()
 			.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.0F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
@@ -146,10 +142,10 @@ public class EnchanterAnimation {
 			.addAnimation("leftBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(0.2F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.36F, KeyframeAnimations.degreeVec(0.0F, -5.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.48F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.44F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.72F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.88F, KeyframeAnimations.degreeVec(0.0F, -5.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+					new Keyframe(0.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.build();
 
@@ -238,8 +234,8 @@ public class EnchanterAnimation {
 					new Keyframe(0.761F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.addAnimation("Cape", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.4F, KeyframeAnimations.degreeVec(5.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4F, KeyframeAnimations.degreeVec(10.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(0.52F, KeyframeAnimations.degreeVec(22.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.6F, KeyframeAnimations.degreeVec(37.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(0.84F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
@@ -427,50 +423,6 @@ public class EnchanterAnimation {
 					new Keyframe(2.96F, KeyframeAnimations.degreeVec(-2.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
 					new Keyframe(3.36F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
-			.addAnimation("book", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(30.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.24F, KeyframeAnimations.degreeVec(25.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(1.0F, KeyframeAnimations.degreeVec(27.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.0F, KeyframeAnimations.degreeVec(25.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.92F, KeyframeAnimations.degreeVec(27.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.96F, KeyframeAnimations.degreeVec(90.0F, 80.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.16F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.36F, KeyframeAnimations.degreeVec(90.0F, 47.5F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.6F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM)
-			))
-			.addAnimation("book", new AnimationChannel(AnimationChannel.Targets.POSITION,
-					new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 2.0F, -1.75F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(0.24F, KeyframeAnimations.posVec(0.0F, 9.0F, -12.5F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 6.0F, -13.25F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.0F, KeyframeAnimations.posVec(0.0F, 9.0F, -12.5F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.92F, KeyframeAnimations.posVec(0.0F, 6.0F, -13.25F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.96F, KeyframeAnimations.posVec(-4.0F, 3.5F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.16F, KeyframeAnimations.posVec(-4.0F, 2.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.36F, KeyframeAnimations.posVec(-4.0F, -0.25F, -1.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(3.6F, KeyframeAnimations.posVec(-4.0F, 2.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
-			))
-			.addAnimation("leftBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, -65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.92F, KeyframeAnimations.degreeVec(0.0F, -65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-			))
-			.addAnimation("leftPage", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.24F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.52F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.76F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.0F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(1.04F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
-					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
-			))
-			.addAnimation("rightBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
-					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.92F, KeyframeAnimations.degreeVec(0.0F, 65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
-					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
-			))
 			.addAnimation("hat", new AnimationChannel(AnimationChannel.Targets.ROTATION,
 					new Keyframe(3.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(3.2F, KeyframeAnimations.degreeVec(-12.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
@@ -491,6 +443,103 @@ public class EnchanterAnimation {
 					new Keyframe(2.96F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(3.0F, KeyframeAnimations.posVec(0.0F, -1.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
 					new Keyframe(3.36F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("book", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.12F, KeyframeAnimations.degreeVec(25.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.degreeVec(27.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.48F, KeyframeAnimations.degreeVec(26.32F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.56F, KeyframeAnimations.degreeVec(61.09F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.88F, KeyframeAnimations.degreeVec(61.09F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.24F, KeyframeAnimations.degreeVec(26.32F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.92F, KeyframeAnimations.degreeVec(27.5F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(90.0F, 80.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.16F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.36F, KeyframeAnimations.degreeVec(90.0F, 47.5F, 90.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.6F, KeyframeAnimations.degreeVec(90.0F, 60.0F, 90.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("book", new AnimationChannel(AnimationChannel.Targets.POSITION,
+					new Keyframe(0.0F, KeyframeAnimations.posVec(-4.0F, 2.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(0.12F, KeyframeAnimations.posVec(0.0F, 9.0F, -12.5F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.0F, KeyframeAnimations.posVec(0.0F, 6.0F, -13.25F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.48F, KeyframeAnimations.posVec(0.0F, 7.41F, -12.9F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.56F, KeyframeAnimations.posVec(0.0F, -3.31F, -12.83F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(1.88F, KeyframeAnimations.posVec(0.0F, -3.31F, -12.83F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.24F, KeyframeAnimations.posVec(0.0F, 7.41F, -12.9F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.92F, KeyframeAnimations.posVec(0.0F, 6.0F, -13.25F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.96F, KeyframeAnimations.posVec(-4.0F, 3.5F, 3.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.16F, KeyframeAnimations.posVec(-4.0F, 2.0F, 0.5F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.36F, KeyframeAnimations.posVec(-4.0F, -0.25F, -1.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(3.6F, KeyframeAnimations.posVec(-4.0F, 2.0F, 1.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("leftBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.32F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, -65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.92F, KeyframeAnimations.degreeVec(0.0F, -65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("leftPage", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.36F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.64F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.68F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.92F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.96F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.16F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.32F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.4F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.44F, KeyframeAnimations.degreeVec(0.0F, -10.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.56F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.72F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.76F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.04F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.24F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("rightBookCover", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.32F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, 65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.92F, KeyframeAnimations.degreeVec(0.0F, 65.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("leftPage2", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.52F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.56F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.8F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.84F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.08F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.12F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.32F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.56F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.6F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.72F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.76F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.88F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(1.92F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.2F, KeyframeAnimations.degreeVec(0.0F, 122.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.4F, KeyframeAnimations.degreeVec(0.0F, -7.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.addAnimation("pages", new AnimationChannel(AnimationChannel.Targets.ROTATION,
+					new Keyframe(0.32F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(0.4F, KeyframeAnimations.degreeVec(0.0F, -62.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.92F, KeyframeAnimations.degreeVec(0.0F, -62.5F, 0.0F), AnimationChannel.Interpolations.LINEAR),
+					new Keyframe(2.96F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.LINEAR)
+			))
+			.build();
+	public static final AnimationDefinition WALK_STOP = AnimationDefinition.Builder.withLength(0.0F)
+			.addAnimation("left_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
+			))
+			.addAnimation("right_arm", new AnimationChannel(AnimationChannel.Targets.SCALE,
+					new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), AnimationChannel.Interpolations.CATMULLROM)
 			))
 			.build();
 
