@@ -1,7 +1,7 @@
 package baguchan.enchantwithmob.registry;
 
 import baguchan.enchantwithmob.EnchantWithMob;
-import baguchan.enchantwithmob.entity.EnchanterEntity;
+import baguchan.enchantwithmob.entity.Enchanter;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -19,7 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES_REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, EnchantWithMob.MODID);
 
-    public static final RegistryObject<EntityType<EnchanterEntity>> ENCHANTER = ENTITIES_REGISTRY.register("enchanter", () -> EntityType.Builder.of(EnchanterEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build(prefix("enchanter")));
+    public static final RegistryObject<EntityType<Enchanter>> ENCHANTER = ENTITIES_REGISTRY.register("enchanter", () -> EntityType.Builder.of(Enchanter::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build(prefix("enchanter")));
 
     private static String prefix(String path) {
         return EnchantWithMob.MODID + "." + path;
@@ -27,7 +27,7 @@ public class ModEntities {
 
     @SubscribeEvent
     public static void registerEntity(EntityAttributeCreationEvent event) {
-        event.put(ENCHANTER.get(), EnchanterEntity.createAttributeMap().build());
+        event.put(ENCHANTER.get(), Enchanter.createAttributeMap().build());
     }
 
     @SubscribeEvent

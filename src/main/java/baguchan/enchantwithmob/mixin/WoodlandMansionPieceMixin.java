@@ -1,6 +1,6 @@
 package baguchan.enchantwithmob.mixin;
 
-import baguchan.enchantwithmob.entity.EnchanterEntity;
+import baguchan.enchantwithmob.entity.Enchanter;
 import baguchan.enchantwithmob.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +21,7 @@ public class WoodlandMansionPieceMixin {
 	@Inject(method = "handleDataMarker", at = @At("HEAD"), cancellable = true)
 	protected void handleDataMarker(String p_230213_, BlockPos p_230214_, ServerLevelAccessor p_230215_, RandomSource p_230216_, BoundingBox p_230217_, CallbackInfo callbackInfo) {
 		if (p_230213_.equals("Enchanter")) {
-			EnchanterEntity entity = ModEntities.ENCHANTER.get().create(p_230215_.getLevel());
+			Enchanter entity = ModEntities.ENCHANTER.get().create(p_230215_.getLevel());
 			entity.setPersistenceRequired();
 			entity.moveTo(p_230214_, 0.0F, 0.0F);
 			entity.finalizeSpawn(p_230215_, p_230215_.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.STRUCTURE, (SpawnGroupData) null, (CompoundTag) null);

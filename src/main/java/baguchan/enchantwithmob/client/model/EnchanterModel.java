@@ -2,18 +2,18 @@ package baguchan.enchantwithmob.client.model;
 
 import bagu_chan.bagus_lib.client.layer.IArmor;
 import baguchan.enchantwithmob.client.animation.EnchanterAnimation;
-import baguchan.enchantwithmob.entity.EnchanterEntity;
+import baguchan.enchantwithmob.entity.Enchanter;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel<T> implements IArmor {
+public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> implements IArmor {
 	private final ModelPart realRoot;
 	private final ModelPart everything;
 	private final ModelPart left_leg;
@@ -33,9 +33,10 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 	private final ModelPart arms;
 	private final ModelPart book;
 	private final ModelPart leftBookCover;
-	private final ModelPart leftPage;
 	private final ModelPart rightBookCover;
-	private final ModelPart rightPage;
+	private final ModelPart pages;
+	private final ModelPart leftPage;
+	private final ModelPart leftPage2;
 
 	public EnchanterModel(ModelPart root) {
 		this.realRoot = root;
@@ -57,9 +58,10 @@ public class EnchanterModel<T extends EnchanterEntity> extends HierarchicalModel
 		this.arms = this.body.getChild("arms");
 		this.book = this.everything.getChild("book");
 		this.leftBookCover = this.book.getChild("leftBookCover");
-		this.leftPage = this.leftBookCover.getChild("leftPage");
 		this.rightBookCover = this.book.getChild("rightBookCover");
-		this.rightPage = this.rightBookCover.getChild("rightPage");
+		this.pages = this.book.getChild("pages");
+		this.leftPage = this.pages.getChild("leftPage");
+		this.leftPage2 = this.pages.getChild("leftPage2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
