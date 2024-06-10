@@ -1,6 +1,5 @@
 package baguchan.enchantwithmob.entity;
 
-import bagu_chan.bagus_lib.entity.AnimationScale;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
@@ -45,7 +44,6 @@ public class Enchanter extends SpellcasterIllager {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState castingAnimationState = new AnimationState();
-    public final AnimationScale idleAnimationStateScale = new AnimationScale();
 
     public int attackAnimationTick;
     public final int attackAnimationLength = 20;
@@ -127,8 +125,6 @@ public class Enchanter extends SpellcasterIllager {
 
         if (this.level().isClientSide) {
             this.setupAnimationStates();
-            this.idleAnimationStateScale.setFlag(this.idleAnimationState.isStarted());
-            this.idleAnimationStateScale.tick(this);
         }
     }
 

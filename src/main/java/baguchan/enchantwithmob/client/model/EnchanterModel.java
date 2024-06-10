@@ -6,13 +6,10 @@ import baguchan.enchantwithmob.client.animation.NormalAnimation;
 import baguchan.enchantwithmob.entity.Enchanter;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.animation.AnimationDefinition;
-import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.AnimationState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -134,18 +131,15 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 		} else if (entity.attackAnimationState.isStarted()) {
 			this.animate(entity.attackAnimationState, EnchanterAnimation.ATTACK, ageInTicks);
 		} else if (!entity.castingAnimationState.isStarted() && !entity.attackAnimationState.isStarted()) {
-			this.animateWalk(EnchanterAnimation.WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
-			this.animate(entity.idleAnimationState, EnchanterAnimation.IDLE, ageInTicks, 1.0F, entity.idleAnimationStateScale.getAnimationScale(ageInTicks - entity.tickCount));
-			this.applyStatic(NormalAnimation.WALK_STOP);
+			if (entity.idleAnimationState.isStarted()) {
+				this.animate(entity.idleAnimationState, EnchanterAnimation.IDLE, ageInTicks, 1.0F);
+			} else {
+				this.animateWalk(EnchanterAnimation.WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
+				this.applyStatic(NormalAnimation.WALK_STOP);
+			}
 		}
 	}
 
-	protected void animate(AnimationState p_233386_, AnimationDefinition p_233387_, float p_233388_, float p_233389_, float scale) {
-		p_233386_.updateTime(p_233388_, p_233389_);
-		p_233386_.ifStarted((p_233392_) -> {
-			KeyframeAnimations.animate(this, p_233387_, p_233392_.getAccumulatedTime(), scale, ANIMATION_VECTOR_CACHE);
-		});
-	}
 
 
 	@Override
