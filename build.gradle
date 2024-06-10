@@ -65,7 +65,7 @@ minecraft {
     // See https://docs.neoforged.net/docs/1.20.x/advanced/accesstransformers/ for more information.
 
 
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
