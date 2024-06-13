@@ -24,6 +24,7 @@ import net.minecraft.world.flag.FeatureFlags;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class MobEnchant implements FeatureElement {
     private final Map<Holder<Attribute>, AttributeTemplate> attributeModifierMap = Maps.newHashMap();
@@ -109,6 +110,10 @@ public class MobEnchant implements FeatureElement {
     public MobEnchant addAttributesModifier(Holder<Attribute> p_316656_, ResourceLocation p_350368_, double p_19475_, AttributeModifier.Operation p_19476_) {
         this.attributeModifierMap.put(p_316656_, new AttributeTemplate(p_350368_, p_19475_, p_19476_));
         return this;
+    }
+
+    public void createModifiers(int p_316803_, BiConsumer<Holder<Attribute>, AttributeModifier> p_316902_) {
+        this.attributeModifierMap.forEach((p_349971_, p_349972_) -> p_316902_.accept(p_349971_, p_349972_.create(p_316803_)));
     }
 
     public Map<Holder<Attribute>, AttributeTemplate> getAttributeModifierMap() {

@@ -3,30 +3,34 @@ package baguchan.enchantwithmob.item.mobenchant;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModTags;
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipProvider;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -66,8 +70,12 @@ public class ItemMobEnchantments implements TooltipProvider {
         return this.enchantments.getInt(getHolder(p_330552_));
     }
 
+    @Override
     public void addToTooltip(Item.TooltipContext p_341290_, Consumer<Component> p_331119_, TooltipFlag p_330400_) {
+        List<Pair<Holder<Attribute>, AttributeModifier>> list = Lists.newArrayList();
+
         if (this.showInTooltip) {
+
             HolderLookup.Provider holderlookup$provider = p_341290_.registries();
             HolderSet<MobEnchant> holderset = getTagOrEmpty(holderlookup$provider, MobEnchants.MOB_ENCHANT_REGISTRY, ModTags.MobEnchantTags.TOOLTIP_ORDER);
             Iterator var6 = holderset.iterator();
@@ -76,6 +84,8 @@ public class ItemMobEnchantments implements TooltipProvider {
                 Holder<MobEnchant> holder = (Holder) var6.next();
                 int i = this.enchantments.getInt(holder);
                 if (i > 0) {
+                    holder.value().createModifiers(i, (p_331556_, p_330860_) -> list.add(new Pair<>(p_331556_, p_330860_)));
+
                     p_331119_.accept(((MobEnchant) holder.value()).getFullname(i));
                 }
             }
@@ -90,7 +100,43 @@ public class ItemMobEnchantments implements TooltipProvider {
                 }
             }
         }
+        if (!list.isEmpty()) {
+            p_331119_.accept(CommonComponents.EMPTY);
+            p_331119_.accept(Component.translatable("potion.whenDrank").withStyle(ChatFormatting.DARK_PURPLE));
 
+            for (Pair<Holder<Attribute>, AttributeModifier> pair : list) {
+                AttributeModifier attributemodifier = pair.getSecond();
+                double d1 = attributemodifier.amount();
+                double d0;
+                if (attributemodifier.operation() != AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+                        && attributemodifier.operation() != AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL) {
+                    d0 = attributemodifier.amount();
+                } else {
+                    d0 = attributemodifier.amount() * 100.0;
+                }
+
+                if (d1 > 0.0) {
+                    p_331119_.accept(
+                            Component.translatable(
+                                            "attribute.modifier.plus." + attributemodifier.operation().id(),
+                                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(d0),
+                                            Component.translatable(pair.getFirst().value().getDescriptionId())
+                                    )
+                                    .withStyle(ChatFormatting.BLUE)
+                    );
+                } else if (d1 < 0.0) {
+                    d0 *= -1.0;
+                    p_331119_.accept(
+                            Component.translatable(
+                                            "attribute.modifier.take." + attributemodifier.operation().id(),
+                                            ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(d0),
+                                            Component.translatable(pair.getFirst().value().getDescriptionId())
+                                    )
+                                    .withStyle(ChatFormatting.RED)
+                    );
+                }
+            }
+        }
     }
 
     private static <T> HolderSet<T> getTagOrEmpty(@Nullable HolderLookup.Provider p_341186_, ResourceKey<Registry<T>> p_341113_, TagKey<T> p_341409_) {
