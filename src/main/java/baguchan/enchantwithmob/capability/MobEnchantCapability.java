@@ -20,9 +20,9 @@ import java.util.List;
 
 
 public class MobEnchantCapability {
-	private static final ResourceLocation HEALTH_MODIFIER_NAME = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "HealthBoost");
+	private static final ResourceLocation HEALTH_MODIFIER_NAME = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "health_boost");
 
-	private static final AttributeModifier HEALTH_MODIFIER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "HealthBoost"), 0.5D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+	private static final AttributeModifier HEALTH_MODIFIER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "health_boost"), 0.5D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
 
 	private List<MobEnchantHandler> mobEnchants = Lists.newArrayList();
