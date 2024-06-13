@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class EnchantedWindLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-    private static final ResourceLocation WIND_TEXTURE_LOCATION = new ResourceLocation("textures/entity/breeze/breeze_wind.png");
+    private static final ResourceLocation WIND_TEXTURE_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/breeze/breeze_wind.png");
 
     private static final float TOP_PART_ALPHA = 1.0F;
     private static final float MIDDLE_PART_ALPHA = 1.0F;
@@ -51,15 +51,15 @@ public class EnchantedWindLayer<T extends LivingEntity, M extends EntityModel<T>
                 this.model.windTop().skipDraw = true;
                 this.model.windMiddle().skipDraw = true;
                 this.model.windBottom().skipDraw = false;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
                 this.model.windTop().skipDraw = true;
                 this.model.windMiddle().skipDraw = false;
                 this.model.windBottom().skipDraw = true;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
                 this.model.windTop().skipDraw = false;
                 this.model.windMiddle().skipDraw = true;
                 this.model.windBottom().skipDraw = true;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
             }
         }
     }

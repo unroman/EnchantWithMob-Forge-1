@@ -77,6 +77,6 @@ public class ArrowRendererMixin<T extends AbstractArrow> {
 	}
 
 	public void vertex(Matrix4f p_254392_, PoseStack.Pose p_254011_, VertexConsumer p_253902_, int p_254058_, int p_254338_, int p_254196_, float p_254003_, float p_254165_, int p_253982_, int p_254037_, int p_254038_, int p_254271_) {
-		p_253902_.vertex(p_254392_, (float) p_254058_, (float) p_254338_, (float) p_254196_).color(255, 255, 255, 255).uv(p_254003_, p_254165_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_254271_).normal(p_254011_, (float) p_253982_, (float) p_254038_, (float) p_254037_).endVertex();
+		p_253902_.addVertex(p_254392_, (float) p_254058_, (float) p_254338_, (float) p_254196_).setColor(255, 255, 255, 255).setUv(p_254003_, p_254165_).setOverlay(OverlayTexture.NO_OVERLAY).setLight(p_254271_).setNormal(p_254011_, (float) p_253982_, (float) p_254038_, (float) p_254037_);
 	}
 }

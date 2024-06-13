@@ -62,7 +62,7 @@ public class EnchantedEyesLayer<T extends LivingEntity, M extends EntityModel<T>
 		if (p_116986_ instanceof IEnchantCap cap) {
 			if (cap.getEnchantCap().hasEnchant() && predicate.test(p_116986_)) {
 				VertexConsumer ivertexbuilder = p_116984_.getBuffer(this.renderType());
-				this.getParentModel().renderToBuffer(p_116983_, ivertexbuilder, p_116985_, OverlayTexture.NO_OVERLAY, 0.5F, 0.5F, 0.5F, 1.0F);
+				this.getParentModel().renderToBuffer(p_116983_, ivertexbuilder, p_116985_, OverlayTexture.NO_OVERLAY);
 			}
 		}
 		;

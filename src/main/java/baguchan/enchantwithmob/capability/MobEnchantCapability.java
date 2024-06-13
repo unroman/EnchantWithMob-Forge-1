@@ -1,12 +1,14 @@
 package baguchan.enchantwithmob.capability;
 
 import baguchan.enchantwithmob.EnchantConfig;
+import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,13 +17,12 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 
 public class MobEnchantCapability {
-	private static final UUID HEALTH_MODIFIER_UUID = UUID.fromString("6699a403-e2cc-31e6-195e-4757200e0935");
+	private static final ResourceLocation HEALTH_MODIFIER_NAME = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "HealthBoost");
 
-	private static final AttributeModifier HEALTH_MODIFIER = new AttributeModifier(HEALTH_MODIFIER_UUID, "Health boost", 0.5D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+	private static final AttributeModifier HEALTH_MODIFIER = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "HealthBoost"), 0.5D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
 
 	private List<MobEnchantHandler> mobEnchants = Lists.newArrayList();
@@ -147,8 +148,8 @@ public class MobEnchantCapability {
 
 		if (EnchantConfig.COMMON.dungeonsLikeHealth.get()) {
 			AttributeInstance modifiableattributeinstance = entity.getAttributes().getInstance(Attributes.MAX_HEALTH);
-			if (modifiableattributeinstance != null && !modifiableattributeinstance.hasModifier(HEALTH_MODIFIER)) {
-                modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_UUID);
+			if (modifiableattributeinstance != null && !modifiableattributeinstance.hasModifier(HEALTH_MODIFIER_NAME)) {
+				modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_NAME);
 				modifiableattributeinstance.addPermanentModifier(HEALTH_MODIFIER);
 				entity.setHealth(entity.getHealth() * 1.25F);
 			}
@@ -170,9 +171,9 @@ public class MobEnchantCapability {
 
 		AttributeInstance modifiableattributeinstance = entity.getAttributes().getInstance(Attributes.MAX_HEALTH);
 		if (modifiableattributeinstance != null) {
-			if (modifiableattributeinstance.hasModifier(HEALTH_MODIFIER)) {
+			if (modifiableattributeinstance.hasModifier(HEALTH_MODIFIER_NAME)) {
 				entity.setHealth(entity.getHealth() / 1.25F);
-                modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_UUID);
+				modifiableattributeinstance.removeModifier(HEALTH_MODIFIER_NAME);
 			}
 		}
 	}

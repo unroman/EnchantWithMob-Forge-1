@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 
 public class EnchanterClothesItem extends ArmorItem {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(EnchantWithMob.MODID, "textures/models/armor/enchanter_clothes.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/models/armor/enchanter_clothes.png");
     public EnchanterClothesItem(ArmorItem.Type type, Properties p_40388_) {
         super(ModArmorMaterials.ENCHANTER_CLOTHES, type, p_40388_);
     }

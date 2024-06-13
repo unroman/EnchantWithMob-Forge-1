@@ -10,7 +10,7 @@ public class ModTags {
         public static final TagKey<MobEnchant> TOOLTIP_ORDER = create("tooltip_order");
 
         private static TagKey<MobEnchant> create(String p_341202_) {
-            return TagKey.create(MobEnchants.MOB_ENCHANT_REGISTRY, new ResourceLocation(EnchantWithMob.MODID, p_341202_));
+            return TagKey.create(MobEnchants.MOB_ENCHANT_REGISTRY, ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, p_341202_));
         }
     }
 }

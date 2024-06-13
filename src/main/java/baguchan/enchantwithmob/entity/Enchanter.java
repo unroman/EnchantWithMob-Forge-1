@@ -6,6 +6,7 @@ import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.registry.ModSounds;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import baguchan.enchantwithmob.utils.MobEnchantmentData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EntityTypeTags;
@@ -145,13 +146,12 @@ public class Enchanter extends SpellcasterIllager {
         return enchantTarget;
     }
 
-
     @Override
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-        super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+    protected void dropCustomDeathLoot(ServerLevel p_348683_, DamageSource p_21385_, boolean p_21387_) {
+        super.dropCustomDeathLoot(p_348683_, p_21385_, p_21387_);
 
         //when raid is active, reward is more bigger
-        if (this.random.nextFloat() < 0.25F + 0.025F * looting) {
+        if (this.random.nextFloat() < 0.25F) {
             if (this.raid != null && this.hasActiveRaid() && this.getWave() > 0) {
                 ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
 
@@ -203,7 +203,7 @@ public class Enchanter extends SpellcasterIllager {
     }
 
     @Override
-    public void applyRaidBuffs(int p_213660_1_, boolean p_213660_2_) {
+    public void applyRaidBuffs(ServerLevel serverLevel, int p_213660_1_, boolean p_213660_2_) {
         Raid raid = this.getCurrentRaid();
         boolean flag = this.random.nextFloat() <= raid.getEnchantOdds() + 0.1F;
         if (flag) {

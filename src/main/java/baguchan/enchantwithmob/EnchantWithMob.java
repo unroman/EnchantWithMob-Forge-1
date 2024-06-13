@@ -68,7 +68,7 @@ public class EnchantWithMob {
 	}
 
     public static ResourceLocation prefix(String path) {
-        return new ResourceLocation(EnchantWithMob.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, path);
     }
 
 

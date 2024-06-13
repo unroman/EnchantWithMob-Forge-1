@@ -43,7 +43,7 @@ public class ModArmorMaterials {
             float p_323731_,
             Supplier<Ingredient> p_323970_
     ) {
-        List<ArmorMaterial.Layer> list = List.of(new ArmorMaterial.Layer(new ResourceLocation(p_323589_)));
+        List<ArmorMaterial.Layer> list = List.of(new ArmorMaterial.Layer(ResourceLocation.parse(p_323589_)));
         return register(p_323589_, p_323819_, p_323636_, p_323958_, p_323937_, p_323731_, p_323970_, list);
     }
 

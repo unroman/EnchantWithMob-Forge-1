@@ -33,19 +33,19 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientRegistrar {
-    private static final RenderType BLAZE_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_blaze_eyes.png"));
-    private static final RenderType CREEPER_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_creeper_eyes.png"));
-    private static final RenderType EVOKER_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_evoker_eyes.png"));
-    private static final RenderType PILLAGER_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_pillager_eyes.png"));
-    private static final RenderType SKELETON_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_skeleton_eyes.png"));
-    private static final RenderType SLIME_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_slime_eyes.png"));
-    private static final RenderType SPIDER_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_spider_eyes.png"));
-    private static final RenderType VEX_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_vex_eyes.png"));
-    private static final RenderType VINDICATOR_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_vindicator_eyes.png"));
-    private static final RenderType WITCH_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_witch_eyes.png"));
-    private static final RenderType WOLF_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_wolf_eyes.png"));
-    private static final RenderType ZOMBIE_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_zombie_eyes.png"));
-	private static final RenderType GUARDIAN_EYES = EnchantedEyesLayer.enchantedEyes(new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_guardian_eyes.png"));
+	private static final RenderType BLAZE_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_blaze_eyes.png"));
+	private static final RenderType CREEPER_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_creeper_eyes.png"));
+	private static final RenderType EVOKER_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_evoker_eyes.png"));
+	private static final RenderType PILLAGER_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_pillager_eyes.png"));
+	private static final RenderType SKELETON_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_skeleton_eyes.png"));
+	private static final RenderType SLIME_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_slime_eyes.png"));
+	private static final RenderType SPIDER_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_spider_eyes.png"));
+	private static final RenderType VEX_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_vex_eyes.png"));
+	private static final RenderType VINDICATOR_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_vindicator_eyes.png"));
+	private static final RenderType WITCH_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_witch_eyes.png"));
+	private static final RenderType WOLF_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_wolf_eyes.png"));
+	private static final RenderType ZOMBIE_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_zombie_eyes.png"));
+	private static final RenderType GUARDIAN_EYES = EnchantedEyesLayer.enchantedEyes(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchant_eye/enchanted_guardian_eyes.png"));
 
 	@SubscribeEvent
 	public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event) {

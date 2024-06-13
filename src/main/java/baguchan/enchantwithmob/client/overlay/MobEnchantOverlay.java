@@ -5,6 +5,7 @@ import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
@@ -12,7 +13,7 @@ import net.minecraft.network.chat.Component;
 
 public class MobEnchantOverlay implements LayeredDraw.Layer {
     @Override
-    public void render(GuiGraphics guiGraphics, float partialTick) {
+    public void render(GuiGraphics guiGraphics, DeltaTracker partialTick) {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.options.getCameraType().isMirrored()) {

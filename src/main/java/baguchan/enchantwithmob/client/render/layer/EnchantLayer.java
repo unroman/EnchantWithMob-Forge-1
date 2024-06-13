@@ -46,7 +46,7 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
     protected static final RenderStateShard.WriteMaskStateShard COLOR_WRITE = new RenderStateShard.WriteMaskStateShard(true, false);
 
 
-    public static final ResourceLocation ANCIENT_GLINT = new ResourceLocation(EnchantWithMob.MODID, "textures/entity/ancient_glint.png");
+    public static final ResourceLocation ANCIENT_GLINT = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/ancient_glint.png");
 
     public EnchantLayer(RenderLayerParent<T, M> p_i50947_1_) {
         super(p_i50947_1_);
@@ -56,15 +56,13 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
         float tick = (float) entitylivingbaseIn.tickCount + partialTicks;
         if (entitylivingbaseIn instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant() && !entitylivingbaseIn.isInvisible()) {
-                float intensity = cap.getEnchantCap().getMobEnchants().size() < 3 ? ((float) cap.getEnchantCap().getMobEnchants().size() / 3) : 3;
-
                 float f = (float) entitylivingbaseIn.tickCount + partialTicks;
                 EntityModel<T> entitymodel = this.getParentModel();
                 entitymodel.prepareMobModel(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
                 this.getParentModel().copyPropertiesTo(entitymodel);
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
                 entitymodel.setupAnim(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-                entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, intensity, intensity, intensity, 1.0F);
+                entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY);
             }
         }
         ;

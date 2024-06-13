@@ -10,6 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -23,7 +24,6 @@ import net.minecraft.world.flag.FeatureFlags;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.UUID;
 
 public class MobEnchant implements FeatureElement {
     private final Map<Holder<Attribute>, AttributeTemplate> attributeModifierMap = Maps.newHashMap();
@@ -106,8 +106,8 @@ public class MobEnchant implements FeatureElement {
 		return this != ench;
     }
 
-    public MobEnchant addAttributesModifier(Holder<Attribute> attributeIn, String uuid, double amount, AttributeModifier.Operation operation) {
-        this.attributeModifierMap.put(attributeIn, new AttributeTemplate(UUID.fromString(uuid), amount, operation));
+    public MobEnchant addAttributesModifier(Holder<Attribute> p_316656_, ResourceLocation p_350368_, double p_19475_, AttributeModifier.Operation p_19476_) {
+        this.attributeModifierMap.put(p_316656_, new AttributeTemplate(p_350368_, p_19475_, p_19476_));
         return this;
     }
 
@@ -131,7 +131,7 @@ public class MobEnchant implements FeatureElement {
 			if (modifiableattributeinstance != null) {
                 AttributeTemplate attributemodifier = entry.getValue();
                 modifiableattributeinstance.removeModifier(attributemodifier.id());
-                modifiableattributeinstance.addPermanentModifier(new AttributeModifier(attributemodifier.id(), MobEnchants.getRegistry().getKey(this).toString() + " " + amplifier, this.getAttributeModifierAmount(amplifier, attributemodifier), attributemodifier.operation));
+                modifiableattributeinstance.addPermanentModifier(((AttributeTemplate) entry.getValue()).create(amplifier));
 			}
 		}
     }
@@ -239,18 +239,18 @@ public class MobEnchant implements FeatureElement {
 
     }
 
-    static record AttributeTemplate(UUID id, double amount, AttributeModifier.Operation operation) {
-        AttributeTemplate(UUID id, double amount, AttributeModifier.Operation operation) {
+    static record AttributeTemplate(ResourceLocation id, double amount, AttributeModifier.Operation operation) {
+        AttributeTemplate(ResourceLocation id, double amount, AttributeModifier.Operation operation) {
             this.id = id;
             this.amount = amount;
             this.operation = operation;
         }
 
-        public AttributeModifier create(String p_316465_, int p_316614_) {
-            return new AttributeModifier(this.id, p_316465_ + " " + p_316614_, this.amount * (double) (p_316614_ + 1), this.operation);
+        public AttributeModifier create(int p_316614_) {
+            return new AttributeModifier(this.id, this.amount * (double) (p_316614_ + 1), this.operation);
         }
 
-        public UUID id() {
+        public ResourceLocation id() {
             return this.id;
         }
 

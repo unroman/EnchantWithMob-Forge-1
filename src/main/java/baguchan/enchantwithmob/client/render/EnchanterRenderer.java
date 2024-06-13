@@ -15,9 +15,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class EnchanterRenderer<T extends Enchanter> extends MobRenderer<T, EnchanterModel<T>> {
-    private static final ResourceLocation ILLAGER = new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchanter_clothed.png");
+    private static final ResourceLocation ILLAGER = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchanter_clothed.png");
 
-    private static final ResourceLocation GLOW = new ResourceLocation(EnchantWithMob.MODID, "textures/entity/enchanter_clothed_glow.png");
+    private static final ResourceLocation GLOW = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/entity/enchanter_clothed_glow.png");
     private static final RenderType GLOW_TYPE = RenderType.eyes(GLOW);
 
 

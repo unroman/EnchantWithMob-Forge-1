@@ -43,7 +43,7 @@ public class EvokerFangsRendererMixin {
 				p_114531_.scale(0.5F, 0.5F, 0.5F);
 				this.model.setupAnim(p_114528_, f, 0.0F, 0.0F, p_114528_.getYRot(), p_114528_.getXRot());
 				VertexConsumer vertexconsumer = p_114532_.getBuffer(EnchantLayer.enchantSwirl(ItemRenderer.ENCHANTED_GLINT_ENTITY));
-				this.model.renderToBuffer(p_114531_, vertexconsumer, p_114533_, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                this.model.renderToBuffer(p_114531_, vertexconsumer, p_114533_, OverlayTexture.NO_OVERLAY);
 				p_114531_.popPose();
 			}
 		}

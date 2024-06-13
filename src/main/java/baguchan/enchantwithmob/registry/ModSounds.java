@@ -20,7 +20,7 @@ public class ModSounds {
     public static final Supplier<SoundEvent> ENCHANTER_BEAM_LOOP = createEvent("entity.enchanter.beam_loop");
 
     private static Supplier<SoundEvent> createEvent(String sound) {
-        ResourceLocation name = new ResourceLocation(EnchantWithMob.MODID, sound);
+        ResourceLocation name = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, sound);
         return SOUND_EVENTS.register(sound, () -> SoundEvent.createVariableRangeEvent(name));
     }
 
