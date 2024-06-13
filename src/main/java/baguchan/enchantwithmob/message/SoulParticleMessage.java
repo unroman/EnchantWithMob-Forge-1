@@ -15,7 +15,7 @@ public class SoulParticleMessage implements CustomPacketPayload, IPayloadHandler
     public static final StreamCodec<FriendlyByteBuf, SoulParticleMessage> STREAM_CODEC = CustomPacketPayload.codec(
             SoulParticleMessage::write, SoulParticleMessage::new
     );
-    public static final CustomPacketPayload.Type<SoulParticleMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("soul_particle").toString());
+	public static final CustomPacketPayload.Type<SoulParticleMessage> TYPE = new Type<>(EnchantWithMob.prefix("soul_particle"));
 
 
 	private int entityId;

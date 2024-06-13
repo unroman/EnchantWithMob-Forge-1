@@ -16,7 +16,7 @@ public class MobEnchantFromOwnerMessage implements CustomPacketPayload, IPayload
     public static final StreamCodec<FriendlyByteBuf, MobEnchantFromOwnerMessage> STREAM_CODEC = CustomPacketPayload.codec(
             MobEnchantFromOwnerMessage::write, MobEnchantFromOwnerMessage::new
     );
-    public static final CustomPacketPayload.Type<MobEnchantFromOwnerMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("mob_enchant_from_owner").toString());
+    public static final CustomPacketPayload.Type<MobEnchantFromOwnerMessage> TYPE = new Type<>(EnchantWithMob.prefix("mob_enchant_from_owner"));
 
 
     private int entityId;

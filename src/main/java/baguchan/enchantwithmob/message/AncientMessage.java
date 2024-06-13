@@ -17,7 +17,7 @@ public class AncientMessage implements CustomPacketPayload, IPayloadHandler<Anci
     public static final StreamCodec<FriendlyByteBuf, AncientMessage> STREAM_CODEC = CustomPacketPayload.codec(
             AncientMessage::write, AncientMessage::new
     );
-    public static final CustomPacketPayload.Type<AncientMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("ancient").toString());
+    public static final CustomPacketPayload.Type<AncientMessage> TYPE = new Type<>(EnchantWithMob.prefix("ancient"));
 
     private int entityId;
     private boolean isAncient;

@@ -20,7 +20,7 @@ public class MobEnchantedMessage implements CustomPacketPayload, IPayloadHandler
     public static final StreamCodec<FriendlyByteBuf, MobEnchantedMessage> STREAM_CODEC = CustomPacketPayload.codec(
             MobEnchantedMessage::write, MobEnchantedMessage::new
     );
-    public static final CustomPacketPayload.Type<MobEnchantedMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("mob_enchant").toString());
+    public static final CustomPacketPayload.Type<MobEnchantedMessage> TYPE = new Type<>(EnchantWithMob.prefix("mob_enchant"));
 
 
     private int entityId;

@@ -16,7 +16,7 @@ public class RemoveMobEnchantOwnerMessage implements CustomPacketPayload, IPaylo
     public static final StreamCodec<FriendlyByteBuf, RemoveMobEnchantOwnerMessage> STREAM_CODEC = CustomPacketPayload.codec(
             RemoveMobEnchantOwnerMessage::write, RemoveMobEnchantOwnerMessage::new
     );
-    public static final CustomPacketPayload.Type<RemoveMobEnchantOwnerMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("remove_mob_enchant_owner").toString());
+    public static final CustomPacketPayload.Type<RemoveMobEnchantOwnerMessage> TYPE = new Type<>(EnchantWithMob.prefix("remove_mob_enchant_owner"));
     private int entityId;
 
     public RemoveMobEnchantOwnerMessage(Entity entity) {

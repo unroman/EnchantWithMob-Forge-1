@@ -16,7 +16,7 @@ public class RemoveAllMobEnchantMessage implements CustomPacketPayload, IPayload
     public static final StreamCodec<FriendlyByteBuf, RemoveAllMobEnchantMessage> STREAM_CODEC = CustomPacketPayload.codec(
             RemoveAllMobEnchantMessage::write, RemoveAllMobEnchantMessage::new
     );
-    public static final CustomPacketPayload.Type<RemoveAllMobEnchantMessage> TYPE = CustomPacketPayload.createType(EnchantWithMob.prefix("remove_all_mob_enchant").toString());
+    public static final CustomPacketPayload.Type<RemoveAllMobEnchantMessage> TYPE = new Type<>(EnchantWithMob.prefix("remove_all_mob_enchant"));
 
 
     private int entityId;
