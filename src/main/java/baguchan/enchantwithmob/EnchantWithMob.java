@@ -4,7 +4,6 @@ import baguchan.enchantwithmob.command.MobEnchantingCommand;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.registry.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.raid.Raid;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -54,7 +53,6 @@ public class EnchantWithMob {
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
-		Raid.RaiderType.create("enchanter", ModEntities.ENCHANTER.get(), new int[]{0, 0, 1, 0, 1, 1, 2, 1});
 	}
 
     public void setupPackets(RegisterPayloadHandlersEvent event) {

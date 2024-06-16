@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/entity/raid/Raid$RaiderType",
+      "name": "ENCHANTWITHMOB_ENCHANTER",
+      "constructor": "(Ljava/util/function/Supplier;[I)V",
+      "parameters": {
+        "class": "baguchan/enchantwithmob/registry/RaiderEnumParams",
+        "field": "ENCHANTER"
+      }
+    }
+  ]
+}
