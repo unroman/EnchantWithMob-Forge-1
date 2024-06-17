@@ -11,6 +11,7 @@ import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantCombatRules;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import baguchan.enchantwithmob.utils.MobEnchantmentData;
+import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -37,6 +38,8 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
@@ -191,22 +194,25 @@ public class CommonEventHandler {
 
                     if (!(livingEntity instanceof Animal) && !(livingEntity instanceof WaterAnimal) || EnchantConfig.COMMON.spawnEnchantedAnimal.get()) {
                         if (event.getSpawnType() != MobSpawnType.BREEDING && event.getSpawnType() != MobSpawnType.CONVERSION && event.getSpawnType() != MobSpawnType.STRUCTURE && event.getSpawnType() != MobSpawnType.MOB_SUMMONED) {
-                            if (world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
+                            boolean flag = event.getSpawner() != null && isOminousTrialSpawner(event.getSpawner());
+                            if (flag || world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 if (!world.isClientSide()) {
                                     int i = 0;
+                                    float scale = flag ? 0.5F : 1F;
+                                    difficultScale = flag ? 1.0F : difficultScale;
                                     switch (world.getDifficulty()) {
                                         case EASY:
-                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale, 1, 20);
+                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale * scale, 1, 20);
 
                                             MobEnchantUtils.addRandomEnchantmentToEntity(livingEntity, cap, world.getRandom(), i, true, true, false);
                                             break;
                                         case NORMAL:
-                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale, 1, 40);
+                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(5)) * difficultScale * scale, 1, 40);
 
                                             MobEnchantUtils.addRandomEnchantmentToEntity(livingEntity, cap, world.getRandom(), i, true, true, false);
                                             break;
                                         case HARD:
-                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(10)) * difficultScale, 1, 50);
+                                            i = (int) Mth.clamp((5 + world.getRandom().nextInt(10)) * difficultScale * scale, 1, 50);
 
                                             MobEnchantUtils.addRandomEnchantmentToEntity(livingEntity, cap, world.getRandom(), i, true, true, false);
                                             break;
@@ -227,6 +233,10 @@ public class CommonEventHandler {
                 }
             }
         }
+    }
+
+    private static boolean isOminousTrialSpawner(Either<BlockEntity, Entity> spawner) {
+        return spawner.left().isPresent() && spawner.left().get() instanceof TrialSpawnerBlockEntity trialSpawnerBlockEntity && trialSpawnerBlockEntity.getTrialSpawner().isOminous();
     }
 
     private static boolean isSpawnAlwayEnchantableEntity(Entity entity) {
