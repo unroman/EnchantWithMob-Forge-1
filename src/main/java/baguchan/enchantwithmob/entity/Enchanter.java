@@ -2,7 +2,6 @@ package baguchan.enchantwithmob.entity;
 
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.registry.MobEnchants;
-import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.registry.ModSounds;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import baguchan.enchantwithmob.utils.MobEnchantmentData;
@@ -29,7 +28,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -144,32 +142,6 @@ public class Enchanter extends SpellcasterIllager {
     @Nullable
     public LivingEntity getEnchantTarget() {
         return enchantTarget;
-    }
-
-    @Override
-    protected void dropCustomDeathLoot(ServerLevel p_348683_, DamageSource p_21385_, boolean p_21387_) {
-        super.dropCustomDeathLoot(p_348683_, p_21385_, p_21387_);
-
-        //when raid is active, reward is more bigger
-        if (this.random.nextFloat() < 0.25F) {
-            if (this.raid != null && this.hasActiveRaid() && this.getWave() > 0) {
-                ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
-
-                if (this.random.nextFloat() < 0.5F) {
-                    itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-                }
-
-                this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20 + this.getWave() * 4, true, false));
-            } else {
-                ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
-
-                if (this.random.nextFloat() < 0.5F) {
-                    itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-                }
-
-                this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20, true, false));
-            }
-        }
     }
 
     @Override
