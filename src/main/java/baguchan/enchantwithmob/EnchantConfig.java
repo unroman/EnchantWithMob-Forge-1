@@ -86,12 +86,12 @@ public class EnchantConfig {
                     .define("allowPoisonCloudProjectiles", Lists.newArrayList("minecraft:arrow", "minecraft:snowball", "earthmobsmod:melon_seeds", "earthmobsmod:zombie_flesh", "conjurer_illager:throwing_card", "conjurer_illager:bouncy_ball", "tofucraft:fukumame", "tofucraft:nether_fukumame", "tofucraft:soul_fukumame"));
             ALLOW_MULTISHOT_PROJECTILE = builder
                     .comment("Allow the multi shot for projectile. Use the full name(eg: minecraft:arrow.")
-                    .define("allowMultiShotProjectiles", Lists.newArrayList("minecraft:arrow", "minecraft:snowball", "earthmobsmod:melon_seeds", "earthmobsmod:zombie_flesh", "conjurer_illager:throwing_card", "conjurer_illager:bouncy_ball", "tofucraft:fukumame", "tofucraft:nether_fukumame", "tofucraft:soul_fukumame"));
+                    .define("allowMultiShotProjectiles", Lists.newArrayList("minecraft:arrow", "minecraft:snowball", "earthmobsmod:melon_seeds", "earthmobsmod:zombie_flesh", "conjurer_illager:throwing_card", "conjurer_illager:bouncy_ball", "tofucraft:fukumame", "tofucraft:nether_fukumame", "tofucraft:soul_fukumame", "minecraft:wind_charge", "minecraft:breeze_wind_charge", "minecraft:dragon_fireball", "minecraft:fireball", "minecraft:small_fireball"));
 
             WHITELIST_SHOOT_ENTITY = builder
                     .comment("Whitelist the projectile mob enchant for mob. Use the full name(eg: minecraft:zombie.")
                     .define("whitelistShootEntity", Lists.newArrayList("minecraft:skeleton", "minecraft:pillager", "minecraft:shulker", "minecraft:llama", "conjurer_illager:conjurer", "earthmobsmod:bone_spider", "earthmobsmod:lobber_zombie", "earthmobsmod:lobber_drowned"
-                            , "earthmobsmod:melon_golem", "minecraft:piglin", "minecraft:snow_golem", "minecraft:player"));
+                            , "earthmobsmod:melon_golem", "minecraft:piglin", "minecraft:snow_golem", "minecraft:player", "minecraft:breeze", "minecraft:blaze"));
             BLACKLIST_PLAYER_ENCHANT = builder
                     .comment("Blacklist the mob enchant for player. Use the full name(eg: enchantwithmob:thorn.")
                     .define("blacklistPlayerEnchant", Lists.newArrayList());
