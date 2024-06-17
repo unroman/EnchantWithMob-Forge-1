@@ -13,10 +13,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 
 import java.util.UUID;
 
@@ -26,6 +28,25 @@ public class MultiShotMobEnchant extends MobEnchant {
 
 	public MultiShotMobEnchant(Properties properties) {
 		super(properties);
+	}
+
+	@SubscribeEvent
+	public static void onEntityImpactWorld(ProjectileImpactEvent event) {
+		Projectile projectile = event.getProjectile();
+		if (!shooterIsLiving(projectile) || !EnchantConfig.COMMON.ALLOW_MULTISHOT_PROJECTILE.get().contains(BuiltInRegistries.ENTITY_TYPE.getKey(projectile.getType()).toString()))
+			return;
+		LivingEntity owner = (LivingEntity) projectile.getOwner();
+		MobEnchantUtils.executeIfPresent(owner, MobEnchants.MULTISHOT.get(), () -> {
+			if (!projectile.level().isClientSide) {
+				if (event.getRayTraceResult() instanceof EntityHitResult entityHitResult) {
+					if (entityHitResult.getEntity() instanceof Projectile projectile2) {
+						if (shooterIsLiving(projectile2) && projectile2.getOwner() == projectile.getOwner()) {
+							event.setCanceled(true);
+						}
+					}
+				}
+			}
+		});
 	}
 
 	@SubscribeEvent

@@ -4,6 +4,7 @@ import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -33,8 +34,7 @@ public class DeflectMobEnchant extends MobEnchant {
             MobEnchantUtils.executeIfPresent(entityHitResult.getEntity(), MobEnchants.DEFLECT.get(), () -> {
                 event.setCanceled(true);
                 Vec3 vec3 = projectile.getDeltaMovement();
-
-                projectile.setDeltaMovement(-vec3.x * 0.75F, -vec3.y * 0.75F, -vec3.z * 0.75F);
+                projectile.deflect(ProjectileDeflection.AIM_DEFLECT, entityHitResult.getEntity(), projectile.getOwner(), false);
             });
         }
     }
