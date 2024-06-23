@@ -10,19 +10,12 @@ import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedEyesLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedWindLayer;
 import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
-import baguchan.enchantwithmob.compat.GeckoLibCompat;
-import baguchan.enchantwithmob.compat.GeckoLibCompatClient;
 import baguchan.enchantwithmob.registry.ModEntities;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.AbstractSkeleton;
-import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -71,46 +64,58 @@ public class ClientRegistrar {
 				}
 			}
 		});
-
-		Minecraft.getInstance().getEntityRenderDispatcher().renderers.values().forEach(r -> {
-			if (r instanceof SlimeRenderer) {
-				((SlimeRenderer) r).addLayer(new SlimeEnchantLayer<>((SlimeRenderer) r, event.getEntityModels()));
+		event.getEntityTypes().forEach(entityType -> {
+			if (event.getRenderer(entityType) instanceof SlimeRenderer r) {
+				(r).addLayer(new SlimeEnchantLayer<>((SlimeRenderer) r, event.getEntityModels()));
 			}
 
-			if (r instanceof LivingEntityRenderer) {
+			if (event.getRenderer(entityType) instanceof LivingEntityRenderer r) {
 				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantLayer((LivingEntityRenderer<?, ?>) r));
 				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedWindLayer((LivingEntityRenderer<?, ?>) r, event.getEntityModels()));
 
 			}
-			if (GeckoLibCompat.isLoaded) {
-				GeckoLibCompatClient.addLayer(r);
+
+
+			if (event.getRenderer(entityType) instanceof LivingEntityRenderer r) {
+				if (entityType == EntityType.BLAZE) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), BLAZE_EYES));
+				}
+				if (entityType == EntityType.CREEPER) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), CREEPER_EYES));
+				}
+				if (entityType == EntityType.EVOKER) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), EVOKER_EYES));
+				}
+				if (entityType == EntityType.PILLAGER) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), PILLAGER_EYES));
+				}
+				if (entityType == EntityType.STRAY || entityType == EntityType.WITHER || entityType == EntityType.SKELETON || entityType == EntityType.BOGGED) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SKELETON_EYES));
+				}
+				if (entityType == EntityType.SLIME) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SLIME_EYES));
+				}
+				if (entityType == EntityType.SPIDER || entityType == EntityType.CAVE_SPIDER) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SPIDER_EYES));
+				}
+				if (entityType == EntityType.VINDICATOR) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), VINDICATOR_EYES));
+				}
+				if (entityType == EntityType.WITCH) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WITCH_EYES));
+				}
+				if (entityType == EntityType.WOLF) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WOLF_EYES));
+				}
+				if (entityType == EntityType.ZOMBIE || entityType == EntityType.HUSK) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), ZOMBIE_EYES));
+				}
+				if (entityType == EntityType.GUARDIAN || entityType == EntityType.ELDER_GUARDIAN) {
+					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), GUARDIAN_EYES));
+				}
+
 			}
-
-
-			if (r instanceof LivingEntityRenderer) {
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), BLAZE_EYES, EntityType.BLAZE));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), CREEPER_EYES, EntityType.CREEPER));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), EVOKER_EYES, EntityType.EVOKER));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), PILLAGER_EYES, EntityType.PILLAGER));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SKELETON_EYES, (entity) -> {
-					return entity instanceof AbstractSkeleton;
-				}));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SLIME_EYES, EntityType.SLIME));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SPIDER_EYES, EntityType.SPIDER));
-				//TODO Vex Eyes
-				//((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), VEX_EYES, EntityType.VEX));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), VINDICATOR_EYES, EntityType.VINDICATOR));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WITCH_EYES, EntityType.WITCH));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WOLF_EYES, EntityType.WOLF));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), ZOMBIE_EYES, (entity) -> {
-					return entity instanceof Zombie && !(entity instanceof ZombifiedPiglin);
-				}));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), GUARDIAN_EYES, (entity) -> {
-					return entity instanceof Guardian;
-				}));
-
-			}
-        });
+		});
     }
 
     @SubscribeEvent
