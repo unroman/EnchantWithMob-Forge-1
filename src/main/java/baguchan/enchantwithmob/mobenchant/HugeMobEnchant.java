@@ -9,7 +9,7 @@ import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = EnchantWithMob.MODID)
 public class HugeMobEnchant extends MobEnchant {
@@ -26,7 +26,7 @@ public class HugeMobEnchant extends MobEnchant {
     }
 
     @SubscribeEvent
-    public static void onEntityHurt(LivingHurtEvent event) {
+    public static void onEntityHurt(LivingIncomingDamageEvent event) {
         LivingEntity livingEntity = event.getEntity();
 
         if (event.getSource().getEntity() instanceof LivingEntity) {

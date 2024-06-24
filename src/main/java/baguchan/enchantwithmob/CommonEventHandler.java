@@ -45,8 +45,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -266,7 +267,45 @@ public class CommonEventHandler {
 
 
     @SubscribeEvent
-    public static void onEntityHurt(LivingHurtEvent event) {
+    public static void onEntityHurt(LivingDamageEvent.Post event) {
+        LivingEntity livingEntity = event.getEntity();
+
+        if (event.getSource().getEntity() instanceof LivingEntity) {
+            LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
+
+            if (attacker instanceof IEnchantCap cap) {
+
+                if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get())) {
+                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get());
+
+                    if (event.getNewDamage() > 0) {
+                        if (attacker.getRandom().nextFloat() < i * 0.125F) {
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.POISON, 60 * i, 0), attacker);
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        if (livingEntity instanceof IEnchantCap cap) {
+            if (event.getSource().getDirectEntity() != null) {
+                if (cap.getEnchantCap().hasEnchant()) {
+                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.THORN.get());
+
+                    if (event.getSource().getDirectEntity() instanceof LivingEntity && !event.getSource().is(DamageTypeTags.IS_PROJECTILE) && !event.getSource().is(DamageTypes.THORNS) && livingEntity.getRandom().nextFloat() < i * 0.1F) {
+                        LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();
+
+                        attacker.hurt(livingEntity.damageSources().thorns(livingEntity), MobEnchantCombatRules.getThornDamage(event.getNewDamage(), cap.getEnchantCap()));
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntityIncomingDamage(LivingIncomingDamageEvent event) {
         LivingEntity livingEntity = event.getEntity();
 
         if (event.getSource().getEntity() instanceof LivingEntity) {
@@ -284,18 +323,6 @@ public class CommonEventHandler {
                         event.setAmount(MobEnchantCombatRules.getDamageAddition(event.getAmount(), mobEnchantLevel, mobEnchantSize));
                     }
                 }
-
-                if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get())) {
-                    int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.POISON.get());
-
-                    if (event.getAmount() > 0) {
-                        if (attacker.getRandom().nextFloat() < i * 0.125F) {
-                            livingEntity.addEffect(new MobEffectInstance(MobEffects.POISON, 60 * i, 0), attacker);
-                        }
-                    }
-                }
-
-
             }
         }
 
@@ -305,17 +332,6 @@ public class CommonEventHandler {
                 int mobEnchantSize = cap.getEnchantCap().getMobEnchants().size();
 
                 event.setAmount(MobEnchantCombatRules.getDamageReduction(event.getAmount(), mobEnchantLevel, mobEnchantSize));
-            }
-            if (event.getSource().getDirectEntity() != null) {
-               if (cap.getEnchantCap().hasEnchant()) {
-                   int i = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.THORN.get());
-
-                   if (event.getSource().getDirectEntity() instanceof LivingEntity && !event.getSource().is(DamageTypeTags.IS_PROJECTILE) && !event.getSource().is(DamageTypes.THORNS) && livingEntity.getRandom().nextFloat() < i * 0.1F) {
-                       LivingEntity attacker = (LivingEntity) event.getSource().getDirectEntity();
-
-                       attacker.hurt(livingEntity.damageSources().thorns(livingEntity), MobEnchantCombatRules.getThornDamage(event.getAmount(), cap.getEnchantCap()));
-                   }
-               }
             }
         }
     }
