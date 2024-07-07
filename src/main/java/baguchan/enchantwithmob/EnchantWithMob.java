@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob;
 
+import baguchan.enchantwithmob.client.ModParticles;
 import baguchan.enchantwithmob.command.MobEnchantingCommand;
 import baguchan.enchantwithmob.message.*;
 import baguchan.enchantwithmob.registry.*;
@@ -41,6 +42,7 @@ public class EnchantWithMob {
 		ModLootItemFunctions.LOOT_REGISTRY.register(modEventBus);
 		ModCapability.ATTACHMENT_TYPES.register(modEventBus);
 		ModSounds.SOUND_EVENTS.register(modEventBus);
+		ModParticles.PARTICLE_TYPES.register(modEventBus);
 
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 

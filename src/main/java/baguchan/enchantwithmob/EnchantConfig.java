@@ -35,7 +35,7 @@ public class EnchantConfig {
                     .define("Disable Poison Particle", true);
             disableAuraRender = builder
                     .comment("Disable Aura Render. [true / false]")
-                    .define("Disable Aura Render", true);
+                    .define("Disable Aura Render", false);
         }
     }
 

@@ -3,6 +3,7 @@ package baguchan.enchantwithmob;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.api.IEnchantVisual;
 import baguchan.enchantwithmob.capability.MobEnchantHandler;
+import baguchan.enchantwithmob.client.ModParticles;
 import baguchan.enchantwithmob.item.mobenchant.ItemMobEnchantments;
 import baguchan.enchantwithmob.message.MobEnchantedMessage;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
@@ -15,6 +16,7 @@ import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -260,9 +262,17 @@ public class CommonEventHandler {
             for (MobEnchantHandler enchantHandler : cap.getEnchantCap().getMobEnchants()) {
                 enchantHandler.getMobEnchant().tick(livingEntity, enchantHandler.getEnchantLevel());
             }
+            if (cap.getEnchantCap().hasEnchant()) {
+                if (entity.level().isClientSide() && !EnchantConfig.CLIENT.disableAuraRender.get()) {
+                    if (!(entity instanceof Player player) || !player.isCreative()) {
+                        if (entity.getRandom().nextFloat() < 0.45F) {
+                            entity.level().addParticle(cap.getEnchantCap().isAncient() ? ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER : ModParticles.ENCHANT.get(), entity.getRandomX(entity.getBbWidth()), entity.getRandomY(), entity.getRandomZ(entity.getBbWidth()), 0, 0, 0);
+                        }
 
+                    }
+                }
+            }
         }
-        ;
     }
 
 
