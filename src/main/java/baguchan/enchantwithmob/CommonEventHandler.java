@@ -264,7 +264,7 @@ public class CommonEventHandler {
             }
             if (cap.getEnchantCap().hasEnchant()) {
                 if (entity.level().isClientSide() && !EnchantConfig.CLIENT.disableAuraRender.get()) {
-                    if (!(entity instanceof Player player) || !player.isCreative()) {
+                    if (!(entity instanceof Player player) || !player.isSpectator()) {
                         if (entity.getRandom().nextFloat() < 0.45F) {
                             entity.level().addParticle(cap.getEnchantCap().isAncient() ? ParticleTypes.TRIAL_SPAWNER_DETECTED_PLAYER : ModParticles.ENCHANT.get(), entity.getRandomX(entity.getBbWidth()), entity.getRandomY(), entity.getRandomZ(entity.getBbWidth()), 0, 0, 0);
                         }

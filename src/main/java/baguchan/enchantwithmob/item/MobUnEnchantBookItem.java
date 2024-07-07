@@ -34,6 +34,9 @@ public class MobUnEnchantBookItem extends Item {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		if (playerIn instanceof IEnchantCap cap) {
 			if (!cap.getEnchantCap().isAncient()) {
+				if (cap.getEnchantCap().hasOwner()) {
+					cap.getEnchantCap().removeOwner(playerIn);
+				}
 				MobEnchantUtils.removeMobEnchantToEntity(playerIn, cap);
 			}
 		}

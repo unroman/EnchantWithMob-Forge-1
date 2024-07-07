@@ -64,7 +64,7 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
                 this.getParentModel().copyPropertiesTo(entitymodel);
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
                 entitymodel.setupAnim(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-                entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1F, 1F, 1F, intensity));
+                entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(intensity, 1F, 1F, 1F));
             }
         }
         ;

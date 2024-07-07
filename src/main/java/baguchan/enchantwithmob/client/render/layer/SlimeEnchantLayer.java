@@ -42,7 +42,7 @@ public class SlimeEnchantLayer<T extends LivingEntity> extends RenderLayer<T, Sl
 					this.getParentModel().copyPropertiesTo(this.model);
 					this.model.prepareMobModel(p_117473_, p_117474_, p_117475_, p_117476_);
 					this.model.setupAnim(p_117473_, p_117474_, p_117475_, p_117477_, p_117478_, p_117479_);
-					this.model.renderToBuffer(p_117470_, vertexconsumer, p_117472_, LivingEntityRenderer.getOverlayCoords(p_117473_, 0.0F), FastColor.ARGB32.colorFromFloat(1F, 1F, 1F, intensity));
+					this.model.renderToBuffer(p_117470_, vertexconsumer, p_117472_, LivingEntityRenderer.getOverlayCoords(p_117473_, 0.0F), FastColor.ARGB32.colorFromFloat(intensity, 1F, 1F, 1F));
 				}
 			}
 		}

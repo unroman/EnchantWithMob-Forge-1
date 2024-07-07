@@ -46,7 +46,7 @@ public class ClientEventHandler {
         MultiBufferSource bufferBuilder = event.getMultiBufferSource();
         float particalTick = event.getPartialTick();
         if (event.getEntity() instanceof IEnchantCap cap) {
-			if (cap.getEnchantCap().hasOwner()) {
+			if (cap.getEnchantCap().hasOwner() && cap.getEnchantCap().hasEnchant()) {
 
 				LivingEntity entity = cap.getEnchantCap().getEnchantOwner();
                 if (entity != null) {
