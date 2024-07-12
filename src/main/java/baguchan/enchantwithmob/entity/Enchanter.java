@@ -1,5 +1,6 @@
 package baguchan.enchantwithmob.entity;
 
+import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.registry.MobEnchants;
 import baguchan.enchantwithmob.registry.ModItems;
@@ -165,23 +166,25 @@ public class Enchanter extends SpellcasterIllager {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
 
         //when raid is active, reward is more bigger
-        if (this.random.nextFloat() < 0.25F + 0.025F * looting) {
-            if (this.raid != null && this.hasActiveRaid() && this.getWave() > 0) {
-                ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
+        if (!EnchantConfig.COMMON.disableMobEnchantStuffItems.get()) {
+            if (this.random.nextFloat() < 0.25F + 0.025F * looting) {
+                if (this.raid != null && this.hasActiveRaid() && this.getWave() > 0) {
+                    ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
 
-                if (this.random.nextFloat() < 0.5F) {
-                    itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
+                    if (this.random.nextFloat() < 0.5F) {
+                        itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
+                    }
+
+                    this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20 + this.getWave() * 4, true, false));
+                } else {
+                    ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
+
+                    if (this.random.nextFloat() < 0.5F) {
+                        itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
+                    }
+
+                    this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20, true, false));
                 }
-
-                this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20 + this.getWave() * 4, true, false));
-            } else {
-                ItemStack itemStack = new ItemStack(ModItems.ENCHANTERS_BOOK.get());
-
-                if (this.random.nextFloat() < 0.5F) {
-                    itemStack = new ItemStack(ModItems.MOB_ENCHANT_BOOK.get());
-                }
-
-                this.spawnAtLocation(MobEnchantUtils.addRandomEnchantmentToItemStack(random, itemStack, 20, true, false));
             }
         }
     }
