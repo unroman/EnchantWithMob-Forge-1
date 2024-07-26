@@ -7,18 +7,24 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = Entity.class, remap = false)
-public class EntityMixin implements IEnchantedTime {
+public abstract class EntityMixin implements IEnchantedTime {
 
     @Shadow
     private EntityDimensions dimensions;
-    @Shadow
-    private float eyeHeight;
+
     private float differentTime = 1.0F;
+
+    @Accessor("eyeHeight")
+    abstract float getEyeHeight();
+
+    @Accessor("eyeHeight")
+    abstract void setEyeHeight(float eyeHeight);
 
     @Override
     public float getDifferentTime() {
@@ -38,15 +44,11 @@ public class EntityMixin implements IEnchantedTime {
                 if (EnchantConfig.COMMON.changeSizeWhenEnchant.get()) {
                     float totalWidth = this.dimensions.width() * 1.025F;
                     float totalHeight = this.dimensions.height() * 1.025F;
-                    this.eyeHeight = (this.eyeHeight * (1.025F));
+                    setEyeHeight(this.getEyeHeight() * (1.025F));
                     dimensions = EntityDimensions.fixed(totalWidth, totalHeight);
                 }
             }
         }
-    }
-
-    public final float getEyeHeight() {
-        return this.eyeHeight;
     }
 
 }
