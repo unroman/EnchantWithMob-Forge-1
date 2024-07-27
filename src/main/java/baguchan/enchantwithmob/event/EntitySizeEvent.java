@@ -27,23 +27,20 @@ public class EntitySizeEvent {
                     if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get())) {
                         int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.SMALL.get());
                         float cappedScale = Mth.clamp(0.15F * level, 0.0F, 0.9F);
-                        float totalWidth = entity.getDimensions(entity.getPose()).width * (1.0F - cappedScale);
-                        float totalHeight = entity.getDimensions(entity.getPose()).height * (1.0F - cappedScale);
-                        event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * (1.0F - cappedScale));
+                        float totalWidth = event.getNewSize().width * (1.0F - cappedScale);
+                        float totalHeight = event.getNewSize().height * (1.0F - cappedScale);
 
-                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight));
+                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight), true);
                     } else if (MobEnchantUtils.findMobEnchantFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get())) {
                         int level = MobEnchantUtils.getMobEnchantLevelFromHandler(cap.getEnchantCap().getMobEnchants(), MobEnchants.HUGE.get());
 
-                        float totalWidth = entity.getDimensions(entity.getPose()).width * (1.0F + level * 0.15F);
-                        float totalHeight = entity.getDimensions(entity.getPose()).height * (1.0F + level * 0.15F);
-                        event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * (1.0F + level * 0.15F));
-                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight));
+                        float totalWidth = event.getNewSize().width * (1.0F + level * 0.15F);
+                        float totalHeight = event.getNewSize().height * (1.0F + level * 0.15F);
+                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight), true);
                     } else if (EnchantConfig.COMMON.changeSizeWhenEnchant.get()) {
-                        float totalWidth = entity.getDimensions(entity.getPose()).width * 1.025F;
-                        float totalHeight = entity.getDimensions(entity.getPose()).height * 1.025F;
-                        event.setNewEyeHeight(entity.getEyeHeight(entity.getPose()) * (1.025F));
-                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight));
+                        float totalWidth = event.getNewSize().width * 1.025F;
+                        float totalHeight = event.getNewSize().height * 1.025F;
+                        event.setNewSize(EntityDimensions.fixed(totalWidth, totalHeight), true);
 
                     }
                 }
