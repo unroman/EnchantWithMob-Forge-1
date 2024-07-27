@@ -10,6 +10,11 @@
         {
           "type": "minecraft:item",
           "weight": 1,
+          "name": "minecraft:air"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 1,
           "functions": [
             {
               "function": "enchantwithmob:mob_enchant_with_levels",
