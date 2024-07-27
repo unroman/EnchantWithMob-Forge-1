@@ -10,7 +10,9 @@ import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedEyesLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedWindLayer;
 import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
+import baguchan.enchantwithmob.item.EnchanterClothesItem;
 import baguchan.enchantwithmob.registry.ModEntities;
+import baguchan.enchantwithmob.registry.ModItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
@@ -22,6 +24,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -122,4 +125,9 @@ public class ClientRegistrar {
 	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "mobenchant"), new MobEnchantOverlay());
     }
+
+	@SubscribeEvent
+	public static void registerOverlay(RegisterClientExtensionsEvent event) {
+		event.registerItem(EnchanterClothesItem.ArmorRender.INSTANCE, ModItems.ENCHANTER_BOOTS.get(), ModItems.ENCHANTER_CLOTHES.get(), ModItems.ENCHANTER_HAT.get());
+	}
 }

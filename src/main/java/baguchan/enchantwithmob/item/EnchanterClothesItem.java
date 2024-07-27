@@ -23,19 +23,11 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
 public class EnchanterClothesItem extends ArmorItem {
 
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "textures/models/armor/enchanter_clothes.png");
     public EnchanterClothesItem(ArmorItem.Type type, Properties p_40388_) {
         super(ModArmorMaterials.ENCHANTER_CLOTHES, type, p_40388_);
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        super.initializeClient(consumer);
-        consumer.accept(ArmorRender.INSTANCE);
     }
 
     @Override
@@ -48,8 +40,8 @@ public class EnchanterClothesItem extends ArmorItem {
         return super.isEnabled(p_249172_) && !EnchantConfig.COMMON.disableEnchanterArmor.get();
     }
 
-    private static final class ArmorRender implements IClientItemExtensions {
-        private static final ArmorRender INSTANCE = new ArmorRender();
+    public static final class ArmorRender implements IClientItemExtensions {
+        public static final ArmorRender INSTANCE = new ArmorRender();
 
 
         @Override
