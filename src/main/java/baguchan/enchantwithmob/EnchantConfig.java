@@ -71,33 +71,42 @@ public class EnchantConfig {
                     .define("Enchanted Mob can Spawn Natural", true);
             ENCHANT_ON_SPAWN_EXCLUSION_MOBS = builder
                     .comment("Disables specific mob from receiveing enchantments on spawn. Use the full name, eg: minecraft:ender_dragon.")
+                    .translation(EnchantWithMob.MODID + ".config.enchantOnSpawnExclusionMobs")
                     .define("enchantOnSpawnExclusionMobs", Lists.newArrayList("minecraft:wither", "minecraft:ender_dragon"));
             ALWAY_ENCHANTABLE_MOBS = builder
                     .comment("Allow the specific mob from alway receiveing enchantments on spawn. Use the full name, eg: minecraft:zombie.")
+                    .translation(EnchantWithMob.MODID + ".config.alwayEnchantableMobs")
                     .define("alwayEnchantableMobs", Lists.newArrayList());
             ALWAY_ENCHANTABLE_ANCIENT_MOBS = builder
                     .comment("Allow the specific mob from alway receiveing enchantments as Ancient Mob on spawn(This feature may break for balance so be careful). Use the full name, eg: minecraft:zombie.")
+                    .translation(EnchantWithMob.MODID + ".config.alwayEnchantableAncientMobs")
                     .define("alwayEnchantableAncientMobs", Lists.newArrayList());
             DISABLE_ENCHANTS = builder
                     .comment("Disables the specific mob enchant. Use the full name(This config only disabled mob enchant when mob spawn. not mean delete complete, eg: enchantwithmob:thorn.")
+                    .translation(EnchantWithMob.MODID + ".config.disable_enchants")
                     .define("disableMobEnchants", Lists.newArrayList());
             ALLOW_POISON_CLOUD_PROJECTILE = builder
                     .comment("Allow the poison cloud for projectile. Use the full name(eg: minecraft:arrow.")
+                    .translation(EnchantWithMob.MODID + ".config.allowPoisonCloudProjectiles")
                     .define("allowPoisonCloudProjectiles", Lists.newArrayList("minecraft:arrow", "minecraft:snowball", "earthmobsmod:melon_seeds", "earthmobsmod:zombie_flesh", "conjurer_illager:throwing_card", "conjurer_illager:bouncy_ball", "tofucraft:fukumame", "tofucraft:nether_fukumame", "tofucraft:soul_fukumame"));
             ALLOW_MULTISHOT_PROJECTILE = builder
                     .comment("Allow the multi shot for projectile. Use the full name(eg: minecraft:arrow.")
+                    .translation(EnchantWithMob.MODID + ".config.allowMultiShotProjectiles")
                     .define("allowMultiShotProjectiles", Lists.newArrayList("minecraft:arrow", "minecraft:snowball", "earthmobsmod:melon_seeds", "earthmobsmod:zombie_flesh", "conjurer_illager:throwing_card", "conjurer_illager:bouncy_ball", "tofucraft:fukumame", "tofucraft:nether_fukumame", "tofucraft:soul_fukumame", "minecraft:wind_charge", "minecraft:breeze_wind_charge", "minecraft:dragon_fireball", "minecraft:fireball", "minecraft:small_fireball"));
 
             WHITELIST_SHOOT_ENTITY = builder
                     .comment("Whitelist the projectile mob enchant for mob. Use the full name(eg: minecraft:zombie.")
+                    .translation(EnchantWithMob.MODID + ".config.whitelistShootEntity")
                     .define("whitelistShootEntity", Lists.newArrayList("minecraft:skeleton", "minecraft:pillager", "minecraft:shulker", "minecraft:llama", "conjurer_illager:conjurer", "earthmobsmod:bone_spider", "earthmobsmod:lobber_zombie", "earthmobsmod:lobber_drowned"
                             , "earthmobsmod:melon_golem", "minecraft:piglin", "minecraft:snow_golem", "minecraft:player", "minecraft:breeze", "minecraft:blaze"));
             BLACKLIST_PLAYER_ENCHANT = builder
                     .comment("Blacklist the mob enchant for player. Use the full name(eg: enchantwithmob:thorn.")
+                    .translation(EnchantWithMob.MODID + ".config.blacklistPlayerEnchant")
                     .define("blacklistPlayerEnchant", Lists.newArrayList());
 
             buffedDragon = builder
                     .comment("Set the MobEnchant on the EnderDragon. If you want more harder fight. should set it! eg: enchantwithmob:thorn.")
+                    .translation(EnchantWithMob.MODID + ".config.buffed_dragon")
                     .define("Buffed Dragon", Lists.newArrayList());
             spawnEnchantedAnimal = builder
                     .comment("Enable the the spawning of enchanted animal mobs. [true / false]")
@@ -121,18 +130,23 @@ public class EnchantConfig {
                     .define("Big Your Self", false);
             universalEnchant = builder
                     .comment("Enable All MobEnchant for all mob. [true / false]")
+                    .translation(EnchantWithMob.MODID + ".config.universalEnchant")
                     .define("UniversalEnchant", false);
             difficultyBasePercent = builder
                     .comment("Set The Difficulty Base Enchanted Mob Spawn Percent. [(Difficulty Base Percent * Difficulty id) + (Effective Difficulty Percent * Effective Difficulty)]")
+                    .translation(EnchantWithMob.MODID + ".config.DifficultyEnchantedSpawnPercent")
                     .defineInRange("Difficulty Enchanted Spawn Percent", 0.005D, 0.0D, 1D);
             effectiveBasePercent = builder
                     .comment("Set The Effective Difficulty Base Enchanted Mob Spawn Percent [(Difficulty Base Percent * Difficulty id) + (Effective Difficulty Percent * Effective Difficulty)]")
+                    .translation(EnchantWithMob.MODID + ".config.EffectiveDifficultyEnchantedSpawnPercent")
                     .defineInRange("Effective Difficulty Enchanted Spawn Percent", 0.025D, 0.0D, 1D);
             disableEnchanterArmor = builder
                     .comment("Disable Enchanter Armor Item. [true / false]")
+                    .translation(EnchantWithMob.MODID + ".config.DisableEnchanterArmor")
                     .define("Disable Enchanter Armor", false);
             disableMobEnchantStuffItems = builder
                     .comment("Disable MobEnchant Stuff Items. [true / false]")
+                    .translation(EnchantWithMob.MODID + ".config.DisableMobEnchantStuffItems")
                     .define("Disable MobEnchant Stuff Items", false);
         }
     }
