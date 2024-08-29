@@ -26,6 +26,7 @@ public class EnchantConfig {
         public final ForgeConfigSpec.BooleanValue showEnchantedMobHud;
         public final ForgeConfigSpec.BooleanValue disablePoisonParticle;
         public final ForgeConfigSpec.BooleanValue disableAuraRender;
+        public final ForgeConfigSpec.BooleanValue oldStyleAnimation;
 
         public Client(ForgeConfigSpec.Builder builder) {
             showEnchantedMobHud = builder
@@ -38,6 +39,9 @@ public class EnchantConfig {
             disableAuraRender = builder
                     .comment("Disable Aura Render. [true / false]")
                     .define("Disable Aura Render", true);
+            oldStyleAnimation = builder
+                    .comment("Enable Old Style Animation. [true / false]")
+                    .define("OldStyleAnimation", false);
         }
     }
 
