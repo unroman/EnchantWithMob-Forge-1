@@ -25,6 +25,8 @@ public class EnchantConfig {
         public final ModConfigSpec.BooleanValue disablePoisonParticle;
         public final ModConfigSpec.BooleanValue disableAuraRender;
 
+        public final ModConfigSpec.BooleanValue oldStyleAnimation;
+
         public Client(ModConfigSpec.Builder builder) {
             showEnchantedMobHud = builder
                     .translation(EnchantWithMob.MODID + ".config.showEnchantedMobHud")
@@ -35,7 +37,12 @@ public class EnchantConfig {
                     .define("Disable Poison Particle", true);
             disableAuraRender = builder
                     .comment("Disable Aura Render. [true / false]")
+                    .translation(EnchantWithMob.MODID + ".config.disableAuraRender")
                     .define("Disable Aura Render", false);
+            oldStyleAnimation = builder
+                    .comment("Enable Old Style Animation. [true / false]")
+                    .translation(EnchantWithMob.MODID + ".config.OldStyleAnimation")
+                    .define("Old Style Animation", false);
         }
     }
 
@@ -148,6 +155,7 @@ public class EnchantConfig {
                     .comment("Disable MobEnchant Stuff Items. [true / false]")
                     .translation(EnchantWithMob.MODID + ".config.DisableMobEnchantStuffItems")
                     .define("Disable MobEnchant Stuff Items", false);
+
         }
     }
 

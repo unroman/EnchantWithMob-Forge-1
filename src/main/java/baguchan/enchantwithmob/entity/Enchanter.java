@@ -274,7 +274,8 @@ public class Enchanter extends SpellcasterIllager {
             LivingEntity entity = Enchanter.this.getEnchantTarget();
             if (entity != null && entity.isAlive()) {
                 if (entity instanceof IEnchantCap cap) {
-                    MobEnchantUtils.addUnstableRandomEnchantmentToEntity(entity, Enchanter.this, cap, entity.getRandom(), 12, false, false);
+                    float difficulty = entity.level().getCurrentDifficultyAt(entity.blockPosition()).getEffectiveDifficulty();
+                    MobEnchantUtils.addUnstableRandomEnchantmentToEntity(entity, Enchanter.this, cap, entity.getRandom(), (int) (5 + difficulty * 2), false, false);
                 }
             }
         }
