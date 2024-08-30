@@ -151,6 +151,10 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 			this.left_leg.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 0.7F * limbSwingAmount;
 
 		} else {
+			this.arms.visible = true;
+			this.right_arm.visible = true;
+			this.left_arm.visible = true;
+
 			if (entity.castingAnimationState.isStarted()) {
 				this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANCE, ageInTicks);
 			} else if (entity.attackAnimationState.isStarted()) {
