@@ -22,8 +22,8 @@ public class ClientModelEvent {
     @SubscribeEvent
     public static void modelEvent(BagusModelEvent.PostAnimate event) {
         if (event.getEntity() instanceof IEnchantCap enchantCap && MobEnchantUtils.hasWindEnchant(enchantCap.getEnchantCap().getMobEnchants())) {
-            if (event.getModel() instanceof IRootModel rootModel) {
-                rootModel.animateWalkBagu(FloatAnimation.FLOAT, event.getAgeInTick(), 1.0F, 1.0F, 1.0F);
+            if (event.isSupportedAnimateModel()) {
+                event.getRootModel().animateWalkBagu(FloatAnimation.FLOAT, event.getAgeInTick(), 1.0F, 1.0F, 1.0F);
             }
         }
     }
