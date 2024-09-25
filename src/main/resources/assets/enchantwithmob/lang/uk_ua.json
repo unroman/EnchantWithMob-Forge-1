@@ -26,7 +26,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "лише союзники можуть бути зачаровані.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "Зникає, якщо ви занадто далеко від власника зачарування",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "ви можете створити зачарування з нескінченною тривалістю.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "ви можете зняти зачарування з моба або з себе.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "ви можете зняти зачарування з моба або з себе.",
   "enchantwithmob.cannot.enchant": "Моб не може отримати це зачарування або він уже йог має",
   "enchantwithmob.cannot.enchant_yourself": "ви не можете отримати це зачарування або ви вже його маєте",
   "enchantwithmob.cannot.no_enchantable_ally": "ви не можете зачарувати, тому що союзника немає поблизу",

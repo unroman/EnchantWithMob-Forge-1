@@ -20,7 +20,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "רק אספסוף בעלי ברית יכול להיות מוקסם בבת אחת.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "נעלמת אם אתה רחוק מדי מהבעלים המכושף",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "אתה יכול להקסים המון עם משך זמן אינסופי.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "אתה יכול להסיר את האספסוף או את קסם ההמון שלך.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "אתה יכול להסיר את האספסוף או את קסם ההמון שלך.",
   "enchantwithmob.cannot.enchant": "ההמון הזה לא יכול להעניק את הקסם הזה או שכבר יש לו",
   "enchantwithmob.cannot.enchant_yourself": "אתה לא יכול להעניק את הקסם הזה או שכבר יש לך",
   "enchantwithmob.cannot.no_enchantable_ally": "אתה לא יכול להקסים. כי בעל ברית קסום לא כאן",

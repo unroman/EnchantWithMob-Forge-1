@@ -20,7 +20,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "solo los aliados pueden ser encantados a la vez.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "Desaparece si estás demasiado lejos del dueño encantado.",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "puedes hacer que un mob se encante con una duración infinita.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "puedes eliminar la mafia o tu propio encantamiento de la mafia.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "puedes eliminar la mafia o tu propio encantamiento de la mafia.",
   "enchantwithmob.cannot.enchant": "Este multitud no puede conceder ese encantamiento o ya tiene",
   "enchantwithmob.cannot.enchant_yourself": "no puedes otorgar ese encantamiento o ya tienes",
   "enchantwithmob.cannot.no_enchantable_ally": "no puedes encantar. porque aliado encantador no esta aqui",

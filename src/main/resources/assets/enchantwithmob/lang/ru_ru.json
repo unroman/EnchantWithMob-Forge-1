@@ -26,7 +26,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "Зачаровать можно только союзных существ одновременно.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "Если Вы слишком далеко от владельца, на которого наложены чары, то они исчезнут.",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "Вы можете наложить чары на существо с бесконечной длительностью.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "Вы можете снять чары с существа или с собственного заколдованного существа.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "Вы можете снять чары с существа или с собственного заколдованного существа.",
   "enchantwithmob.cannot.enchant": "Это существо не может получить эти чары или уже обладает ими.",
   "enchantwithmob.cannot.enchant_yourself": "Вы не можете наделить существо этими чарами или оно уже обладает ими.",
   "enchantwithmob.cannot.no_enchantable_ally": "Вы не можете наложить чары, потому что здесь нет союзного существа, которое можно заколдовать.",

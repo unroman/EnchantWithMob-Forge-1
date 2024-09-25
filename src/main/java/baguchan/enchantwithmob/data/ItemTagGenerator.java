@@ -21,6 +21,5 @@ public class ItemTagGenerator extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider p_256380_) {
         this.tag(ItemTags.BOOKSHELF_BOOKS).add(ModItems.MOB_ENCHANT_BOOK.get());
         this.tag(ItemTags.BOOKSHELF_BOOKS).add(ModItems.ENCHANTERS_BOOK.get());
-        this.tag(ItemTags.BOOKSHELF_BOOKS).add(ModItems.MOB_UNENCHANT_BOOK.get());
     }
 }

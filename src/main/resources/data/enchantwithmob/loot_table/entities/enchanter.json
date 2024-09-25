@@ -103,7 +103,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "enchantwithmob:mob_unenchant_book"
+          "name": "enchantwithmob:enchanters_bottle"
         }
       ],
       "conditions": [

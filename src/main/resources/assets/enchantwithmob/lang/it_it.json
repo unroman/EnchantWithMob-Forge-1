@@ -19,7 +19,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "Solo i mob alleati possono essere incantati contemporaneamente.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "Scompare se sei troppo lontano/a dal proprietario incantato.",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "Puoi fare un Incantesimo del Mob con durata infinita.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "Puoi rimuovere il mob o il tuo Incantesimo del Mob.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "Puoi rimuovere il mob o il tuo Incantesimo del Mob.",
   "enchantwithmob.cannot.enchant": "Questo mob non può concedere quell'incantesimo o l'ha già fatto",
   "enchantwithmob.cannot.enchant_yourself": "Non puoi concederti quell'incantesimo o l'hai già fatto",
   "enchantwithmob.cannot.no_enchantable_ally": "non puoi incantare perchè l'alleato incantabile non è qui",

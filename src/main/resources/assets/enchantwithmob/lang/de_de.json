@@ -21,7 +21,7 @@
   "mobenchant.enchantwithmob.enchanter_book.tooltip": "nur verbündete Mobs können gleichzeitig verzaubert werden.",
   "mobenchant.enchantwithmob.enchanter_book.tooltip2": "Verschwindet, wenn Sie zu weit vom verzauberten Besitzer entfernt sind",
   "mobenchant.enchantwithmob.mob_enchant_book.tooltip": "sie können einen Mob mit unendlicher Dauer verzaubern lassen.",
-  "mobenchant.enchantwithmob.mob_unenchant_book.tooltip": "sie können den Mob oder Ihren eigenen Mob Enchant entfernen.",
+  "mobenchant.enchantwithmob.enchanters_bottle.tooltip": "sie können den Mob oder Ihren eigenen Mob Enchant entfernen.",
   "enchantwithmob.cannot.enchant": "Dieser Mob kann diese Verzauberung nicht gewähren oder hat sie bereits",
   "enchantwithmob.cannot.enchant_yourself": "sie können diese Verzauberung nicht gewähren oder haben sie bereits",
   "enchantwithmob.cannot.no_enchantable_ally": "du kannst nicht verzaubern. weil verzauberbarer Verbündeter nicht hier ist",

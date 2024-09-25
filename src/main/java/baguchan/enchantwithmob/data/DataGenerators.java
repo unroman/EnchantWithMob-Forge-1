@@ -20,9 +20,10 @@ public class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         BlockTagGenerator blockTagsProvider = new BlockTagGenerator(packOutput, lookupProvider, event.getExistingFileHelper());
-        event.getGenerator().addProvider(event.includeServer(), blockTagsProvider);
-        event.getGenerator().addProvider(event.includeServer(), new ItemTagGenerator(packOutput, lookupProvider, blockTagsProvider.contentsGetter(), event.getExistingFileHelper()));
-        event.getGenerator().addProvider(event.includeServer(), new EntityTagGenerator(packOutput, lookupProvider, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(event.includeServer(), new CustomTagProvider.MobEnchantTagGenerator(packOutput, lookupProvider, event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), blockTagsProvider);
+        generator.addProvider(event.includeServer(), new ItemTagGenerator(packOutput, lookupProvider, blockTagsProvider.contentsGetter(), event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new EntityTagGenerator(packOutput, lookupProvider, event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new CustomTagProvider.MobEnchantTagGenerator(packOutput, lookupProvider, event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new CraftingGenerator(packOutput, lookupProvider));
     }
 }

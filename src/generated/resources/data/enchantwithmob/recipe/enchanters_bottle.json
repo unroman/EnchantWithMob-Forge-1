@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "G": {
+      "item": "minecraft:gold_nugget"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "pattern": [
+    " G ",
+    "ALA",
+    " A "
+  ],
+  "result": {
+    "count": 3,
+    "id": "enchantwithmob:enchanters_bottle"
+  }
+}

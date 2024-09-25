@@ -8,6 +8,7 @@ import baguchan.enchantwithmob.item.mobenchant.ItemMobEnchantments;
 import baguchan.enchantwithmob.message.MobEnchantedMessage;
 import baguchan.enchantwithmob.mobenchant.MobEnchant;
 import baguchan.enchantwithmob.registry.MobEnchants;
+import baguchan.enchantwithmob.registry.ModDataCompnents;
 import baguchan.enchantwithmob.registry.ModItems;
 import baguchan.enchantwithmob.utils.MobEnchantCombatRules;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
@@ -347,34 +348,33 @@ public class CommonEventHandler {
     }
 
 
-
-
     @SubscribeEvent
     public static void onRightClick(PlayerInteractEvent.EntityInteract event) {
         ItemStack stack = event.getItemStack();
         Entity entityTarget = event.getTarget();
+        Player player = event.getEntity();
 
         if (!(entityTarget instanceof Player)) {
-            if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+            if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !player.getCooldowns().isOnCooldown(stack.getItem())) {
                 if (entityTarget instanceof LivingEntity) {
                     LivingEntity target = (LivingEntity) entityTarget;
                     if (MobEnchantUtils.hasMobEnchant(stack)) {
 
                         if (target instanceof IEnchantCap cap) {
-                            boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, event.getEntity(), cap);
+                            boolean flag = MobEnchantUtils.addItemMobEnchantToEntity(stack, target, player, cap);
 
                             if (flag) {
-                                event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+                                player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                                stack.hurtAndBreak(1, event.getEntity(), LivingEntity.getSlotForHand(event.getHand()));
+                                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
 
-                                event.getEntity().getCooldowns().addCooldown(stack.getItem(), 60);
+                                player.getCooldowns().addCooldown(stack.getItem(), 60);
 
                                 event.setCancellationResult(InteractionResult.SUCCESS);
                                 event.setCanceled(true);
                             } else {
-                                event.getEntity().displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
-                                event.getEntity().getCooldowns().addCooldown(stack.getItem(), 20);
+                                player.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
+                                player.getCooldowns().addCooldown(stack.getItem(), 20);
                                 event.setCancellationResult(InteractionResult.FAIL);
                                 event.setCanceled(true);
                             }
@@ -383,25 +383,38 @@ public class CommonEventHandler {
                 }
             }
 
-            if (stack.getItem() == ModItems.MOB_UNENCHANT_BOOK.get() && !event.getEntity().getCooldowns().isOnCooldown(stack.getItem())) {
+            if (stack.getItem() == ModItems.ENCHANATERS_BOTTLE.get() && !player.getCooldowns().isOnCooldown(stack.getItem())) {
                 if (entityTarget instanceof LivingEntity) {
                     LivingEntity target = (LivingEntity) entityTarget;
+                    ItemStack stack1 = new ItemStack(ModItems.ENCHANATERS_EXPERIENCE_BOTTLE.get());
 
                     if (target instanceof IEnchantCap cap) {
-                        MobEnchantUtils.removeMobEnchantToEntity(target, cap);
-                        event.getEntity().playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
+                        if (cap.getEnchantCap().hasEnchant() && !cap.getEnchantCap().isAncient()) {
+                            int xp = MobEnchantUtils.getExperienceFromMob(cap);
 
-                        stack.hurtAndBreak(1, event.getEntity(), LivingEntity.getSlotForHand(event.getHand()));
+                            if (xp > 0) {
+                                stack1.set(ModDataCompnents.EXPERIENCE.get(), xp);
+                            }
+                            MobEnchantUtils.removeMobEnchantToEntity(target, cap);
+                            player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
-                        event.getEntity().getCooldowns().addCooldown(stack.getItem(), 80);
+                            stack.consume(1, player);
+                            player.getCooldowns().addCooldown(stack.getItem(), 80);
 
-                        event.setCancellationResult(InteractionResult.SUCCESS);
-                        event.setCanceled(true);
+                            event.setCancellationResult(InteractionResult.SUCCESS);
+                            event.setCanceled(true);
+
+                            if (!player.hasInfiniteMaterials()) {
+                                if (!player.getInventory().add(stack1)) {
+                                    player.drop(stack1, false);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-        }
+    }
 
     @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {

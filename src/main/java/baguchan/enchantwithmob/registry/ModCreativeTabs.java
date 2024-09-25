@@ -19,8 +19,10 @@ public class ModCreativeTabs {
             event.accept(ModItems.ENCHANTER_CLOTHES.get());
             event.accept(ModItems.ENCHANTER_LEGGINGS.get());
             event.accept(ModItems.ENCHANTER_BOOTS.get());
-            event.accept(ModItems.MOB_UNENCHANT_BOOK.get());
             event.acceptAll(MobEnchantBookItem.generateMobEnchantmentBookTypesOnlyMaxLevel());
+        }
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.ENCHANATERS_BOTTLE.get());
         }
     }
 }
