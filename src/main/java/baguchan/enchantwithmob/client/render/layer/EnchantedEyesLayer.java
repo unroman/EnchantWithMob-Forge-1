@@ -50,7 +50,6 @@ public class EnchantedEyesLayer<T extends LivingEntityRenderState, M extends Ent
 
 	@Override
 	public void render(PoseStack p_116983_, MultiBufferSource p_116984_, int p_116985_, T p_363277_, float p_116987_, float p_116988_) {
-		super.render(p_116983_, p_116984_, p_116985_, p_363277_, p_116987_, p_116988_);
 		if (p_116983_ instanceof IEnchantCap cap) {
 			if (cap.getEnchantCap().hasEnchant()) {
 				VertexConsumer ivertexbuilder = p_116984_.getBuffer(this.renderType());
