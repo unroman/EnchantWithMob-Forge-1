@@ -25,10 +25,10 @@ public class EvokerFangsRendererMixin {
 	@Final
 	private EvokerFangsModel model;
 
-	@Inject(method = "render", at = @At("TAIL"))
-	public void render(EvokerFangsRenderState p_114528_, float p_114529_, float p_114530_, PoseStack p_114531_, MultiBufferSource p_114532_, int p_114533_, CallbackInfo callbackInfo) {
-		if (p_114528_ instanceof IEnchantVisual enchantVisual && enchantVisual.hasEnchantVisual()) {
-			float f = p_114528_.biteProgress;
+	@Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/EvokerFangsRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("TAIL"))
+	public void render(EvokerFangsRenderState p_363441_, PoseStack p_114531_, MultiBufferSource p_114532_, int p_114533_, CallbackInfo ci) {
+		if (p_363441_ instanceof IEnchantVisual enchantVisual && enchantVisual.hasEnchantVisual()) {
+			float f = p_363441_.biteProgress;
 			if (f != 0.0F) {
 				float f1 = 2.0F;
 				if (f > 0.9F) {
@@ -36,12 +36,12 @@ public class EvokerFangsRendererMixin {
 				}
 
 				p_114531_.pushPose();
-				p_114531_.mulPose(Axis.YP.rotationDegrees(90.0F - p_114528_.yRot));
+				p_114531_.mulPose(Axis.YP.rotationDegrees(90.0F - p_363441_.yRot));
 				p_114531_.scale(-f1, -f1, f1);
 				float f2 = 0.03125F;
 				p_114531_.translate(0.0D, -0.626D, 0.0D);
 				p_114531_.scale(0.5F, 0.5F, 0.5F);
-				this.model.setupAnim(p_114528_);
+				this.model.setupAnim(p_363441_);
 				VertexConsumer vertexconsumer = p_114532_.getBuffer(EnchantLayer.enchantSwirl(ItemRenderer.ENCHANTED_GLINT_ENTITY));
                 this.model.renderToBuffer(p_114531_, vertexconsumer, p_114533_, OverlayTexture.NO_OVERLAY);
 				p_114531_.popPose();

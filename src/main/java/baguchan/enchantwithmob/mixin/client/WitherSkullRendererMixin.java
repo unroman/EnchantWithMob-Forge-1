@@ -24,17 +24,17 @@ public class WitherSkullRendererMixin {
 	@Final
 	private SkullModel model;
 
-	@Inject(method = "render", at = @At("TAIL"))
-	public void render(WitherSkullRenderState p_116484_, float p_116485_, float p_116486_, PoseStack p_116487_, MultiBufferSource p_116488_, int p_116489_, CallbackInfo callbackInfo) {
-		if (p_116484_ instanceof IEnchantCap cap) {
+	@Inject(method = "render(Lnet/minecraft/client/renderer/entity/state/WitherSkullRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("TAIL"))
+	public void render(WitherSkullRenderState p_365156_, PoseStack p_116475_, MultiBufferSource p_116476_, int p_116477_, CallbackInfo ci) {
+		if (p_365156_ instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant()) {
                 if (cap.getEnchantCap().hasEnchant()) {
-                    p_116487_.pushPose();
-                    p_116487_.scale(-1.0F, -1.0F, 1.0F);
-                    VertexConsumer vertexconsumer = p_116488_.getBuffer(EnchantLayer.enchantSwirl(cap.getEnchantCap().isAncient() ? EnchantLayer.ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-					this.model.setupAnim(0.0F, p_116484_.yRot, p_116484_.xRot);
-                    this.model.renderToBuffer(p_116487_, vertexconsumer, p_116489_, OverlayTexture.NO_OVERLAY);
-                    p_116487_.popPose();
+					p_116475_.pushPose();
+					p_116475_.scale(-1.0F, -1.0F, 1.0F);
+					VertexConsumer vertexconsumer = p_116476_.getBuffer(EnchantLayer.enchantSwirl(cap.getEnchantCap().isAncient() ? EnchantLayer.ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+					this.model.setupAnim(0.0F, p_365156_.yRot, p_365156_.xRot);
+					this.model.renderToBuffer(p_116475_, vertexconsumer, p_116477_, OverlayTexture.NO_OVERLAY);
+					p_116475_.popPose();
 				}
 			}
 			;
