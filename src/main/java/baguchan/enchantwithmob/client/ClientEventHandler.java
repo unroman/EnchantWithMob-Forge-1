@@ -12,11 +12,14 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -41,32 +44,32 @@ import static baguchan.enchantwithmob.client.render.layer.EnchantLayer.enchantBe
 public class ClientEventHandler {
 
 	@SubscribeEvent
-	public static void renderEnchantBeam(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+	public static void renderEnchantBeam(RenderLivingEvent.Post<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> event) {
         PoseStack matrixStack = event.getPoseStack();
         MultiBufferSource bufferBuilder = event.getMultiBufferSource();
         float particalTick = event.getPartialTick();
-        if (event.getEntity() instanceof IEnchantCap cap) {
+		if (event.getRenderState() instanceof IEnchantCap cap) {
 			if (cap.getEnchantCap().hasOwner() && cap.getEnchantCap().hasEnchant()) {
 
 				LivingEntity entity = cap.getEnchantCap().getEnchantOwner();
                 if (entity != null) {
-                    renderBeam(cap.getEnchantCap(), event.getEntity(), particalTick, matrixStack, bufferBuilder, entity, event.getRenderer());
+					renderBeam(cap.getEnchantCap(), event.getRenderState(), particalTick, matrixStack, bufferBuilder, entity, event.getRenderer());
                 }
             }
         }
     }
 
-	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntity p_229118_1_, float p_229118_2_, PoseStack p_229118_3_, MultiBufferSource p_229118_4_, Entity p_229118_5_, LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> renderer) {
-		float tick = (float) p_229118_1_.tickCount + p_229118_2_;
+	private static void renderBeam(@NotNull MobEnchantCapability cap, LivingEntityRenderState p_229118_1_, float p_229118_2_, PoseStack p_229118_3_, MultiBufferSource p_229118_4_, Entity p_229118_5_, LivingEntityRenderer<LivingEntity, LivingEntityRenderState, EntityModel<LivingEntityRenderState>> renderer) {
+		float tick = (float) p_229118_1_.ageInTicks;
 		p_229118_3_.pushPose();
 		Vec3 vector3d = p_229118_5_.getRopeHoldPosition(p_229118_2_);
-		double d0 = (double) (Mth.lerp(p_229118_2_, p_229118_1_.yBodyRot, p_229118_1_.yBodyRotO) * ((float) Math.PI / 180F)) + (Math.PI / 2D);
-		Vector3d vector3d1 = new Vector3d(0.0D, (double) p_229118_1_.getEyeHeight() / 2, 0.0F);
+		double d0 = p_229118_1_.bodyRot * ((float) Math.PI / 180F) + (Math.PI / 2D);
+		Vector3d vector3d1 = new Vector3d(0.0D, (double) p_229118_1_.eyeHeight / 2, 0.0F);
 		double d1 = Math.cos(d0) * vector3d1.z + Math.sin(d0) * vector3d1.x;
 		double d2 = Math.sin(d0) * vector3d1.z - Math.cos(d0) * vector3d1.x;
-		double d3 = Mth.lerp((double) p_229118_2_, p_229118_1_.xo, p_229118_1_.getX()) + d1;
-		double d4 = Mth.lerp((double) p_229118_2_, p_229118_1_.yo, p_229118_1_.getY()) + vector3d1.y;
-		double d5 = Mth.lerp((double) p_229118_2_, p_229118_1_.zo, p_229118_1_.getZ()) + d2;
+		double d3 = p_229118_1_.x + d1;
+		double d4 = p_229118_1_.y + vector3d1.y;
+		double d5 = p_229118_1_.z + d2;
 		p_229118_3_.translate(d1, vector3d1.y, d2);
 		float f = (float) (vector3d.x - d3);
 		float f1 = (float) (vector3d.y - d4);
@@ -78,12 +81,12 @@ public class ClientEventHandler {
 		float f4 = Mth.fastInvCubeRoot(f * f + f2 * f2) * 0.1F / 2.0F;
 		float f5 = f2 * f4;
 		float f6 = f * f4;
-		BlockPos blockpos = BlockPos.containing(p_229118_1_.getEyePosition(p_229118_2_));
-		BlockPos blockpos1 = BlockPos.containing(p_229118_5_.getEyePosition(p_229118_2_));
-		int i = getBlockLightLevel(p_229118_1_, blockpos);
+		BlockPos blockpos = new BlockPos((int) p_229118_1_.x, (int) (p_229118_1_.eyeHeight + p_229118_1_.y), (int) p_229118_1_.z);
+		BlockPos blockpos1 = new BlockPos((int) p_229118_5_.getX(), (int) (p_229118_1_.eyeHeight + p_229118_5_.getY()), (int) p_229118_5_.getZ());
+		int i = getBlockLightLevel(p_229118_5_.level(), p_229118_1_, blockpos);
 		int j = getBlockLightLevel(p_229118_5_, blockpos1);
-		int k = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos);
-		int l = p_229118_1_.level().getBrightness(LightLayer.SKY, blockpos1);
+		int k = p_229118_5_.level().getBrightness(LightLayer.SKY, blockpos);
+		int l = p_229118_5_.level().getBrightness(LightLayer.SKY, blockpos1);
 		renderSide(ivertexbuilder, matrix4f, p_229118_3_.last(), f, f1, f2, i, j, k, l, 0.05F, 0.1F, f5, f6);
 		renderSide(ivertexbuilder, matrix4f, p_229118_3_.last(), f, f1, f2, i, j, k, l, 0.1F, 0.0F, f5, f6);
 		p_229118_3_.popPose();
@@ -122,6 +125,10 @@ public class ClientEventHandler {
 
 	protected static int getSkyLightLevel(Entity p_239381_1_, BlockPos p_239381_2_) {
 		return p_239381_1_.level().getBrightness(LightLayer.SKY, p_239381_2_);
+	}
+
+	protected static int getBlockLightLevel(Level p_225624_1_, EntityRenderState entityRenderState, BlockPos p_225624_2_) {
+		return entityRenderState.displayFireAnimation ? 15 : p_225624_1_.getBrightness(LightLayer.BLOCK, p_225624_2_);
 	}
 
 	protected static int getBlockLightLevel(Entity p_225624_1_, BlockPos p_225624_2_) {

@@ -7,8 +7,10 @@ import baguchan.enchantwithmob.registry.ModCapability;
 import baguchan.enchantwithmob.utils.MobEnchantUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -60,12 +62,12 @@ public class MultiShotMobEnchant extends MobEnchant {
 					return;
 				LivingEntity owner = (LivingEntity) projectile.getOwner();
 				MobEnchantUtils.executeIfPresent(owner, MobEnchants.MULTISHOT.get(), () -> {
-					if (!level.isClientSide && projectile.tickCount == 0 && !isAdding) {
+					if (level instanceof ServerLevel serverLevel && projectile.tickCount == 0 && !isAdding) {
 						isAdding = true;
 						CompoundTag compoundNBT = new CompoundTag();
 						compoundNBT = projectile.saveWithoutId(compoundNBT);
-						addProjectile(projectile, compoundNBT, level, 15.0F);
-						addProjectile(projectile, compoundNBT, level, -15.0F);
+						addProjectile(projectile, compoundNBT, serverLevel, 15.0F);
+						addProjectile(projectile, compoundNBT, serverLevel, -15.0F);
 						isAdding = false;
 					}
 				});
@@ -73,8 +75,8 @@ public class MultiShotMobEnchant extends MobEnchant {
 		}
 	}
 
-	private static void addProjectile(Projectile projectile, CompoundTag compoundNBT, Level level, float rotation) {
-		Projectile newProjectile = (Projectile) projectile.getType().create(level);
+	private static void addProjectile(Projectile projectile, CompoundTag compoundNBT, ServerLevel level, float rotation) {
+		Projectile newProjectile = (Projectile) projectile.getType().create(level, EntitySpawnReason.EVENT);
 		UUID uuid = newProjectile.getUUID();
 		newProjectile.load(compoundNBT);
 		newProjectile.setUUID(uuid);

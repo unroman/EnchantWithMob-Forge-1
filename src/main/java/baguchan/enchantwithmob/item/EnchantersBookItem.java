@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 public class EnchantersBookItem extends Item {
 	private final TargetingConditions enchantTargeting = TargetingConditions.forNonCombat().range(16.0D).ignoreLineOfSight().ignoreInvisibilityTesting();
-	private final TargetingConditions alreadyEnchantTargeting = TargetingConditions.forNonCombat().range(16.0D).ignoreLineOfSight().ignoreInvisibilityTesting().selector((entity) -> {
+	private final TargetingConditions alreadyEnchantTargeting = TargetingConditions.forNonCombat().range(16.0D).ignoreLineOfSight().ignoreInvisibilityTesting().selector((server, entity) -> {
 		return entity instanceof IEnchantCap enchantCap && enchantCap.getEnchantCap().hasEnchant();
 	});
 
@@ -39,11 +39,13 @@ public class EnchantersBookItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 			if (MobEnchantUtils.hasMobEnchant(stack)) {
-				List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, this.enchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
-				List<LivingEntity> hasEnchantedMoblist = level.getNearbyEntities(LivingEntity.class, this.alreadyEnchantTargeting, playerIn, playerIn.getBoundingBox().inflate(16.0D));
+				List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, playerIn.getBoundingBox().inflate(16.0D));
+				List<LivingEntity> hasEnchantedMoblist = level.getEntitiesOfClass(LivingEntity.class, playerIn.getBoundingBox().inflate(16.0D), (entity) -> {
+					return entity instanceof IEnchantCap enchantCap && enchantCap.getEnchantCap().hasEnchant();
+				});
 
 				if (hasEnchantedMoblist.isEmpty() || hasEnchantedMoblist.size() < 5) {
 					if (!list.isEmpty()) {
@@ -74,23 +76,23 @@ public class EnchantersBookItem extends Item {
 						if (flag[0]) {
 							level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
 
-							playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
+							playerIn.getCooldowns().addCooldown(stack, 40);
 
-							return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+							return InteractionResult.SUCCESS;
 						}
 					} else {
 						playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);
 
-						playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+						playerIn.getCooldowns().addCooldown(stack, 20);
 
-						return InteractionResultHolder.fail(stack);
+						return InteractionResult.FAIL;
 					}
 				} else {
 					playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.no_enchantable_ally"), true);
 
-					playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+					playerIn.getCooldowns().addCooldown(stack, 20);
 
-					return InteractionResultHolder.fail(stack);
+					return InteractionResult.FAIL;
 				}
 			}
 		return super.use(level, playerIn, handIn);

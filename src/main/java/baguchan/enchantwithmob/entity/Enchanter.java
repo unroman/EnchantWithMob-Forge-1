@@ -381,12 +381,12 @@ public class Enchanter extends SpellcasterIllager {
             super.tick();
             LivingEntity livingentity = this.enchanter.getTarget();
 
-            if (livingentity != null && livingentity.isAlive()) {
+            if (livingentity != null && livingentity.isAlive() && livingentity.level() instanceof ServerLevel serverLevel) {
                 this.enchanter.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
                 if (this.canPerformAttack(livingentity)) {
                     if (this.tick == this.enchanter.attackAnimationActionPoint) {
                         this.enchanter.swing(InteractionHand.MAIN_HAND);
-                        this.enchanter.doHurtTarget(livingentity);
+                        this.enchanter.doHurtTarget(serverLevel, livingentity);
                         this.enchanter.playSound(ModSounds.ENCHANTER_ATTACK.get());
                     }
                     this.enchanter.getNavigation().stop();

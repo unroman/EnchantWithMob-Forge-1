@@ -12,11 +12,11 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 
-public class EnchantedWindLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class EnchantedWindLayer<T extends LivingEntityRenderState, M extends EntityModel<LivingEntityRenderState>> extends RenderLayer<T, M> {
     private static final ResourceLocation WIND_TEXTURE_LOCATION = ResourceLocation.withDefaultNamespace("textures/entity/breeze/breeze_wind.png");
 
     private static final float TOP_PART_ALPHA = 1.0F;
@@ -29,37 +29,26 @@ public class EnchantedWindLayer<T extends LivingEntity, M extends EntityModel<T>
         this.model = new EnchantedWindModel<>(p_312909_.bakeLayer(ModModelLayers.ENCHANTED_WIND));
     }
 
-    public void render(
-            PoseStack p_312822_,
-            MultiBufferSource p_312869_,
-            int p_311783_,
-            T p_312046_,
-            float p_312170_,
-            float p_311773_,
-            float p_312428_,
-            float p_312287_,
-            float p_312118_,
-            float p_312531_
-    ) {
-        if (p_312046_ instanceof IEnchantCap cap) {
+    @Override
+    public void render(PoseStack p_117349_, MultiBufferSource p_117350_, int p_117351_, T p_361554_, float p_117353_, float p_117354_) {
+        if (p_361554_ instanceof IEnchantCap cap) {
             if (cap.getEnchantCap().hasEnchant() && MobEnchantUtils.hasWindEnchant(cap.getEnchantCap().getMobEnchants())) {
 
-                float f = (float) p_312046_.tickCount + p_312428_;
-                this.model.prepareMobModel(p_312046_, p_312170_, p_311773_, p_312428_);
-                VertexConsumer vertexconsumer = p_312869_.getBuffer(RenderType.breezeWind(this.getTextureLocation(p_312046_), this.xOffset(f) % 1.0F, 0.0F));
-                this.model.setupAnim(p_312046_, p_312170_, p_311773_, p_312287_, p_312118_, p_312531_);
+                float f = (float) p_361554_.ageInTicks;
+                VertexConsumer vertexconsumer = p_117350_.getBuffer(RenderType.breezeWind(getWindTextureLocation(), this.xOffset(f) % 1.0F, 0.0F));
+                this.model.setupAnim(p_361554_);
                 this.model.windTop().skipDraw = true;
                 this.model.windMiddle().skipDraw = true;
                 this.model.windBottom().skipDraw = false;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
+                this.model.root().render(p_117349_, vertexconsumer, p_117351_, OverlayTexture.NO_OVERLAY);
                 this.model.windTop().skipDraw = true;
                 this.model.windMiddle().skipDraw = false;
                 this.model.windBottom().skipDraw = true;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
+                this.model.root().render(p_117349_, vertexconsumer, p_117351_, OverlayTexture.NO_OVERLAY);
                 this.model.windTop().skipDraw = false;
                 this.model.windMiddle().skipDraw = true;
                 this.model.windBottom().skipDraw = true;
-                this.model.root().render(p_312822_, vertexconsumer, p_311783_, OverlayTexture.NO_OVERLAY);
+                this.model.root().render(p_117349_, vertexconsumer, p_117351_, OverlayTexture.NO_OVERLAY);
             }
         }
     }
@@ -68,7 +57,8 @@ public class EnchantedWindLayer<T extends LivingEntity, M extends EntityModel<T>
         return p_312086_ * 0.02F;
     }
 
-    protected ResourceLocation getTextureLocation(T p_312458_) {
+
+    public ResourceLocation getWindTextureLocation() {
         return WIND_TEXTURE_LOCATION;
     }
 }

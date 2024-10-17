@@ -6,12 +6,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
@@ -44,7 +44,8 @@ public class MobEnchantWithLevelsFunction extends LootItemConditionalFunction {
 		return ModLootItemFunctions.MOB_ENCHANT_WITH_LEVELS.get();
 	}
 
-	public Set<LootContextParam<?>> getReferencedContextParams() {
+	@Override
+	public Set<ContextKey<?>> getReferencedContextParams() {
 		return this.levels.getReferencedContextParams();
 	}
 

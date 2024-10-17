@@ -3,6 +3,9 @@ package baguchan.enchantwithmob.registry;
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.entity.Enchanter;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -22,10 +25,6 @@ public class ModEntities {
 
     public static final Supplier<EntityType<Enchanter>> ENCHANTER = ENTITIES_REGISTRY.register("enchanter", () -> EntityType.Builder.of(Enchanter::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build(prefix("enchanter")));
 
-    private static String prefix(String path) {
-        return EnchantWithMob.MODID + "." + path;
-    }
-
     @SubscribeEvent
     public static void registerEntity(EntityAttributeCreationEvent event) {
         event.put(ENCHANTER.get(), Enchanter.createAttributeMap().build());
@@ -34,5 +33,9 @@ public class ModEntities {
     @SubscribeEvent
     public static void registerSpawnPlacement(RegisterSpawnPlacementsEvent event) {
         event.register(ENCHANTER.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+    }
+
+    private static ResourceKey<EntityType<?>> prefix(String path) {
+        return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, path));
     }
 }

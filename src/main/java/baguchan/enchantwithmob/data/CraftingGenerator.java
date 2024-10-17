@@ -2,24 +2,23 @@ package baguchan.enchantwithmob.data;
 
 import baguchan.enchantwithmob.registry.ModItems;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import java.util.concurrent.CompletableFuture;
-
 public class CraftingGenerator extends RecipeProvider {
-    public CraftingGenerator(PackOutput p_248933_, CompletableFuture<HolderLookup.Provider> p_323846_) {
+    public CraftingGenerator(HolderLookup.Provider p_248933_, RecipeOutput p_323846_) {
         super(p_248933_, p_323846_);
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput consumer) {
+    protected void buildRecipes() {
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.ENCHANATERS_BOTTLE.get(), 3)
+        ShapedRecipeBuilder.shaped(this.registries.lookupOrThrow(Registries.ITEM), RecipeCategory.MISC, new ItemStack(ModItems.ENCHANATERS_BOTTLE.get(), 3))
                 .pattern(" G ")
                 .pattern("ALA")
                 .pattern(" A ")
@@ -27,6 +26,6 @@ public class CraftingGenerator extends RecipeProvider {
                 .define('L', Items.LAPIS_LAZULI)
                 .define('G', Items.GOLD_NUGGET)
                 .unlockedBy("has_item", has(Items.AMETHYST_SHARD))
-                .save(consumer);
+                .save(this.output);
     }
 }

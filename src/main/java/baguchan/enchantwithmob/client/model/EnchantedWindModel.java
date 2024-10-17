@@ -1,14 +1,13 @@
 package baguchan.enchantwithmob.client.model;
 
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
 
-public class EnchantedWindModel<T extends LivingEntity> extends HierarchicalModel<T> {
+public class EnchantedWindModel<T extends LivingEntityRenderState> extends EntityModel<T> {
     private static final float WIND_TOP_SPEED = 0.6F;
     private static final float WIND_MIDDLE_SPEED = 0.8F;
     private static final float WIND_BOTTOM_SPEED = 1.0F;
@@ -19,7 +18,7 @@ public class EnchantedWindModel<T extends LivingEntity> extends HierarchicalMode
     private final ModelPart windBottom;
 
     public EnchantedWindModel(ModelPart p_312152_) {
-        super(RenderType::entityTranslucent);
+        super(p_312152_);
         this.root = p_312152_;
         this.windBody = p_312152_.getChild("wind_body");
         this.windBottom = this.windBody.getChild("wind_bottom");
@@ -74,12 +73,6 @@ public class EnchantedWindModel<T extends LivingEntity> extends HierarchicalMode
         this.windBottom.x = Mth.cos(f) * -0.25F * 1.0F;
         this.windBottom.z = Mth.sin(f) * -0.25F * 1.0F;
     }
-
-    @Override
-    public ModelPart root() {
-        return this.root;
-    }
-
     public ModelPart windTop() {
         return this.windTop;
     }

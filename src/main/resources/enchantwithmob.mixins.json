@@ -7,16 +7,14 @@
   "mixins": [
     "EntityMixin",
     "LivingEntityMixin",
-    "ServerLevelMixin",
     "WoodlandMansionPieceMixin"
   ],
   "client": [
-    "ArrowRendererMixin",
     "client.EnderDragonRendererMixin",
     "client.EntityRendererMixin",
     "client.EvokerFangsRendererMixin",
-    "client.HierarchicalModelMixin",
     "client.LivingEntityRendererMixin",
+    "client.LivingEntityRenderStateMixin",
     "client.WitherSkullRendererMixin"
   ],
   "injectors": {

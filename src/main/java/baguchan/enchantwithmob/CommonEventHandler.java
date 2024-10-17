@@ -29,8 +29,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.TraceableEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
@@ -197,7 +197,7 @@ public class CommonEventHandler {
                 if (EnchantConfig.COMMON.naturalSpawnEnchantedMob.get() && isSpawnEnchantableEntity(event.getEntity())) {
 
                     if (!(livingEntity instanceof Animal) && !(livingEntity instanceof WaterAnimal) || EnchantConfig.COMMON.spawnEnchantedAnimal.get()) {
-                        if (event.getSpawnType() != MobSpawnType.BREEDING && event.getSpawnType() != MobSpawnType.CONVERSION && event.getSpawnType() != MobSpawnType.STRUCTURE && event.getSpawnType() != MobSpawnType.MOB_SUMMONED) {
+                        if (event.getSpawnType() != EntitySpawnReason.BREEDING && event.getSpawnType() != EntitySpawnReason.CONVERSION && event.getSpawnType() != EntitySpawnReason.STRUCTURE && event.getSpawnType() != EntitySpawnReason.MOB_SUMMONED) {
                             boolean flag = event.getSpawner() != null && isOminousTrialSpawner(event.getSpawner());
                             if (flag || world.getRandom().nextFloat() < (EnchantConfig.COMMON.difficultyBasePercent.get() * world.getDifficulty().getId()) + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 if (!world.isClientSide()) {
@@ -227,7 +227,7 @@ public class CommonEventHandler {
                             }
                         }
 
-                        if (event.getSpawnType() == MobSpawnType.TRIAL_SPAWNER) {
+                        if (event.getSpawnType() == EntitySpawnReason.TRIAL_SPAWNER) {
                             if (world.getRandom().nextFloat() < 0.1F + difficultScaleOnPercent * EnchantConfig.COMMON.effectiveBasePercent.get()) {
                                 MobEnchantUtils.addEnchantmentToEntity(livingEntity, cap, new MobEnchantmentData(MobEnchants.WIND.get(), 1));
                             }
@@ -355,7 +355,7 @@ public class CommonEventHandler {
         Player player = event.getEntity();
 
         if (!(entityTarget instanceof Player)) {
-            if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+            if (stack.getItem() == ModItems.MOB_ENCHANT_BOOK.get() && !player.getCooldowns().isOnCooldown(stack)) {
                 if (entityTarget instanceof LivingEntity) {
                     LivingEntity target = (LivingEntity) entityTarget;
                     if (MobEnchantUtils.hasMobEnchant(stack)) {
@@ -368,13 +368,13 @@ public class CommonEventHandler {
 
                                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
 
-                                player.getCooldowns().addCooldown(stack.getItem(), 60);
+                                player.getCooldowns().addCooldown(stack, 60);
 
                                 event.setCancellationResult(InteractionResult.SUCCESS);
                                 event.setCanceled(true);
                             } else {
                                 player.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant"), true);
-                                player.getCooldowns().addCooldown(stack.getItem(), 20);
+                                player.getCooldowns().addCooldown(stack, 20);
                                 event.setCancellationResult(InteractionResult.FAIL);
                                 event.setCanceled(true);
                             }
@@ -383,7 +383,7 @@ public class CommonEventHandler {
                 }
             }
 
-            if (stack.getItem() == ModItems.ENCHANATERS_BOTTLE.get() && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+            if (stack.getItem() == ModItems.ENCHANATERS_BOTTLE.get() && !player.getCooldowns().isOnCooldown(stack)) {
                 if (entityTarget instanceof LivingEntity) {
                     LivingEntity target = (LivingEntity) entityTarget;
                     ItemStack stack1 = new ItemStack(ModItems.ENCHANATERS_EXPERIENCE_BOTTLE.get());
@@ -399,7 +399,7 @@ public class CommonEventHandler {
                             player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 1.0F, 1.0F);
 
                             stack.consume(1, player);
-                            player.getCooldowns().addCooldown(stack.getItem(), 80);
+                            player.getCooldowns().addCooldown(stack, 80);
 
                             event.setCancellationResult(InteractionResult.SUCCESS);
                             event.setCanceled(true);
@@ -431,7 +431,7 @@ public class CommonEventHandler {
             boolean flag = false;
             if (!stack2.isEmpty()) {
                 flag = stack2.has(DataComponents.STORED_ENCHANTMENTS);
-                if (stack1.isDamageableItem() && stack1.getItem().isValidRepairItem(stack3, stack2)) {
+                if (stack1.isDamageableItem() && stack1.isRepairable()) {
                     int l2 = Math.min(stack1.getDamageValue(), stack1.getMaxDamage() / 4);
                     if (l2 <= 0) {
                         event.setOutput(ItemStack.EMPTY);

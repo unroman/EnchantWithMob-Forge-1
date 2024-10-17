@@ -9,23 +9,24 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.TriState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
-public class EnchantedEyesLayer<T extends LivingEntity, M extends EntityModel<T>> extends EyesLayer<T, M> {
-	protected static final RenderStateShard.ShaderStateShard RENDERTYPE_ENERGY_SWIRL_SHADER = new RenderStateShard.ShaderStateShard(GameRenderer::getRendertypeEnergySwirlShader);
+public class EnchantedEyesLayer<T extends LivingEntityRenderState, M extends EntityModel<T>> extends EyesLayer<T, M> {
+	protected static final RenderStateShard.ShaderStateShard RENDERTYPE_ENERGY_SWIRL_SHADER = new RenderStateShard.ShaderStateShard(CoreShaders.RENDERTYPE_ENERGY_SWIRL);
 	protected static final RenderStateShard.CullStateShard NO_CULL = new RenderStateShard.CullStateShard(false);
 	protected static final RenderStateShard.TransparencyStateShard TRANSLUCENT_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
 		RenderSystem.enableBlend();
@@ -35,7 +36,7 @@ public class EnchantedEyesLayer<T extends LivingEntity, M extends EntityModel<T>
 		RenderSystem.defaultBlendFunc();
 	});
 	private static final Function<ResourceLocation, RenderType> ENCHANTED_EYES = Util.memoize((p_173253_) -> {
-		RenderStateShard.TextureStateShard renderstateshard$texturestateshard = new RenderStateShard.TextureStateShard(p_173253_, false, false);
+		RenderStateShard.TextureStateShard renderstateshard$texturestateshard = new RenderStateShard.TextureStateShard(p_173253_, TriState.FALSE, false);
 		return RenderType.create("enchanted_eyes", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setTextureState(renderstateshard$texturestateshard).setCullState(NO_CULL).setTransparencyState(TRANSLUCENT_TRANSPARENCY).createCompositeState(false));
 	});
 
@@ -48,14 +49,14 @@ public class EnchantedEyesLayer<T extends LivingEntity, M extends EntityModel<T>
 	}
 
 	@Override
-	public void render(PoseStack p_116983_, MultiBufferSource p_116984_, int p_116985_, T p_116986_, float p_116987_, float p_116988_, float p_116989_, float p_116990_, float p_116991_, float p_116992_) {
-		if (p_116986_ instanceof IEnchantCap cap) {
+	public void render(PoseStack p_116983_, MultiBufferSource p_116984_, int p_116985_, T p_363277_, float p_116987_, float p_116988_) {
+		super.render(p_116983_, p_116984_, p_116985_, p_363277_, p_116987_, p_116988_);
+		if (p_116983_ instanceof IEnchantCap cap) {
 			if (cap.getEnchantCap().hasEnchant()) {
 				VertexConsumer ivertexbuilder = p_116984_.getBuffer(this.renderType());
 				this.getParentModel().renderToBuffer(p_116983_, ivertexbuilder, p_116985_, OverlayTexture.NO_OVERLAY);
 			}
 		}
-		;
 	}
 
 	public static RenderType enchantedEyes(ResourceLocation p_110455_) {

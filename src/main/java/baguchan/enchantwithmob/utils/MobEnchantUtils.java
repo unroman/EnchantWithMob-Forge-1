@@ -65,7 +65,7 @@ public class MobEnchantUtils {
 	@Nullable
 	public static MobEnchant getEnchantFromNBT(@Nullable CompoundTag tag) {
 		if (tag != null && MobEnchants.getRegistry().containsKey(ResourceLocation.tryParse(tag.getString(TAG_MOBENCHANT)))) {
-			return MobEnchants.getRegistry().get(ResourceLocation.tryParse(tag.getString(TAG_MOBENCHANT)));
+			return MobEnchants.getRegistry().getValue(ResourceLocation.tryParse(tag.getString(TAG_MOBENCHANT)));
 		} else {
 			return null;
 		}
@@ -92,7 +92,7 @@ public class MobEnchantUtils {
 	@Nullable
 	public static MobEnchant getEnchantFromString(@Nullable String id) {
 		if (id != null && MobEnchants.getRegistry().containsKey(ResourceLocation.tryParse(id))) {
-			return MobEnchants.getRegistry().get(ResourceLocation.tryParse(id));
+			return MobEnchants.getRegistry().getValue(ResourceLocation.tryParse(id));
 		} else {
 			return null;
 		}
@@ -101,7 +101,7 @@ public class MobEnchantUtils {
 	@Nullable
 	public static MobEnchant getEnchantFromResourceLocation(@Nullable ResourceLocation id) {
 		if (id != null && MobEnchants.getRegistry().containsKey(id)) {
-			return MobEnchants.getRegistry().get(id);
+			return MobEnchants.getRegistry().getValue(id);
 		} else {
 			return null;
 		}

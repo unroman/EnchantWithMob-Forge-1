@@ -13,8 +13,6 @@
     "enchantwithmob:soul_steal",
     "enchantwithmob:deflect",
     "enchantwithmob:small",
-    "enchantwithmob:huge",
-    "enchantwithmob:fast",
-    "enchantwithmob:slow"
+    "enchantwithmob:huge"
   ]
 }

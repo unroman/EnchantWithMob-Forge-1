@@ -1,14 +1,11 @@
 package baguchan.enchantwithmob.mixin;
 
-import bagu_chan.bagus_lib.api.IBaguPacket;
 import baguchan.enchantwithmob.api.IEnchantCap;
 import baguchan.enchantwithmob.capability.MobEnchantCapability;
 import baguchan.enchantwithmob.message.MobEnchantedMessage;
-import baguchan.enchantwithmob.registry.MobEnchants;
-import baguchan.enchantwithmob.utils.MobEnchantUtils;
+import baguchi.bagus_lib.api.IBaguPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +16,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = LivingEntity.class, remap = false)
 public abstract class LivingEntityMixin extends Entity implements IEnchantCap, IBaguPacket {
@@ -75,15 +71,6 @@ public abstract class LivingEntityMixin extends Entity implements IEnchantCap, I
     @Override
     public void setEnchantCap(MobEnchantCapability cap) {
         this.capability = cap;
-    }
-
-    @Inject(method = "getVoicePitch", at = @At("RETURN"), cancellable = true)
-    public void getVoicePitch(CallbackInfoReturnable<Float> cir) {
-        int fastTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(this.getEnchantCap().getMobEnchants(), MobEnchants.HASTE.get()), 0, 2);
-        int slowTime = Mth.clamp(MobEnchantUtils.getMobEnchantLevelFromHandler(this.getEnchantCap().getMobEnchants(), MobEnchants.SLOW.get()), 0, 2);
-        float different = Mth.clamp(cir.getReturnValue() + fastTime * 0.125F - slowTime * 0.125F, 0.1F, 2.0F);
-
-        cir.setReturnValue(different);
     }
 
     @Shadow

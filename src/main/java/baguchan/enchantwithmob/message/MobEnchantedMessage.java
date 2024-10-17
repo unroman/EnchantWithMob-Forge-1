@@ -57,7 +57,7 @@ public class MobEnchantedMessage implements CustomPacketPayload, IPayloadHandler
     }
 
     public MobEnchantedMessage(FriendlyByteBuf buffer) {
-        this(buffer.readInt(), new MobEnchantHandler(MobEnchants.getRegistry().get(buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY)), buffer.readInt()));
+        this(buffer.readInt(), new MobEnchantHandler(MobEnchants.getRegistry().getValue(buffer.readResourceKey(MobEnchants.MOB_ENCHANT_REGISTRY)), buffer.readInt()));
     }
 
     @Override

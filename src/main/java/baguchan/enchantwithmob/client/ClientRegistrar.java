@@ -2,7 +2,6 @@ package baguchan.enchantwithmob.client;
 
 import baguchan.enchantwithmob.EnchantWithMob;
 import baguchan.enchantwithmob.client.model.EnchantedWindModel;
-import baguchan.enchantwithmob.client.model.EnchanterClothesModel;
 import baguchan.enchantwithmob.client.model.EnchanterModel;
 import baguchan.enchantwithmob.client.overlay.MobEnchantOverlay;
 import baguchan.enchantwithmob.client.render.EnchanterRenderer;
@@ -10,9 +9,7 @@ import baguchan.enchantwithmob.client.render.layer.EnchantLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedEyesLayer;
 import baguchan.enchantwithmob.client.render.layer.EnchantedWindLayer;
 import baguchan.enchantwithmob.client.render.layer.SlimeEnchantLayer;
-import baguchan.enchantwithmob.item.EnchanterClothesItem;
 import baguchan.enchantwithmob.registry.ModEntities;
-import baguchan.enchantwithmob.registry.ModItems;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
@@ -24,7 +21,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = EnchantWithMob.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -52,7 +48,6 @@ public class ClientRegistrar {
 	public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.ENCHANTER, EnchanterModel::createBodyLayer);
 		event.registerLayerDefinition(ModModelLayers.ENCHANTED_WIND, EnchantedWindModel::createWindBodyLayer);
-		event.registerLayerDefinition(ModModelLayers.ENCHANTER_CLOTHES, EnchanterClothesModel::createBodyLayer);
 	}
 
 	@SubscribeEvent
@@ -61,60 +56,60 @@ public class ClientRegistrar {
 		{
 			if (event.getSkin(model) != null) {
 				if (player instanceof LivingEntityRenderer) {
-					((LivingEntityRenderer<?, ?>) player).addLayer(new EnchantLayer(event.getSkin(model)));
-					((LivingEntityRenderer<?, ?>) player).addLayer(new EnchantedWindLayer(event.getSkin(model), event.getEntityModels()));
+					((LivingEntityRenderer<?, ?, ?>) player).addLayer(new EnchantLayer(event.getSkin(model)));
+					((LivingEntityRenderer<?, ?, ?>) player).addLayer(new EnchantedWindLayer(event.getSkin(model), event.getEntityModels()));
 
 				}
 			}
 		});
 		event.getEntityTypes().forEach(entityType -> {
 			if (event.getRenderer(entityType) instanceof SlimeRenderer r) {
-				(r).addLayer(new SlimeEnchantLayer<>((SlimeRenderer) r, event.getEntityModels()));
+				(r).addLayer(new SlimeEnchantLayer<>(r, event.getEntityModels()));
 			}
 
 			if (event.getRenderer(entityType) instanceof LivingEntityRenderer r) {
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantLayer((LivingEntityRenderer<?, ?>) r));
-				((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedWindLayer((LivingEntityRenderer<?, ?>) r, event.getEntityModels()));
+				r.addLayer(new EnchantLayer(r));
+				r.addLayer(new EnchantedWindLayer(r, event.getEntityModels()));
 
 			}
 
 
 			if (event.getRenderer(entityType) instanceof LivingEntityRenderer r) {
 				if (entityType == EntityType.BLAZE) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), BLAZE_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, BLAZE_EYES));
 				}
 				if (entityType == EntityType.CREEPER) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), CREEPER_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, CREEPER_EYES));
 				}
 				if (entityType == EntityType.EVOKER) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), EVOKER_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, EVOKER_EYES));
 				}
 				if (entityType == EntityType.PILLAGER) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), PILLAGER_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, PILLAGER_EYES));
 				}
 				if (entityType == EntityType.STRAY || entityType == EntityType.WITHER || entityType == EntityType.SKELETON || entityType == EntityType.BOGGED) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SKELETON_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, SKELETON_EYES));
 				}
 				if (entityType == EntityType.SLIME) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SLIME_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, SLIME_EYES));
 				}
 				if (entityType == EntityType.SPIDER || entityType == EntityType.CAVE_SPIDER) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), SPIDER_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, SPIDER_EYES));
 				}
 				if (entityType == EntityType.VINDICATOR) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), VINDICATOR_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, VINDICATOR_EYES));
 				}
 				if (entityType == EntityType.WITCH) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WITCH_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, WITCH_EYES));
 				}
 				if (entityType == EntityType.WOLF) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), WOLF_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, WOLF_EYES));
 				}
 				if (entityType == EntityType.ZOMBIE || entityType == EntityType.HUSK) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), ZOMBIE_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, ZOMBIE_EYES));
 				}
 				if (entityType == EntityType.GUARDIAN || entityType == EntityType.ELDER_GUARDIAN) {
-					((LivingEntityRenderer<?, ?>) r).addLayer(new EnchantedEyesLayer(((LivingEntityRenderer<?, ?>) r), GUARDIAN_EYES));
+					r.addLayer(new EnchantedEyesLayer(r, GUARDIAN_EYES));
 				}
 
 			}
@@ -125,9 +120,4 @@ public class ClientRegistrar {
 	public static void registerOverlay(RegisterGuiLayersEvent event) {
 		event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(EnchantWithMob.MODID, "mobenchant"), new MobEnchantOverlay());
     }
-
-	@SubscribeEvent
-	public static void registerOverlay(RegisterClientExtensionsEvent event) {
-		event.registerItem(EnchanterClothesItem.ArmorRender.INSTANCE, ModItems.ENCHANTER_BOOTS.get(), ModItems.ENCHANTER_CLOTHES.get(), ModItems.ENCHANTER_HAT.get());
-	}
 }

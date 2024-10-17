@@ -1,13 +1,12 @@
 package baguchan.enchantwithmob.client.model;
 
-import bagu_chan.bagus_lib.client.layer.IArmor;
 import baguchan.enchantwithmob.EnchantConfig;
 import baguchan.enchantwithmob.client.animation.EnchanterAnimation;
 import baguchan.enchantwithmob.client.animation.NormalAnimation;
-import baguchan.enchantwithmob.entity.Enchanter;
+import baguchan.enchantwithmob.client.render.state.EnchanterRenderState;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
@@ -16,7 +15,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> implements IArmor {
+public class EnchanterModel<T extends EnchanterRenderState> extends EntityModel<T> implements baguchi.bagus_lib.client.layer.IArmor {
 	private final ModelPart realRoot;
 	private final ModelPart everything;
 	private final ModelPart left_leg;
@@ -35,6 +34,7 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 	private final ModelPart right_arm;
 	private final ModelPart rightHand;
 	public EnchanterModel(ModelPart root) {
+		super(root);
 		this.realRoot = root;
 		this.everything = root.getChild("everything");
 		this.left_leg = this.everything.getChild("left_leg");
@@ -119,25 +119,25 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
-		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-		this.head.xRot = headPitch * ((float) Math.PI / 180F);
+	public void setupAnim(T entity) {
+		super.setupAnim(entity);
+		this.head.yRot = entity.yRot * ((float) Math.PI / 180F);
+		this.head.xRot = entity.xRot * ((float) Math.PI / 180F);
 
-		this.Cape.xRot = 0.1F + limbSwingAmount * 0.6F;
+		this.Cape.xRot = 0.1F + entity.walkAnimationSpeed * 0.6F;
 
-		if (this.riding) {
+		if (entity.isRiding) {
 			this.applyStatic(NormalAnimation.SIT);
 		}
 
 		if (EnchantConfig.CLIENT.oldStyleAnimation.get()) {
 			if (entity.castingAnimationState.isStarted()) {
-				this.animate(entity.castingAnimationState, EnchanterAnimation.old_enchant, ageInTicks);
+				this.animate(entity.castingAnimationState, EnchanterAnimation.old_enchant, entity.ageInTicks);
 				this.arms.visible = false;
 				this.right_arm.visible = true;
 				this.left_arm.visible = true;
 			} else if (entity.attackAnimationState.isStarted()) {
-				this.animate(entity.attackAnimationState, EnchanterAnimation.old_attack, ageInTicks);
+				this.animate(entity.attackAnimationState, EnchanterAnimation.old_attack, entity.ageInTicks);
 
 				this.arms.visible = true;
 				this.right_arm.visible = false;
@@ -147,33 +147,26 @@ public class EnchanterModel<T extends Enchanter> extends HierarchicalModel<T> im
 				this.right_arm.visible = false;
 				this.left_arm.visible = false;
 			}
-			this.right_leg.xRot = Mth.cos(limbSwing * 0.6662F) * 0.7F * limbSwingAmount;
-			this.left_leg.xRot = Mth.cos(limbSwing * 0.6662F + (float) Math.PI) * 0.7F * limbSwingAmount;
+			this.right_leg.xRot = Mth.cos(entity.walkAnimationPos * 0.6662F) * 0.7F * entity.walkAnimationSpeed;
+			this.left_leg.xRot = Mth.cos(entity.walkAnimationPos * 0.6662F + (float) Math.PI) * 0.7F * entity.walkAnimationSpeed;
 
 		} else {
 			this.arms.visible = true;
 			this.right_arm.visible = true;
 			this.left_arm.visible = true;
 			if (entity.castingAnimationState.isStarted()) {
-				this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANCE, ageInTicks);
+				this.animate(entity.castingAnimationState, EnchanterAnimation.ENCHANCE, entity.ageInTicks);
 			} else if (entity.attackAnimationState.isStarted()) {
-				this.animate(entity.attackAnimationState, EnchanterAnimation.ATTACK, ageInTicks);
+				this.animate(entity.attackAnimationState, EnchanterAnimation.ATTACK, entity.ageInTicks);
 			} else if (!entity.castingAnimationState.isStarted() && !entity.attackAnimationState.isStarted()) {
 				if (entity.idleAnimationState.isStarted()) {
-					this.animate(entity.idleAnimationState, EnchanterAnimation.IDLE, ageInTicks, 1.0F);
+					this.animate(entity.idleAnimationState, EnchanterAnimation.IDLE, entity.ageInTicks, 1.0F);
 				} else {
-					this.animateWalk(EnchanterAnimation.WALK, limbSwing, limbSwingAmount, 3.0F, 4.5F);
+					this.animateWalk(EnchanterAnimation.WALK, entity.walkAnimationPos, entity.walkAnimationSpeed, 3.0F, 4.5F);
 					this.applyStatic(NormalAnimation.WALK_STOP);
 				}
 			}
 		}
-	}
-
-
-
-	@Override
-	public ModelPart root() {
-		return this.realRoot;
 	}
 
 	@Override

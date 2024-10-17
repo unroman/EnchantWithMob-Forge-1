@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
@@ -57,7 +57,7 @@ public class MobEnchantBookItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		if (EnchantConfig.COMMON.enchantYourSelf.get() && MobEnchantUtils.hasMobEnchant(stack)) {
 				if (playerIn instanceof IEnchantCap cap) {
@@ -67,15 +67,15 @@ public class MobEnchantBookItem extends Item {
 					//When flag is true, enchanting is success.
 					if (flag) {
 						level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
-						playerIn.getCooldowns().addCooldown(stack.getItem(), 40);
+						playerIn.getCooldowns().addCooldown(stack, 40);
 
-						return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+						return InteractionResult.SUCCESS;
 					} else {
 						playerIn.displayClientMessage(Component.translatable("enchantwithmob.cannot.enchant_yourself"), true);
 
-						playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
+						playerIn.getCooldowns().addCooldown(stack, 20);
 
-						return InteractionResultHolder.fail(stack);
+						return InteractionResult.FAIL;
 					}
 				}
 		}

@@ -10,23 +10,23 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.util.TriState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
-public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class EnchantLayer<T extends LivingEntityRenderState, M extends EntityModel<T>> extends RenderLayer<T, M> {
     protected static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
     protected static final RenderStateShard.TransparencyStateShard ADDITIVE_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("additive_transparency", () -> {
         RenderSystem.enableBlend();
@@ -35,7 +35,7 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
         RenderSystem.disableBlend();
         RenderSystem.defaultBlendFunc();
     });
-    protected static final RenderStateShard.ShaderStateShard RENDERTYPE_ENERGY_SWIRL_SHADER = new RenderStateShard.ShaderStateShard(GameRenderer::getRendertypeEnergySwirlShader);
+    protected static final RenderStateShard.ShaderStateShard RENDERTYPE_ENERGY_SWIRL_SHADER = new RenderStateShard.ShaderStateShard(CoreShaders.RENDERTYPE_ENERGY_SWIRL);
     protected static final RenderStateShard.CullStateShard NO_CULL = new RenderStateShard.CullStateShard(false);
     protected static final RenderStateShard.TexturingStateShard ENTITY_GLINT_TEXTURING = new RenderStateShard.TexturingStateShard("entity_glint_texturing", () -> {
         setupGlintTexturing(0.16F);
@@ -53,29 +53,27 @@ public class EnchantLayer<T extends LivingEntity, M extends EntityModel<T>> exte
         super(p_i50947_1_);
     }
 
-    public void render(PoseStack poseStackIn, MultiBufferSource bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        float tick = (float) entitylivingbaseIn.tickCount + partialTicks;
+    @Override
+    public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T entitylivingbaseIn, float v, float v1) {
+        float tick = (float) entitylivingbaseIn.ageInTicks;
         if (entitylivingbaseIn instanceof IEnchantCap cap) {
-            if (cap.getEnchantCap().hasEnchant() && !entitylivingbaseIn.isInvisible()) {
-                float f = (float) entitylivingbaseIn.tickCount + partialTicks;
+            if (cap.getEnchantCap().hasEnchant() && !entitylivingbaseIn.isInvisible) {
+                float f = (float) entitylivingbaseIn.ageInTicks;
                 float intensity = cap.getEnchantCap().getMobEnchants().size() < 3 ? ((float) cap.getEnchantCap().getMobEnchants().size() / 3) : 3;
                 EntityModel<T> entitymodel = this.getParentModel();
-                entitymodel.prepareMobModel(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
-                this.getParentModel().copyPropertiesTo(entitymodel);
-                VertexConsumer ivertexbuilder = bufferIn.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
-                entitymodel.setupAnim(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-                entitymodel.renderToBuffer(poseStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(intensity, 1F, 1F, 1F));
+                VertexConsumer ivertexbuilder = multiBufferSource.getBuffer(enchantSwirl(cap.getEnchantCap().isAncient() ? ANCIENT_GLINT : ItemRenderer.ENCHANTED_GLINT_ENTITY));
+                entitymodel.setupAnim(entitylivingbaseIn);
+                entitymodel.renderToBuffer(poseStack, ivertexbuilder, i, OverlayTexture.NO_OVERLAY);
             }
         }
-        ;
     }
 
     public static RenderType enchantSwirl(ResourceLocation resourceLocation) {
-        return RenderType.create("enchant_effect", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setWriteMaskState(COLOR_WRITE).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST).setTexturingState(ENTITY_GLINT_TEXTURING).createCompositeState(false));
+        return RenderType.create("enchant_effect", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setWriteMaskState(COLOR_WRITE).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, TriState.FALSE, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setCullState(NO_CULL).setDepthTestState(EQUAL_DEPTH_TEST).setTexturingState(ENTITY_GLINT_TEXTURING).createCompositeState(false));
     }
 
     public static RenderType enchantBeamSwirl(ResourceLocation resourceLocation) {
-        return RenderType.create("enchant_beam_effect", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setWriteMaskState(COLOR_WRITE).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, false, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setCullState(NO_CULL).setTexturingState(ENTITY_GLINT_TEXTURING).createCompositeState(false));
+        return RenderType.create("enchant_beam_effect", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENERGY_SWIRL_SHADER).setWriteMaskState(COLOR_WRITE).setTextureState(new RenderStateShard.TextureStateShard(resourceLocation, TriState.FALSE, false)).setTransparencyState(ADDITIVE_TRANSPARENCY).setCullState(NO_CULL).setTexturingState(ENTITY_GLINT_TEXTURING).createCompositeState(false));
     }
 
     private static void setupGlintTexturing(float p_110187_) {

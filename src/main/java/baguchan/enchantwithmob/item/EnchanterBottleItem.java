@@ -9,11 +9,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -91,7 +90,7 @@ public class EnchanterBottleItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level p_41352_, Player p_41353_, InteractionHand p_41354_) {
+	public InteractionResult use(Level p_41352_, Player p_41353_, InteractionHand p_41354_) {
 		if (p_41353_ instanceof IEnchantCap cap) {
 			int xp = MobEnchantUtils.getExperienceFromMob(cap);
 
@@ -122,17 +121,7 @@ public class EnchanterBottleItem extends Item {
 	}
 
 	@Override
-	public UseAnim getUseAnimation(ItemStack p_41358_) {
-		return UseAnim.DRINK;
-	}
-
-	@Override
-	public SoundEvent getDrinkingSound() {
-		return SoundEvents.HONEY_DRINK;
-	}
-
-	@Override
-	public SoundEvent getEatingSound() {
-		return SoundEvents.HONEY_DRINK;
+	public ItemUseAnimation getUseAnimation(ItemStack p_41452_) {
+		return ItemUseAnimation.DRINK;
 	}
 }
