@@ -41,7 +41,7 @@ public class DataGenerators {
 
         @Override
         public String getName() {
-            return "NeoForge recipes";
+            return EnchantWithMob.MODID + "recipes";
         }
     }
 }
