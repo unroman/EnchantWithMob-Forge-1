@@ -5,11 +5,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "name": "minecraft:air"
-        },
-        {
-          "type": "minecraft:item",
           "weight": 2,
           "functions": [
             {
