@@ -64,6 +64,8 @@
   "enchantwithmob.config.DisableMobEnchantStuffItems": "モブエンチャントをするアイテムを無効化する",
   "enchantwithmob.config.disableAuraRender": "エンチャントオーラを有効化する",
   "enchantwithmob.config.OldStyleAnimation": "昔のアニメーションを有効化する",
+  "enchantwithmob.config.hudXPosition": "Hudの表示されるX座標を決める",
+  "enchantwithmob.config.hudYPosition": "Hudの表示されるY座標を決める",
   "death.attack.enchantwithmob.indirectVoid": "%1$sは、%2$sによってvoidに包まれた",
   "commands.enchantwithmob.mob_enchanting.set_enchant": "%2$sを%1$sへの付与が成功しました。",
   "commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_mobenchant": "そのモブエンチャントは存在しません",

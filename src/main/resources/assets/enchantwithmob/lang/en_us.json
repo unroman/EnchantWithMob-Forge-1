@@ -66,6 +66,8 @@
   "enchantwithmob.config.disablePoisonParticle": "Disable Poison Particle",
   "enchantwithmob.config.disableAuraRender": "Disable Aura Render",
   "enchantwithmob.config.OldStyleAnimation": "Enable Old Style Animation",
+  "enchantwithmob.config.hudXPosition": "Set Hud X Position When Enabled",
+  "enchantwithmob.config.hudYPosition": "Set Hud Y Position When Enabled",
   "death.attack.enchantwithmob.indirectVoid": "%1$s was wrapped in void by %2$s",
   "commands.enchantwithmob.mob_enchanting.set_enchant": "Success MobEnchant %1$s For %2$s",
   "commands.enchantwithmob.mob_enchanting.set_enchant.fail.no_mobenchant": "%1$s mob enchant is does not exist",

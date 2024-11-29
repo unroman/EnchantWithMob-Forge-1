@@ -20,7 +20,7 @@ public class MobEnchantOverlay implements LayeredDraw.Layer {
             if (EnchantConfig.CLIENT.showEnchantedMobHud.get() && mc.player != null) {
                 if (mc.player instanceof IEnchantCap cap) {
                     if (cap.getEnchantCap().hasEnchant()) {
-                        guiGraphics.drawString(mc.font, mc.player.getDisplayName(), (int) 20, (int) 50, 0xe0e0e0);
+                        guiGraphics.drawString(mc.font, mc.player.getDisplayName(), (int) EnchantConfig.CLIENT.hudXPostion.getAsInt(), (int) EnchantConfig.CLIENT.hudYPostion.getAsInt(), 0xe0e0e0);
 
                         for (MobEnchantHandler mobEnchantHandler : cap.getEnchantCap().getMobEnchants()) {
                             MobEnchant mobEnchant = mobEnchantHandler.getMobEnchant();
@@ -31,7 +31,7 @@ public class MobEnchantOverlay implements LayeredDraw.Layer {
                             Component s = mobEnchant.getFullname(mobEnchantLevel);
 
                             int xOffset = 20;
-                            int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 60;
+                            int yOffset = cap.getEnchantCap().getMobEnchants().indexOf(mobEnchantHandler) * 10 + 10 + EnchantConfig.CLIENT.hudYPostion.getAsInt();
 
                             guiGraphics.drawString(mc.font, s, (int) (xOffset), (int) yOffset, 0xe0e0e0);
                         }
