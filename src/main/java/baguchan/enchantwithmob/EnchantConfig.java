@@ -22,6 +22,8 @@ public class EnchantConfig {
 
     public static class Client {
         public final ModConfigSpec.BooleanValue showEnchantedMobHud;
+        public final ModConfigSpec.IntValue hudXPostion;
+        public final ModConfigSpec.IntValue hudYPostion;
         public final ModConfigSpec.BooleanValue disablePoisonParticle;
         public final ModConfigSpec.BooleanValue disableAuraRender;
 
@@ -31,6 +33,12 @@ public class EnchantConfig {
             showEnchantedMobHud = builder
                     .translation(EnchantWithMob.MODID + ".config.showEnchantedMobHud")
                     .define("Show Enchanted Mob Hud", true);
+            hudXPostion = builder
+                    .translation(EnchantWithMob.MODID + ".config.hudXPosition")
+                    .defineInRange("Show Enchanted Mob Hud X Position", 20, 0, 1000);
+            hudYPostion = builder
+                    .translation(EnchantWithMob.MODID + ".config.hudYPosition")
+                    .defineInRange("Show Enchanted Mob Hud Y Position", 50, 0, 1000);
             disablePoisonParticle = builder
                     .comment("Disable Poison Mob Enchant Particle. [true / false]")
                     .translation(EnchantWithMob.MODID + ".config.disablePoisonParticle")
