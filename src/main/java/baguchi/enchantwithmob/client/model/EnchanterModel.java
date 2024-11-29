@@ -174,7 +174,7 @@ public class EnchanterModel<T extends EnchanterRenderState> extends EntityModel<
 		this.everything.translateAndRotate(poseStack);
 		this.body.translateAndRotate(poseStack);
 		modelPart.translateAndRotate(poseStack);
-		poseStack.translate(0, -0.2F, 0);
+		poseStack.translate(0, -(6F / 16F), 0);
 		poseStack.scale(1.05F, 1.05F, 1.05F);
 	}
 
@@ -190,21 +190,19 @@ public class EnchanterModel<T extends EnchanterRenderState> extends EntityModel<
 	public void translateToLeg(ModelPart modelPart, PoseStack poseStack) {
 		this.everything.translateAndRotate(poseStack);
 		modelPart.translateAndRotate(poseStack);
+		if (this.right_leg == modelPart) {
+			poseStack.translate(2 / 16F, 0F, 0);
+		}
+		if (this.left_leg == modelPart) {
+			poseStack.translate(-2 / 16F, 0F, 0);
+		}
+		poseStack.translate(0, -(12F / 16F), 0);
+		poseStack.scale(1.05F, 1.05F, 1.05F);
 	}
 
 	@Override
 	public void translateToChestPat(ModelPart modelPart, PoseStack poseStack) {
-		this.everything.translateAndRotate(poseStack);
-		this.body.translateAndRotate(poseStack);
-		if (this.rightHand == modelPart) {
-			this.right_arm.translateAndRotate(poseStack);
-		}
-		if (this.leftHand == modelPart) {
-			this.left_arm.translateAndRotate(poseStack);
-		}
-		modelPart.translateAndRotate(poseStack);
-		poseStack.translate(0, -(12F / 16F), 0);
-		poseStack.scale(1.05F, 1.05F, 1.05F);
+
 	}
 
 	@Override
@@ -229,11 +227,11 @@ public class EnchanterModel<T extends EnchanterRenderState> extends EntityModel<
 
 	@Override
 	public Iterable<ModelPart> rightHandArmors() {
-		return ImmutableList.of(this.rightHand);
+		return ImmutableList.of();
 	}
 
 	@Override
 	public Iterable<ModelPart> leftHandArmors() {
-		return ImmutableList.of(this.leftHand);
+		return ImmutableList.of();
 	}
 }
